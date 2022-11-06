@@ -8,4 +8,9 @@ class AuthenticationRemoteSource {
         data: {"email": email, "password": password});
     return Session.fromJson(res.data);
   }
+
+  Future signUp(String email, String password) {
+    return GetIt.I<Dio>()
+        .post("/auth/users/", data: {"email": email, "password": password});
+  }
 }

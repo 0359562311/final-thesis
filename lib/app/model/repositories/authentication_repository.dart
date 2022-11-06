@@ -4,6 +4,7 @@ import 'package:fakeslink/app/model/entities/session.dart';
 
 mixin IAuthenticationRepository {
   Future<Session> login(String email, String password);
+  Future<void> signUp(String email, String password);
   void saveSession(Session session);
 }
 
@@ -19,5 +20,10 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
   @override
   void saveSession(Session session) {
     _localSource.saveSession(session);
+  }
+
+  @override
+  Future<void> signUp(String email, String password) {
+    return _remoteSource.signUp(email, password);
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/view/authentication/login/login.dart';
+import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
 import 'package:fakeslink/core/const/firebase_config.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
@@ -159,6 +160,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           AppRoute.login: (context) => LoginPage(),
           AppRoute.home: (context) => HomePage(),
+          AppRoute.signUp: (context) => SignUpPage(),
         },
         // onGenerateRoute: (settings) {
         //   return null;

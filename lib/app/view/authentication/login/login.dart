@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: BlocConsumer<LoginCubit, LoginState>(
         bloc: _cubit,
         listener: (context, state) {
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 60,
                   ),
                   AppTextField(
-                    key: ValueKey("account"),
+                    key: const ValueKey("account"),
                     hint: "Tài khoản",
                     errorText: state.errorEmail,
                     onChanged: _cubit.validateEmail,
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 16,
                   ),
                   AppTextField(
-                    key: ValueKey("password"),
+                    key: const ValueKey("password"),
                     controller: _passwordController,
                     hint: "Mật khẩu",
                     obscureText: true,
@@ -108,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       if (state.status == LoginStatus.loading)
-                        SizedBox(
+                        const SizedBox(
                           height: 33,
                           width: 33,
                           child: CircularProgressIndicator(
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 16,
                   ),
                   RichText(
-                      text: const TextSpan(children: [
+                      text: TextSpan(children: [
                     TextSpan(
                         text: "Bạn chưa có tài khoản? ",
                         style: TextStyle(
@@ -129,12 +130,17 @@ class _LoginPageState extends State<LoginPage> {
                             fontWeight: FontWeight.w400,
                             color: Colors.black)),
                     WidgetSpan(
-                      child: Text(
-                        "Đăng ký",
-                        style: TextStyle(
-                            color: AppColor.secondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoute.signUp);
+                        },
+                        child: Text(
+                          "Đăng ký",
+                          style: TextStyle(
+                              color: AppColor.secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
                   ])),
