@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "497561287311",
+    "project_id": "fake-slink",
+    "storage_bucket": "fake-slink.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497561287311:android:9966576dd2973b20404efa",
+        "android_client_info": {
+          "package_name": "com.tankiem.fakeslink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497561287311-44s4nqpq45u2kflmnbq7fkjtfpm164ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgu6z9Z3-1cpwVzcL1mtXEVfwNQR4qAcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497561287311-44s4nqpq45u2kflmnbq7fkjtfpm164ab.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "497561287311-d9pvs8m70htrf7ouqno0l71ijrilifm8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tankiem.fakeslink"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
