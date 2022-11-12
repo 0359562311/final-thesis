@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/view/notification/notification.dart';
 import 'package:fakeslink/app/view/setting/setting.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +40,7 @@ class _HomePageState extends State<HomePage> {
             Center(
               child: Text("Jobs"),
             ),
-            Center(
-              child: Text("Notifications"),
-            ),
+            NotificationPage(),
             SettingTab()
           ],
         ),
