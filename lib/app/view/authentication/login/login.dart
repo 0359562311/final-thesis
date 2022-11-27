@@ -6,6 +6,7 @@ import 'package:fakeslink/core/custom_widgets/custom_button.dart';
 import 'package:fakeslink/core/custom_widgets/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -91,9 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Row(
                     children: [
-                      const Text(
+                      Text(
                         "Quên mật khẩu?",
-                        style: TextStyle(
+                        style: GoogleFonts.montserrat(
                             color: AppColor.secondaryColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w400),
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                       text: TextSpan(children: [
                     TextSpan(
                         text: "Bạn chưa có tài khoản? ",
-                        style: TextStyle(
+                        style: GoogleFonts.montserrat(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.black)),
@@ -136,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text(
                           "Đăng ký",
-                          style: TextStyle(
+                          style: GoogleFonts.montserrat(
                               color: AppColor.secondaryColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500),
@@ -147,9 +148,10 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text(
+                  Text(
                     "hoặc đăng nhập với",
-                    style: TextStyle(color: Colors.black38, fontSize: 12),
+                    style: GoogleFonts.montserrat(
+                        color: Colors.black38, fontSize: 12),
                   ),
                   const SizedBox(
                     height: 16,
@@ -171,9 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           width: 16,
                         ),
-                        const Text(
+                        Text(
                           "Tài khoản Google",
-                          style: TextStyle(color: Colors.black38),
+                          style: GoogleFonts.montserrat(color: Colors.black38),
                         )
                       ],
                     ),

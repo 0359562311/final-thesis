@@ -5,6 +5,7 @@ import 'package:fakeslink/core/custom_widgets/custom_button.dart';
 import 'package:fakeslink/core/custom_widgets/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -66,8 +67,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   Center(
                     child: Text(
                       "Đăng ký",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(

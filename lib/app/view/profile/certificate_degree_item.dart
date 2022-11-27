@@ -1,5 +1,6 @@
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CertificateDegreeItem extends StatelessWidget {
   final String image;
@@ -39,7 +40,7 @@ class CertificateDegreeItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                   ),
                   Text("tại " + organization)
                 ],

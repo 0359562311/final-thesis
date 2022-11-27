@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppButton extends StatelessWidget {
   final Color? backgroundColor;
@@ -31,7 +32,7 @@ class AppButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius ?? 10)),
         child: Text(
           title,
-          style: TextStyle(
+          style: GoogleFonts.montserrat(
               color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12),
         ),
       ),

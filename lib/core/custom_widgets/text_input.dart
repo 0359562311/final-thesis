@@ -1,5 +1,6 @@
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTextField extends StatefulWidget {
   final String? errorText;
@@ -40,7 +41,7 @@ class _AppTextFieldState extends State<AppTextField> {
           contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           hintText: widget.hint,
           errorText: widget.errorText,
-          hintStyle: TextStyle(
+          hintStyle: GoogleFonts.montserrat(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: Colors.black38,

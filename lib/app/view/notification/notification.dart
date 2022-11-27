@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _NotificationPageState extends State<NotificationPage> {
         elevation: 1,
         title: Text(
           "Thông báo",
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.montserrat(color: Colors.black),
         ),
         iconTheme: Theme.of(context).iconTheme.copyWith(color: Colors.black),
         centerTitle: true,

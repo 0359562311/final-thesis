@@ -1,6 +1,7 @@
 import 'package:fakeslink/app/view/profile/certificate_degree_item.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserProfilePage extends StatefulWidget {
   final int userId;
@@ -36,7 +37,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
             children: [
               Text(
                 "Nguyễn Kiêm Tân",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.bold, fontSize: 18),
               ),
               IconButton(
                   onPressed: () {},
@@ -52,49 +54,51 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           Text(
             "Giới thiệu",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
           ),
           SizedBox(
             height: 8,
           ),
           Text(
             "this is an introduction\nhehe",
-            style: TextStyle(fontSize: 13),
+            style: GoogleFonts.montserrat(fontSize: 13),
           ),
           SizedBox(
             height: 16,
           ),
           Text(
             "Số điện thoại",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
           ),
           SizedBox(
             height: 8,
           ),
           Text(
             "0359562345",
-            style: TextStyle(fontSize: 13, color: AppColor.secondaryColor),
+            style: GoogleFonts.montserrat(
+                fontSize: 13, color: AppColor.secondaryColor),
           ),
           SizedBox(
             height: 16,
           ),
           Text(
             "Email",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
           ),
           SizedBox(
             height: 8,
           ),
           Text(
             "tannk.B18CN526@stu.ptit.com",
-            style: TextStyle(fontSize: 13, color: AppColor.secondaryColor),
+            style: GoogleFonts.montserrat(
+                fontSize: 13, color: AppColor.secondaryColor),
           ),
           SizedBox(
             height: 16,
           ),
           Text(
             "Bằng cấp",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),

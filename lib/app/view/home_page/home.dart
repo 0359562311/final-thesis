@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/view/home_tab/home_tab.dart';
 import 'package:fakeslink/app/view/notification/notification.dart';
 import 'package:fakeslink/app/view/setting/setting.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -31,9 +32,7 @@ class _HomePageState extends State<HomePage> {
         body: PageView(
           controller: _pageController,
           children: [
-            Center(
-              child: Text("Home"),
-            ),
+            HomeTab(),
             Center(
               child: Text("History"),
             ),
@@ -45,6 +44,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: AppColor.white,
           selectedItemColor: AppColor.primaryColor,
           unselectedItemColor: AppColor.primaryColor.withOpacity(0.2),
           selectedIconTheme: IconThemeData(color: AppColor.primaryColor),
