@@ -1,3 +1,5 @@
+to generate flutter packages pub run build_runner build  --delete-conflicting-outputs
+
 # fakeslink
 
 A fake Slink application written with Flutter framework.

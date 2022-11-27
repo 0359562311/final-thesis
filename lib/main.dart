@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/model/entities/session.dart';
 import 'package:fakeslink/app/view/authentication/login/login.dart';
 import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
@@ -33,8 +34,8 @@ void main() async {
   //       projectId: "fake-slink");
   // }
   // await Firebase.initializeApp(options: options);
-  // Hive
-  //   ..initFlutter()
+  await Hive.initFlutter();
+  Hive..registerAdapter(SessionAdapter());
   //   ..registerAdapter(StudentModelAdapter())
   //   ..registerAdapter(ScheduleModelAdapter())
   //   ..registerAdapter(RegisterableClassModelAdapter())
@@ -50,9 +51,13 @@ void main() async {
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
+late Box configBox;
+
 Future<void> init() async {
   GetIt getIt = GetIt.instance;
   getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
+
+  configBox = await Hive.openBox("configuration");
 
   final deviceInfo = DeviceInfo();
   await deviceInfo.init();
@@ -73,7 +78,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
-    baseUrl: 'http://192.168.0.102:8000',
+    baseUrl: 'http://192.168.0.101:8000',
     connectTimeout: 60000,
     receiveTimeout: 60000,
   );
@@ -157,14 +162,24 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoute.home,
         routes: {
           AppRoute.login: (context) => LoginPage(),
           AppRoute.home: (context) => HomePage(),
           AppRoute.signUp: (context) => SignUpPage(),
         },
         onGenerateRoute: (settings) {
+          final session = configBox.get("session");
           switch (settings.name) {
+            case "/":
+              if (session == null) {
+                return MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                );
+              } else {
+                return MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                );
+              }
             case AppRoute.profile:
               return MaterialPageRoute(
                 builder: (context) =>
