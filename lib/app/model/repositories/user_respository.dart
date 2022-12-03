@@ -12,6 +12,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<User> getProfile() {
     return _remoteSource.getProfile().then((value) {
+      _localSource.save(value);
       return value;
     });
   }

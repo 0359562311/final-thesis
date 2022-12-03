@@ -73,7 +73,7 @@ class _HomeTabState extends State<HomeTab> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    "Best Jobs",
+                    "Công việc hot nhất",
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.bold,
                       fontSize: 26,
@@ -171,7 +171,7 @@ class _HomeTabState extends State<HomeTab> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: Text(
-                  "Post",
+                  "Đăng việc",
                   style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.bold, fontSize: 24),
                 ),
@@ -214,6 +214,7 @@ class _HomeTabState extends State<HomeTab> {
                                 _cubit.listImage[index],
                                 height: 40,
                                 width: 40,
+                                color: AppColor.primaryColor,
                               ),
                               SizedBox(
                                 height: 3,

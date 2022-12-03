@@ -12,32 +12,33 @@ class HomeCubit extends Cubit<HomeState> {
   List<String> listJob = [
     "Đào tạo",
     "Lập trình",
-    "Kế toàn",
-    "Kiến trúc",
+    "Kế toán",
+    "Sửa chữa",
     "Marketing",
+    "Vận chuyển",
     "Thiết kế",
-    "Trợ lý",
-    "Tư Vấn",
-    "Tất cả"
+    "Viết & Dịch",
+    "Khác"
   ];
   List<String> listImage = [
-    "assets/images/ic_form.png",
-    "assets/images/ic_programming.png",
-    "assets/images/ic_assistant.png",
-    "assets/images/ic_architecture.png",
-    "assets/images/ic_marketing.png",
-    "assets/images/ic_designer.png",
-    "assets/images/ic_advise.png",
-    "assets/images/ic_analytics.png",
-    "assets/images/ic_all.png"
+    "assets/images/education.png",
+    "assets/images/it.png",
+    "assets/images/accounting.png",
+    "assets/images/reparing.png",
+    "assets/images/marketing.png",
+    "assets/images/delivery-truck.png",
+    "assets/images/designer.png",
+    "assets/images/interpreter.png",
+    "assets/images/other.png"
   ];
 
-  void init() {
-    _userRepository.getProfile().then((value) => null);
+  void init() async {
+    emit(state.copyWith(status: HomeStatus.loading));
+    await _userRepository.getProfile();
+    getCategory();
   }
 
   void getCategory() {
-    emit(state.copyWith(status: HomeStatus.loading));
     _jobRepository.getCategory().then((value) {
       emit(state.copyWith(status: HomeStatus.success, category: value));
     }).catchError((onError) {
