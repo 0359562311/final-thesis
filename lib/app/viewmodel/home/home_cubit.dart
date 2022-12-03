@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:fakeslink/app/model/dto/filter_job.dart';
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/repositories/user_respository.dart';
 import 'package:fakeslink/app/viewmodel/home/home_state.dart';
@@ -47,6 +48,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void changeTab(int index) {
-    emit(state.copyWith(status: HomeStatus.loading, currentTab: index));
+    emit(state.copyWith(currentTab: index));
+    _jobRepository
+        .getJobs(FilterJob(categories: [state.category?[index].id ?? 0]));
   }
 }

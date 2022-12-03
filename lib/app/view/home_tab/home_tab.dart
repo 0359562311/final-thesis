@@ -1,12 +1,16 @@
 import 'package:fakeslink/app/viewmodel/home/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
+import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../model/entities/user.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -56,12 +60,11 @@ class _HomeTabState extends State<HomeTab> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    Text("Hi, Tan!"),
+                    Text("Hi, ${configBox.get("user")?.name}!"),
                     Spacer(),
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        "https://images.viblo.asia/avatar/3d9d5f45-1245-4674-aefd-de59ada3685e.jpg",
-                      ),
+                    AvatarWidget(
+                      avatar: configBox.get("user").avatar,
+                      size: 32,
                     )
                   ],
                 ),
