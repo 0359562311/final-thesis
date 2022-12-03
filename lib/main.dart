@@ -2,7 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/model/entities/certificate.dart';
+import 'package:fakeslink/app/model/entities/degree.dart';
+import 'package:fakeslink/app/model/entities/experience.dart';
 import 'package:fakeslink/app/model/entities/session.dart';
+import 'package:fakeslink/app/model/entities/user.dart';
 import 'package:fakeslink/app/view/authentication/login/login.dart';
 import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
@@ -35,18 +39,11 @@ void main() async {
   // }
   // await Firebase.initializeApp(options: options);
   await Hive.initFlutter();
-  Hive..registerAdapter(SessionAdapter());
-  //   ..registerAdapter(StudentModelAdapter())
-  //   ..registerAdapter(ScheduleModelAdapter())
-  //   ..registerAdapter(RegisterableClassModelAdapter())
-  //   ..registerAdapter(SubjectModelAdapter())
-  //   ..registerAdapter(AdministrativeClassModelAdapter())
-  //   ..registerAdapter(AdministrativeClassDetailsModelAdapter())
-  //   ..registerAdapter(RegisterModelAdapter())
-  //   ..registerAdapter(NotificationAdapter())
-  //   ..registerAdapter(NotificationDetailsAdapter())
-  //   ..registerAdapter(SenderAdapter())
-  //   ..registerAdapter(LecturerModelAdapter());
+  Hive.registerAdapter(SessionAdapter());
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(CertificateAdapter());
+  Hive.registerAdapter(DegreeAdapter());
+  Hive.registerAdapter(ExperienceAdapter());
   await init();
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }

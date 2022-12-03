@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
-import 'package:fakeslink/app/model/repositories/home_repository.dart';
+import 'package:fakeslink/app/model/repositories/job_repository.dart';
+import 'package:fakeslink/app/model/repositories/user_respository.dart';
 import 'package:fakeslink/app/viewmodel/home/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final HomeRepository _homeRepository = HomeRepositoryImpl();
+  final JobRepository _jobRepository = JobRepositoryImpl();
+  final UserRepository _userRepository = UserRepositoryImpl();
 
   HomeCubit() : super(HomeState(status: HomeStatus.initial));
-
-  int currentTab = 0;
 
   List<String> listJob = [
     "Đào tạo",
@@ -32,9 +32,13 @@ class HomeCubit extends Cubit<HomeState> {
     "assets/images/ic_all.png"
   ];
 
+  void init() {
+    _userRepository.getProfile().then((value) => null);
+  }
+
   void getCategory() {
     emit(state.copyWith(status: HomeStatus.loading));
-    _homeRepository.getCategory().then((value) {
+    _jobRepository.getCategory().then((value) {
       emit(state.copyWith(status: HomeStatus.success, category: value));
     }).catchError((onError) {
       emit(state.copyWith(category: state.category, status: HomeStatus.error));
@@ -42,7 +46,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void changeTab(int index) {
-    emit(state.copyWith(status: HomeStatus.loading));
-    currentTab = index;
+    emit(state.copyWith(status: HomeStatus.loading, currentTab: index));
   }
 }

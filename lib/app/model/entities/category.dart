@@ -1,12 +1,12 @@
-class CategoryResponse {
+class Category {
   int? id;
   String? name;
 
-  CategoryResponse({
+  Category({
     this.id,
     this.name,
   });
-  CategoryResponse.fromJson(Map<String, dynamic> json) {
+  Category.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
     name = json['name']?.toString();
   }

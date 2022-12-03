@@ -149,7 +149,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title:
                           "${_cubit.state.data?.certificates?[index]?.title} ${_cubit.state.data?.certificates?[index]?.description ?? ""}",
                       description:
-                          "${_cubit.state.data?.certificates?[index]?.From} - ${_cubit.state.data?.certificates?[index]?.to} ",
+                          "${_cubit.state.data?.certificates?[index]?.from} - ${_cubit.state.data?.certificates?[index]?.to} ",
                       organization: "IIG");
                 }, childCount: _cubit.state.data?.certificates?.length ?? 0)),
                 padding: const EdgeInsets.symmetric(horizontal: 20),

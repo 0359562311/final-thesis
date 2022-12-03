@@ -1,15 +1,15 @@
-import 'package:fakeslink/app/model/response/profile_response.dart';
+import 'package:fakeslink/app/model/entities/user.dart';
 
 enum ViewProfileStatus { loading, error, success, initial }
 
 class ViewProfileState {
   final ViewProfileStatus status;
-  final ProfileResponse? data;
+  final User? data;
 
   const ViewProfileState({required this.status, this.data});
 
   ViewProfileState copyWith(
-      {ViewProfileStatus? status, ProfileResponse? data}) {
+      {ViewProfileStatus? status, User? data}) {
     return ViewProfileState(
         status: status ?? this.status, data: data ?? this.data);
   }

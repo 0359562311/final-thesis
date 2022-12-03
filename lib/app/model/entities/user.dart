@@ -1,97 +1,44 @@
-class Certificates {
-  String? From;
-  String? to;
-  String? description;
-  String? title;
+import 'package:hive/hive.dart';
 
-  Certificates({
-    this.From,
-    this.to,
-    this.description,
-    this.title,
-  });
-  Certificates.fromJson(Map<String, dynamic> json) {
-    From = json['_from']?.toString();
-    to = json['to']?.toString();
-    description = json['description']?.toString();
-    title = json['title']?.toString();
-  }
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['_from'] = From;
-    data['to'] = to;
-    data['description'] = description;
-    data['title'] = title;
-    return data;
-  }
-}
+import 'certificate.dart';
+import 'degree.dart';
+import 'experience.dart';
+part 'user.g.dart';
 
-class Experiences {
-  String? From;
-  String? to;
-  String? description;
-
-  Experiences({
-    this.From,
-    this.to,
-    this.description,
-  });
-  Experiences.fromJson(Map<String, dynamic> json) {
-    From = json['_from']?.toString();
-    to = json['to']?.toString();
-    description = json['description']?.toString();
-  }
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['_from'] = From;
-    data['to'] = to;
-    data['description'] = description;
-    return data;
-  }
-}
-
-class Degrees {
-  String? title;
-  String? organization;
-  int? year;
-
-  Degrees({
-    this.title,
-    this.organization,
-    this.year,
-  });
-  Degrees.fromJson(Map<String, dynamic> json) {
-    title = json['title']?.toString();
-    organization = json['organization']?.toString();
-    year = json['year']?.toInt();
-  }
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['title'] = title;
-    data['organization'] = organization;
-    data['year'] = year;
-    return data;
-  }
-}
-
-class ProfileResponse {
+@HiveType(typeId: 2)
+class User {
+  @HiveField(0)
   int? id;
+  @HiveField(1)
   String? name;
+  @HiveField(2)
   String? dob;
+  @HiveField(3)
   String? avatar;
+  @HiveField(4)
   String? cover;
+  @HiveField(5)
   String? gender;
+  @HiveField(6)
   String? phoneNumber;
+  @HiveField(7)
   String? createAt;
+  @HiveField(8)
   String? updateAt;
+  @HiveField(9)
   String? email;
+  @HiveField(10)
   int? loyaltyPoint;
+  @HiveField(11)
   String? bankAccount;
-  List<Degrees?>? degrees;
-  List<Experiences?>? experiences;
-  List<Certificates?>? certificates;
+  @HiveField(12)
+  List<Degree?>? degrees;
+  @HiveField(13)
+  List<Experience?>? experiences;
+  @HiveField(14)
+  List<Certificate?>? certificates;
 
-  ProfileResponse({
+  User({
     this.id,
     this.name,
     this.dob,
@@ -108,7 +55,7 @@ class ProfileResponse {
     this.experiences,
     this.certificates,
   });
-  ProfileResponse.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
     name = json['name']?.toString();
     dob = json['dob']?.toString();
@@ -123,25 +70,25 @@ class ProfileResponse {
     bankAccount = json['bankAccount']?.toString();
     if (json['degrees'] != null) {
       final v = json['degrees'];
-      final arr0 = <Degrees>[];
+      final arr0 = <Degree>[];
       v.forEach((v) {
-        arr0.add(Degrees.fromJson(v));
+        arr0.add(Degree.fromJson(v));
       });
       degrees = arr0;
     }
     if (json['experiences'] != null) {
       final v = json['experiences'];
-      final arr0 = <Experiences>[];
+      final arr0 = <Experience>[];
       v.forEach((v) {
-        arr0.add(Experiences.fromJson(v));
+        arr0.add(Experience.fromJson(v));
       });
       experiences = arr0;
     }
     if (json['certificates'] != null) {
       final v = json['certificates'];
-      final arr0 = <Certificates>[];
+      final arr0 = <Certificate>[];
       v.forEach((v) {
-        arr0.add(Certificates.fromJson(v));
+        arr0.add(Certificate.fromJson(v));
       });
       certificates = arr0;
     }

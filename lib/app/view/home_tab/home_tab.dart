@@ -22,7 +22,7 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     super.initState();
     _cubit = HomeCubit();
-    _cubit.getCategory();
+    _cubit.init();
   }
 
   @override
@@ -100,7 +100,7 @@ class _HomeTabState extends State<HomeTab> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
-                                      color: _cubit.currentTab == index
+                                      color: _cubit.state.currentTab == index
                                           ? AppColor.primaryColor
                                           : Colors.grey.withOpacity(0.3))),
                               padding: EdgeInsets.symmetric(
