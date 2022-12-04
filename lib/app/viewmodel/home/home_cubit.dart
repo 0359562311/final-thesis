@@ -48,8 +48,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void changeTab(int index) {
-    emit(state.copyWith(currentTab: index));
+    emit(state.copyWith(currentTab: index, jobs: []));
     _jobRepository
-        .getJobs(FilterJob(categories: [state.category?[index].id ?? 0]));
+        .getJobs(FilterJob(categories: [state.category?[index].id ?? 0]))
+        .then((value) => emit(state.copyWith(currentTab: index, jobs: value)))
+        .catchError((_) => emit(state.copyWith(currentTab: index, jobs: [])));
   }
 }

@@ -21,7 +21,6 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     if (err.type == DioErrorType.connectTimeout ||
         err.type == DioErrorType.receiveTimeout ||
         err.type == DioErrorType.sendTimeout) {
-      GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
       // if (err.requestOptions.path.contains(APIPath.me) ||
       //     err.requestOptions.path.contains(APIPath.listSchedules))
       err.response?.data = err.response?.data['data'];
@@ -74,10 +73,6 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
           dio.interceptors.responseLock.unlock();
           dio.interceptors.requestLock.unlock();
           dio.interceptors.errorLock.unlock();
-          if (GetIt.instance.isRegistered<StreamController<String>>()) {
-            GetIt.instance<StreamController<String>>()
-                .add("Phiên đăng nhập đã hết.");
-          }
         } else {
           err.response?.data = err.response?.data['data'];
           handler.next(err);

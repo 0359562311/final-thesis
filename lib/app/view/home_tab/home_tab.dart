@@ -2,6 +2,7 @@ import 'package:fakeslink/app/viewmodel/home/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
+import 'package:fakeslink/core/utils/extensions/num.dart';
 import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -60,7 +61,7 @@ class _HomeTabState extends State<HomeTab> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    Text("Hi, ${configBox.get("user")?.name}!"),
+                    Text("Xin chào, ${configBox.get("user")?.name}!"),
                     Spacer(),
                     AvatarWidget(
                       avatar: configBox.get("user").avatar,
@@ -68,6 +69,11 @@ class _HomeTabState extends State<HomeTab> {
                     )
                   ],
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 16,
               ),
             ),
             SliverToBoxAdapter(
@@ -121,11 +127,12 @@ class _HomeTabState extends State<HomeTab> {
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 90,
+                height: 96,
                 child: ListView.builder(
-                  itemCount: 3,
+                  itemCount: state.jobs?.length ?? 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
+                    final job = state.jobs![index];
                     return Container(
                       margin: EdgeInsets.only(left: 10, right: 6),
                       padding: EdgeInsets.all(16),
@@ -153,13 +160,37 @@ class _HomeTabState extends State<HomeTab> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Title",
+                                job.title ?? "",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                     color: AppColor.primaryColor,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
-                              Text("30.000 VND"),
-                              Text("Ha dong Ha noi")
+                              Text(
+                                "${(job.payment?.amount ?? 0).price} VND",
+                                style: GoogleFonts.montserrat(
+                                    color: AppColor.errorColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Text(
+                                job.payment?.paymentMethod?.id == 1
+                                    ? "Trả theo dự án"
+                                    : "Trả theo giờ",
+                                style: GoogleFonts.montserrat(
+                                    color: AppColor.primaryColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Text(
+                                "Việc làm từ xa",
+                                style: GoogleFonts.montserrat(
+                                    color: AppColor.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
+                              )
                             ],
                           )
                         ],
@@ -168,6 +199,9 @@ class _HomeTabState extends State<HomeTab> {
                   },
                 ),
               ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 12),
             ),
             SliverToBoxAdapter(
               child: Padding(
@@ -215,8 +249,8 @@ class _HomeTabState extends State<HomeTab> {
                             children: [
                               Image.asset(
                                 _cubit.listImage[index],
-                                height: 40,
-                                width: 40,
+                                height: 32,
+                                width: 32,
                                 color: AppColor.primaryColor,
                               ),
                               SizedBox(
@@ -226,7 +260,7 @@ class _HomeTabState extends State<HomeTab> {
                                 _cubit.listJob[index],
                                 style: GoogleFonts.montserrat(
                                     color: AppColor.primaryColor,
-                                    fontWeight: FontWeight.normal,
+                                    fontWeight: FontWeight.w700,
                                     fontSize: 12),
                               ),
                             ],

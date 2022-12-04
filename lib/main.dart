@@ -75,7 +75,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
-    baseUrl: 'http://192.168.0.100:8000',
+    baseUrl: 'http://192.168.0.102:8000',
     connectTimeout: 60000,
     receiveTimeout: 60000,
   );
@@ -138,7 +138,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    GetIt.instance<StreamController<String>>().close();
     super.dispose();
   }
 
