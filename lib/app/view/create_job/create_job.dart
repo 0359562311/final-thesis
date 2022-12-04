@@ -41,41 +41,6 @@ class _CreateJobPageState extends State<CreateJobPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        height: 40,
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Row(
-          children: [
-            Expanded(
-                child: ButtonWidget(
-              title: "Huỷ",
-              onPressed: () {},
-              backgroundColor: Colors.red,
-              uppercaseTitle: false,
-              radius: 5,
-            )),
-            const SizedBox(width: 20),
-            Expanded(
-                child: ButtonWidget(
-              title: "Đăng",
-              uppercaseTitle: false,
-              onPressed: () {
-                _cubit.createJob(
-                    title: _titleController.text.trim(),
-                    city: _cubit.cityName,
-                    district: _cubit.districtName,
-                    ward: _cubit.wardName,
-                    detail: _locationController.text.trim(),
-                    description: _descriptionController.text.trim(),
-                    price: _priceController.text.trim(),
-                    paymentMethod: _cubit.paymentId);
-              },
-              radius: 5,
-            ))
-          ],
-        ),
-      ),
       appBar: appBar(context, "Tạo công việc",
           backgroundColor: const Color(0xFF4E43BD),
           centerTitle: true,
@@ -150,114 +115,136 @@ class _CreateJobPageState extends State<CreateJobPage> {
                           )),
                 ),
                 const SizedBox(height: 15),
-                Text(
-                  "Chọn địa chỉ",
-                  style: GoogleFonts.montserrat(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18),
+                Row(
+                  children: [
+                    Text(
+                      "Chọn địa chỉ",
+                      style: GoogleFonts.montserrat(
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18),
+                    ),
+                    Spacer(),
+                    Checkbox(
+                        value: _cubit.isRemoteJob,
+                        fillColor:
+                            MaterialStateProperty.all(AppColor.primaryColor),
+                        onChanged: (value) {
+                          _cubit.changeRemote(value ?? false);
+                        }),
+                    Text(
+                      "Việc từ xa",
+                      style: GoogleFonts.montserrat(
+                          color: _cubit.isRemoteJob
+                              ? AppColor.primaryColor
+                              : null),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    _cubit.districtName = null;
-                    _cubit.wardName = null;
-                    buildSelectedAddress(context, callBack: (index) {
-                      Navigator.pop(context);
-                      _cubit.selectedCity(
-                          name: _cubit.cities[index]['name'],
-                          code: _cubit.cities[index]['code']);
-                    }, list: _cubit.cities);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: AppColor.primaryColor),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                                _cubit.cityName ?? "Chọn tỉnh/ thành phố")),
-                        const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColor.primaryColor,
-                        ),
-                      ],
+                if (!_cubit.isRemoteJob) ...[
+                  GestureDetector(
+                    onTap: () {
+                      _cubit.districtName = null;
+                      _cubit.wardName = null;
+                      buildSelectedAddress(context, callBack: (index) {
+                        Navigator.pop(context);
+                        _cubit.selectedCity(
+                            name: _cubit.cities[index]['name'],
+                            code: _cubit.cities[index]['code']);
+                      }, list: _cubit.cities);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColor.primaryColor),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Text(
+                                  _cubit.cityName ?? "Chọn tỉnh/ thành phố")),
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColor.primaryColor,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    _cubit.wardName = null;
-                    buildSelectedAddress(context, list: _cubit.districts,
-                        callBack: (index) {
-                      Navigator.pop(context);
-                      _cubit.selectedDistrict(
-                          name: _cubit.districts[index]['name_with_type'],
-                          code: _cubit.districts[index]['code']);
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: AppColor.primaryColor),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                                _cubit.districtName ?? "Chọn quận/ huyện")),
-                        const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColor.primaryColor,
-                        ),
-                      ],
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      _cubit.wardName = null;
+                      buildSelectedAddress(context, list: _cubit.districts,
+                          callBack: (index) {
+                        Navigator.pop(context);
+                        _cubit.selectedDistrict(
+                            name: _cubit.districts[index]['name_with_type'],
+                            code: _cubit.districts[index]['code']);
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColor.primaryColor),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Text(
+                                  _cubit.districtName ?? "Chọn quận/ huyện")),
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColor.primaryColor,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    buildSelectedAddress(context, callBack: (index) {
-                      Navigator.pop(context);
-                      _cubit.selectedWard(
-                          name: _cubit.ward[index]['name_with_type']);
-                    }, list: _cubit.ward);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: AppColor.primaryColor),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(_cubit.wardName ?? "Chọn phường/ xã")),
-                        const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColor.primaryColor,
-                        ),
-                      ],
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      buildSelectedAddress(context, callBack: (index) {
+                        Navigator.pop(context);
+                        _cubit.selectedWard(
+                            name: _cubit.ward[index]['name_with_type']);
+                      }, list: _cubit.ward);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColor.primaryColor),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child:
+                                  Text(_cubit.wardName ?? "Chọn phường/ xã")),
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColor.primaryColor,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                TextFieldWidget(
-                  controller: _locationController,
-                  hintText: "Địa chỉ cụ thể",
-                  isEnable: true,
-                  fillColor: Colors.grey.shade200,
-                  maxLines: 1,
-                  autoFocus: false,
-                ),
-                const SizedBox(height: 10),
+                  const SizedBox(height: 10),
+                  TextFieldWidget(
+                    controller: _locationController,
+                    hintText: "Địa chỉ cụ thể",
+                    isEnable: true,
+                    fillColor: Colors.grey.shade200,
+                    maxLines: 1,
+                    autoFocus: false,
+                  ),
+                  const SizedBox(height: 10),
+                ],
                 Row(
                   children: [
                     Expanded(
                       child: Text(
-                        "Thời gian hoàn thành",
+                        "Thời gian kết thúc \n(tối đa 30 ngày kể từ ngày đăng việc)",
                         style: GoogleFonts.montserrat(
                             color: AppColor.primaryColor,
                             fontWeight: FontWeight.w600,
@@ -271,7 +258,12 @@ class _CreateJobPageState extends State<CreateJobPage> {
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1950),
                             lastDate: DateTime(2100));
-                        _cubit.selectDueDate(pickedDate!);
+                        if (pickedDate != null) {
+                          final dif = pickedDate.difference(DateTime.now());
+                          if (dif.inDays <= 30 && dif.inDays >= 0) {
+                            _cubit.selectDueDate(pickedDate);
+                          }
+                        }
                       },
                       child: Container(
                         width: 120,
@@ -299,7 +291,7 @@ class _CreateJobPageState extends State<CreateJobPage> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Description",
+                  "Mô tả",
                   style: GoogleFonts.montserrat(
                       color: AppColor.primaryColor,
                       fontWeight: FontWeight.w600,
@@ -312,7 +304,7 @@ class _CreateJobPageState extends State<CreateJobPage> {
                   isEnable: true,
                   fillColor: Colors.grey.shade200,
                   maxLines: 10,
-                  hintText: "Title of your jobs",
+                  hintText: "Mô tả công việc",
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -380,48 +372,42 @@ class _CreateJobPageState extends State<CreateJobPage> {
                           ),
                         ),
                         builder: (context) {
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _cubit.state.payment?.length,
-                              itemBuilder: (context, int index) {
-                                return ExpansionTile(
-                                  title: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                      _cubit.selectPaymentMethod(
-                                          name: _cubit.state.payment?[index]
-                                                  .title ??
-                                              "",
-                                          paymentMethodId:
-                                              _cubit.state.payment?[index].id ??
-                                                  0);
-                                    },
-                                    child: Text(
+                          return IntrinsicHeight(
+                            child: Column(
+                              children: List.generate(
+                                  state.payment?.length ?? 0, (index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    _cubit.selectPaymentMethod(
+                                        name: _cubit
+                                                .state.payment?[index].title ??
+                                            "",
+                                        paymentMethodId:
+                                            _cubit.state.payment?[index].id ??
+                                                0);
+                                  },
+                                  child: ListTile(
+                                    title: Text(
                                       _cubit.state.payment?[index].title ?? "",
                                       style: GoogleFonts.montserrat(
                                           color: AppColor.primaryColor,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500),
                                     ),
+                                    subtitle: Text(
+                                      _cubit.state.payment?[index]
+                                              .description ??
+                                          "",
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                   ),
-                                  children: List.generate(
-                                      _cubit.state.payment?.length ?? 0,
-                                      (index) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 5),
-                                            child: Text(
-                                              _cubit.state.payment?[index]
-                                                      .description ??
-                                                  "",
-                                              textAlign: TextAlign.start,
-                                              style: GoogleFonts.montserrat(
-                                                  color: AppColor.primaryColor,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          )),
                                 );
-                              });
+                              }),
+                            ),
+                          );
                         });
                   },
                   child: Container(
@@ -467,6 +453,28 @@ class _CreateJobPageState extends State<CreateJobPage> {
                   ),
                 ),
                 SizedBox(height: 20),
+                Container(
+                  height: 40,
+                  margin: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Expanded(
+                      child: ButtonWidget(
+                    title: "Đăng",
+                    uppercaseTitle: false,
+                    onPressed: () {
+                      _cubit.createJob(
+                          title: _titleController.text.trim(),
+                          city: _cubit.cityName,
+                          district: _cubit.districtName,
+                          ward: _cubit.wardName,
+                          detail: _locationController.text.trim(),
+                          description: _descriptionController.text.trim(),
+                          price: _priceController.text.trim(),
+                          paymentMethod: _cubit.paymentId);
+                    },
+                    radius: 5,
+                  )),
+                ),
               ],
             ),
           );

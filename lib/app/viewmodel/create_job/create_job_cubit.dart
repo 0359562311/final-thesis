@@ -22,6 +22,7 @@ class CreateJobCubit extends Cubit<CreateJobState> {
   String? paymentMethodName;
   int? paymentId;
   List<XFile>? selectedImages = [];
+  bool isRemoteJob = false;
 
   DateTime? dueDate;
 
@@ -33,7 +34,8 @@ class CreateJobCubit extends Cubit<CreateJobState> {
   void getCity() async {
     try {
       emit(state.copyWith(
-          status: CreateJobStatus.loading, payment: state.payment));
+        status: CreateJobStatus.loading,
+      ));
       String response = await rootBundle.loadString('assets/json/city.json');
       var data = await json.decode(response);
       data = data as Map;
@@ -41,7 +43,8 @@ class CreateJobCubit extends Cubit<CreateJobState> {
         cities.add(value);
       });
       emit(state.copyWith(
-          status: CreateJobStatus.success, payment: state.payment));
+        status: CreateJobStatus.success,
+      ));
     } catch (e) {}
   }
 
@@ -70,59 +73,57 @@ class CreateJobCubit extends Cubit<CreateJobState> {
         ward.add(value);
       });
       emit(state.copyWith(
-          status: CreateJobStatus.success, payment: state.payment));
+        status: CreateJobStatus.success,
+      ));
     } catch (e) {}
   }
 
   void selectedCity({String? name, String? code}) {
     emit(state.copyWith(
-        status: CreateJobStatus.loading, payment: state.payment));
+      status: CreateJobStatus.loading,
+    ));
     districts.clear();
     cityName = name;
     codeCity = code;
     emit(state.copyWith(
-        status: CreateJobStatus.success,
-        payment: state.payment,
-        category: state.category));
+        status: CreateJobStatus.success, category: state.category));
     getDistrict(codeD: codeCity);
   }
 
   void selectedDistrict({String? name, String? code}) {
     emit(state.copyWith(
-        status: CreateJobStatus.loading, payment: state.payment));
+      status: CreateJobStatus.loading,
+    ));
     ward.clear();
     districtName = name;
     codeDistrict = code;
     emit(state.copyWith(
-        status: CreateJobStatus.success,
-        payment: state.payment,
-        category: state.category));
+      status: CreateJobStatus.success,
+    ));
     getWard(codeW: codeDistrict);
   }
 
   void selectedWard({String? name}) {
     emit(state.copyWith(
-        status: CreateJobStatus.loading, payment: state.payment));
+      status: CreateJobStatus.loading,
+    ));
     wardName = name;
     emit(state.copyWith(
-        status: CreateJobStatus.success,
-        payment: state.payment,
-        category: state.category));
+      status: CreateJobStatus.success,
+    ));
   }
 
   void selectImages() async {
     emit(state.copyWith(
-        status: CreateJobStatus.loading,
-        category: state.category,
-        payment: state.payment));
+      status: CreateJobStatus.loading,
+    ));
     selectedImages = await imagePicker.pickMultiImage();
     if (selectedImages!.isNotEmpty) {
       imageFileList!.addAll(selectedImages!);
     }
     emit(state.copyWith(
-        status: CreateJobStatus.updateImageSuccess,
-        payment: state.payment,
-        category: state.category));
+      status: CreateJobStatus.updateImageSuccess,
+    ));
   }
 
   void getCategory() {
@@ -130,9 +131,9 @@ class CreateJobCubit extends Cubit<CreateJobState> {
         status: CreateJobStatus.loading, category: state.category));
     _jobRepository.getCategory().then((value) {
       emit(state.copyWith(
-          status: CreateJobStatus.success,
-          category: value,
-          payment: state.payment));
+        status: CreateJobStatus.success,
+        category: value,
+      ));
     }).catchError((onError) {
       emit(state.copyWith(
           category: state.category, status: CreateJobStatus.error));
@@ -141,40 +142,41 @@ class CreateJobCubit extends Cubit<CreateJobState> {
 
   void selectedCategory(int id) {
     emit(state.copyWith(
-        status: CreateJobStatus.loading,
-        category: state.category,
-        payment: state.payment));
+      status: CreateJobStatus.loading,
+    ));
     if (listCategory.contains(id)) {
       listCategory.remove(id);
     } else {
       listCategory.add(id);
     }
     emit(state.copyWith(
-        status: CreateJobStatus.success,
-        category: state.category,
-        payment: state.payment));
+      status: CreateJobStatus.success,
+    ));
+  }
+
+  void changeRemote(bool value) {
+    isRemoteJob = value;
+    emit(state.copyWith(status: CreateJobStatus.success));
   }
 
   void getPayment() {
     try {
       emit(state.copyWith(
-          status: CreateJobStatus.loading,
-          category: state.category,
-          payment: state.payment));
+        status: CreateJobStatus.loading,
+      ));
       _jobRepository.getPayment().then((value) {
         emit(state.copyWith(
-            status: CreateJobStatus.success,
-            payment: value,
-            category: state.category));
+          status: CreateJobStatus.success,
+          payment: value,
+        ));
       });
     } catch (e) {}
   }
 
   void selectPaymentMethod({String? name, int? paymentMethodId}) {
     emit(state.copyWith(
-        status: CreateJobStatus.loading,
-        category: state.category,
-        payment: state.payment));
+      status: CreateJobStatus.loading,
+    ));
     paymentMethodName = name;
     paymentId = paymentMethodId;
   }
@@ -195,8 +197,13 @@ class CreateJobCubit extends Cubit<CreateJobState> {
           .createJob(CreteJobRequest(
               description: description,
               title: title,
-              address: Address(
-                  city: city, district: district, ward: ward, detail: detail),
+              address: isRemoteJob
+                  ? null
+                  : Address(
+                      city: city,
+                      district: district,
+                      ward: ward,
+                      detail: detail),
               categories: listCategory,
               dueDate: (dueDate?.millisecondsSinceEpoch)! ~/ 1000,
               payment: Payment(
@@ -205,9 +212,8 @@ class CreateJobCubit extends Cubit<CreateJobState> {
               images: imageFileList?.map((e) => e.path).toList()))
           .then((value) {
         emit(state.copyWith(
-            status: CreateJobStatus.createJobSuccess,
-            category: state.category,
-            payment: state.payment));
+          status: CreateJobStatus.createJobSuccess,
+        ));
       });
     } catch (e) {
       emit(state.copyWith(
@@ -219,14 +225,10 @@ class CreateJobCubit extends Cubit<CreateJobState> {
   void selectDueDate(DateTime time) {
     emit(state.copyWith(
       status: CreateJobStatus.loading,
-      payment: state.payment,
-      category: state.category,
     ));
     dueDate = time;
     emit(state.copyWith(
       status: CreateJobStatus.success,
-      payment: state.payment,
-      category: state.category,
     ));
   }
 }

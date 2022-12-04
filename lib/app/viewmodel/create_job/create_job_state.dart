@@ -23,6 +23,6 @@ class CreateJobState {
     return CreateJobState(
         status: status ?? this.status,
         category: category ?? this.category,
-        payment: this.payment);
+        payment: payment ?? this.payment);
   }
 }
