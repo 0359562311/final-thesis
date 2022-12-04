@@ -42,6 +42,9 @@ class CertificateDegreeItem extends StatelessWidget {
                     title,
                     style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 4),
+                  Text(description),
+                  SizedBox(height: 4),
                   Text("tại " + organization)
                 ],
               )
