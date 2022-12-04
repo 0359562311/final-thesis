@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:fakeslink/app/model/dto/filter_job.dart';
+import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
+import 'package:fakeslink/app/model/entities/payment.dart';
+import 'package:fakeslink/app/model/request/create_job_request.dart';
 import 'package:get_it/get_it.dart';
 
 class JobRemoteSource {
@@ -15,5 +17,16 @@ class JobRemoteSource {
         (await GetIt.I<Dio>().get("/job", queryParameters: filterJob.toMap()))
             .data['results'];
     return (res as List).map((e) => Job.fromJson(e)).toList();
+  }
+
+  Future<List<PaymentMethod>> getPayment() async {
+    final res = (await GetIt.I<Dio>().get("/job/payment_methods")).data;
+    return (res as List).map((e) => PaymentMethod.fromJson(e)).toList();
+  }
+
+  Future<dynamic> createJob(CreteJobRequest request) async {
+    final res =
+        (await GetIt.I<Dio>().post("/job/", data: request.toJson())).data;
+    return res;
   }
 }
