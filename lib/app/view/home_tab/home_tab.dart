@@ -1,9 +1,11 @@
+import 'package:fakeslink/app/view/create_job/create_job.dart';
 import 'package:fakeslink/app/viewmodel/home/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/core/utils/extensions/num.dart';
 import 'package:fakeslink/main.dart';
+import 'package:fakeslink/core/utils/navigations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -238,32 +240,38 @@ class _HomeTabState extends State<HomeTab> {
                     itemCount: 9,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: AppColor.background,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                _cubit.listImage[index],
-                                height: 32,
-                                width: 32,
-                                color: AppColor.primaryColor,
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Text(
-                                _cubit.listJob[index],
-                                style: GoogleFonts.montserrat(
-                                    color: AppColor.primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12),
-                              ),
-                            ],
+                      return GestureDetector(
+                        onTap: () {
+                          NavigationUtils.navigatePage(
+                              context, CreateJobPage());
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: AppColor.background,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  _cubit.listImage[index],
+                                  height: 32,
+                                  width: 32,
+                                  color: AppColor.primaryColor,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  _cubit.listJob[index],
+                                  style: GoogleFonts.montserrat(
+                                      color: AppColor.primaryColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
