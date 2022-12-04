@@ -37,24 +37,26 @@ class User {
   List<Experience?>? experiences;
   @HiveField(14)
   List<Certificate?>? certificates;
+  @HiveField(15)
+  String? bio;
 
-  User({
-    this.id,
-    this.name,
-    this.dob,
-    this.avatar,
-    this.cover,
-    this.gender,
-    this.phoneNumber,
-    this.createAt,
-    this.updateAt,
-    this.email,
-    this.loyaltyPoint,
-    this.bankAccount,
-    this.degrees,
-    this.experiences,
-    this.certificates,
-  });
+  User(
+      {this.id,
+      this.name,
+      this.dob,
+      this.avatar,
+      this.cover,
+      this.gender,
+      this.phoneNumber,
+      this.createAt,
+      this.updateAt,
+      this.email,
+      this.loyaltyPoint,
+      this.bankAccount,
+      this.degrees,
+      this.experiences,
+      this.certificates,
+      this.bio});
   User.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
     name = json['name']?.toString();
@@ -68,6 +70,7 @@ class User {
     email = json['email']?.toString();
     loyaltyPoint = json['loyaltyPoint']?.toInt();
     bankAccount = json['bankAccount']?.toString();
+    bio = json['bio']?.toString();
     if (json['degrees'] != null) {
       final v = json['degrees'];
       final arr0 = <Degree>[];
@@ -107,6 +110,7 @@ class User {
     data['email'] = email;
     data['loyaltyPoint'] = loyaltyPoint;
     data['bankAccount'] = bankAccount;
+    data['bio'] = bio;
     if (degrees != null) {
       final v = degrees;
       final arr0 = [];

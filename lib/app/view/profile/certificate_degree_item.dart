@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CertificateDegreeItem extends StatelessWidget {
-  final String image;
   final String title;
   final String organization;
   final String description;
 
   const CertificateDegreeItem(
       {Key? key,
-      required this.image,
       required this.title,
       required this.description,
       required this.organization})
@@ -25,29 +23,17 @@ class CertificateDegreeItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                image,
-                height: 40,
-                width: 40,
+              Text(
+                title,
+                style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                width: 8,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4),
-                  Text(description),
-                  SizedBox(height: 4),
-                  Text("tại " + organization)
-                ],
-              )
+              SizedBox(height: 4),
+              Text(description),
+              SizedBox(height: 4),
+              Text("tại " + organization)
             ],
           ),
           // SizedBox(

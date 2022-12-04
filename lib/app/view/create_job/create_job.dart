@@ -54,6 +54,9 @@ class _CreateJobPageState extends State<CreateJobPage> {
           }
         },
         builder: (context, state) {
+          if (state.status == CreateJobStatus.loading) {
+            return CircularProgressIndicator();
+          }
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(

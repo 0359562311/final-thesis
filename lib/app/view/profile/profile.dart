@@ -107,7 +107,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         height: 8,
                       ),
                       Text(
-                        _cubit.state.data?.phoneNumber ?? "",
+                        _cubit.state.data?.phoneNumber ?? "Chưa cập nhật",
                         style: GoogleFonts.montserrat(
                             fontSize: 13, color: AppColor.secondaryColor),
                       ),
@@ -131,7 +131,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         height: 16,
                       ),
                       Text(
-                        "Bằng cấp",
+                        "Chứng chỉ",
                         style:
                             GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                       ),
@@ -144,14 +144,35 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                   return CertificateDegreeItem(
-                      image:
-                          "https://znews-photo.zingcdn.me/w660/Uploaded/kbd_pilk/2022_08_30/lisa67.jpg",
                       title:
-                          "${_cubit.state.data?.certificates?[index]?.title} ${_cubit.state.data?.certificates?[index]?.description ?? ""}",
+                          "${_cubit.state.data?.certificates?[index]?.title}",
                       description:
                           "${_cubit.state.data?.certificates?[index]?.from} - ${_cubit.state.data?.certificates?[index]?.to} ",
-                      organization: "IIG");
+                      organization:
+                          "${_cubit.state.data?.certificates?[index]?.description}");
                 }, childCount: _cubit.state.data?.certificates?.length ?? 0)),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    "Bằng cấp",
+                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SliverPadding(
+                sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                  return CertificateDegreeItem(
+                      title: "${_cubit.state.data?.degrees?[index]?.title}",
+                      description:
+                          "${_cubit.state.data?.degrees?[index]?.organization}",
+                      organization:
+                          "${_cubit.state.data?.degrees?[index]?.organization}");
+                }, childCount: _cubit.state.data?.degrees?.length ?? 0)),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
               )
             ],

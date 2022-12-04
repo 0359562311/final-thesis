@@ -177,7 +177,7 @@ class CreateJobCubit extends Cubit<CreateJobState> {
 
   void selectPaymentMethod({String? name, int? paymentMethodId}) {
     emit(state.copyWith(
-      status: CreateJobStatus.loading,
+      status: CreateJobStatus.success,
     ));
     paymentMethodName = name;
     paymentId = paymentMethodId;
