@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/request/create_job_request.dart';
 import 'package:fakeslink/app/viewmodel/create_job/create_job_state.dart';
+import 'package:fakeslink/core/utils/storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -189,10 +191,13 @@ class CreateJobCubit extends Cubit<CreateJobState> {
       String? ward,
       String? detail,
       String? price,
-      int? paymentMethod}) {
+      int? paymentMethod}) async {
     try {
       emit(state.copyWith(
           status: CreateJobStatus.loading, category: state.category));
+      final images = await Future.wait((imageFileList ?? [])
+          .map((e) => StorageService.uploadFile(File(e.path)))
+          .toList());
       _jobRepository
           .createJob(CreteJobRequest(
               description: description,
@@ -209,7 +214,7 @@ class CreateJobCubit extends Cubit<CreateJobState> {
               payment: Payment(
                   amount: int.parse(price ?? ""), paymentMethod: paymentMethod),
               videos: [],
-              images: imageFileList?.map((e) => e.path).toList()))
+              images: images))
           .then((value) {
         emit(state.copyWith(
           status: CreateJobStatus.createJobSuccess,
