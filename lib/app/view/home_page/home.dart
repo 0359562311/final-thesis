@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/view/home_page/activities/activities_page.dart';
 import 'package:fakeslink/app/view/home_page/jobs_list/jobs_list_page.dart';
 import 'package:fakeslink/app/view/notification/notification.dart';
 import 'package:fakeslink/app/view/setting/setting.dart';
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           controller: _pageController,
           children: [
             HomeTab(),
-            SizedBox(),
+            ActivitiesPage(),
             JobsListPage(),
             NotificationPage(),
             SettingTab()

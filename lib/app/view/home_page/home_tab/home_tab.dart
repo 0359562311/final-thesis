@@ -13,7 +13,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
 
@@ -21,7 +20,8 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _HomeTabState extends State<HomeTab>
+    with AutomaticKeepAliveClientMixin<HomeTab> {
   late HomeCubit _cubit;
 
   @override
@@ -282,4 +282,7 @@ class _HomeTabState extends State<HomeTab> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,5 +1,5 @@
-import 'package:fakeslink/app/viewmodel/home/jobs_list/jobs_list_cubit.dart';
-import 'package:fakeslink/app/viewmodel/home/jobs_list/jobs_list_state.dart';
+import 'package:fakeslink/app/viewmodel/home/jobs_list_tab/jobs_list_cubit.dart';
+import 'package:fakeslink/app/viewmodel/home/jobs_list_tab/jobs_list_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/core/custom_widgets/job_item.dart';

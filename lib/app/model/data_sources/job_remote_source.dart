@@ -19,6 +19,13 @@ class JobRemoteSource {
     return (res as List).map((e) => Job.fromJson(e)).toList();
   }
 
+  Future<List<Job>> getMyJobs(int page) async {
+    final res =
+        (await GetIt.I<Dio>().get("/myJobs", queryParameters: {"page": page}))
+            .data['results'];
+    return (res as List).map((e) => Job.fromJson(e)).toList();
+  }
+
   Future<List<PaymentMethod>> getPayment() async {
     final res = (await GetIt.I<Dio>().get("/job/payment_methods")).data;
     return (res as List).map((e) => PaymentMethod.fromJson(e)).toList();

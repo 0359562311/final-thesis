@@ -1,6 +1,6 @@
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
-import 'package:fakeslink/app/viewmodel/home/jobs_list/jobs_list_state.dart';
+import 'package:fakeslink/app/viewmodel/home/jobs_list_tab/jobs_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum JobsListStatus { loading, success, error }

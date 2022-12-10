@@ -1,7 +1,7 @@
 import 'package:fakeslink/app/model/entities/address.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
-import 'package:fakeslink/app/viewmodel/home/jobs_list/jobs_list_cubit.dart';
+import 'package:fakeslink/app/viewmodel/home/jobs_list_tab/jobs_list_cubit.dart';
 
 class JobsListState {
   List<Job> jobs;

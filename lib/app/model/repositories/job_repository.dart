@@ -10,6 +10,7 @@ mixin JobRepository {
   Future<List<PaymentMethod>> getPayment();
   Future<dynamic> createJob(CreteJobRequest request);
   Future<List<Job>> getJobs(FilterJob filterJob);
+  Future<List<Job>> getMyJobs(int page);
 }
 
 class JobRepositoryImpl implements JobRepository {
@@ -32,5 +33,10 @@ class JobRepositoryImpl implements JobRepository {
   @override
   Future<dynamic> createJob(CreteJobRequest request) {
     return _jobRemoteSource.createJob(request);
+  }
+
+  @override
+  Future<List<Job>> getMyJobs(int page) {
+    return _jobRemoteSource.getMyJobs(page);
   }
 }
