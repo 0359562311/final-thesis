@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/repositories/user_respository.dart';
-import 'package:fakeslink/app/viewmodel/home/home_state.dart';
+import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final JobRepository _jobRepository = JobRepositoryImpl();

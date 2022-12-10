@@ -1,8 +1,10 @@
-import 'package:fakeslink/app/view/home_tab/home_tab.dart';
+import 'package:fakeslink/app/view/home_page/jobs_list/jobs_list_page.dart';
 import 'package:fakeslink/app/view/notification/notification.dart';
 import 'package:fakeslink/app/view/setting/setting.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
+
+import 'home_tab/home_tab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,12 +35,8 @@ class _HomePageState extends State<HomePage> {
           controller: _pageController,
           children: [
             HomeTab(),
-            Center(
-              child: Text("History"),
-            ),
-            Center(
-              child: Text("Jobs"),
-            ),
+            SizedBox(),
+            JobsListPage(),
             NotificationPage(),
             SettingTab()
           ],

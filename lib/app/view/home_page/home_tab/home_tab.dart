@@ -1,6 +1,6 @@
 import 'package:fakeslink/app/view/create_job/create_job.dart';
-import 'package:fakeslink/app/viewmodel/home/home_cubit.dart';
-import 'package:fakeslink/app/viewmodel/home/home_state.dart';
+import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
+import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/core/utils/extensions/num.dart';
@@ -13,7 +13,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../model/entities/user.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
