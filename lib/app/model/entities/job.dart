@@ -14,19 +14,20 @@ class Job {
   final String? title;
   final String? description;
   final String? status;
+  final DateTime? dueDate;
 
-  Job({
-    this.id,
-    this.payment,
-    this.address,
-    this.poster,
-    this.categories,
-    this.images,
-    this.videos,
-    this.title,
-    this.description,
-    this.status,
-  });
+  Job(
+      {this.id,
+      this.payment,
+      this.address,
+      this.poster,
+      this.categories,
+      this.images,
+      this.videos,
+      this.title,
+      this.description,
+      this.status,
+      this.dueDate});
 
   Job.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int?,
@@ -47,7 +48,8 @@ class Job {
         videos = json['videos'] as List?,
         title = json['title'] as String?,
         description = json['description'] as String?,
-        status = json['status'] as String?;
+        status = json['status'] as String?,
+        dueDate = DateTime.tryParse(json['dueDate'] ?? "");
 
   Map<String, dynamic> toJson() => {
         'id': id,

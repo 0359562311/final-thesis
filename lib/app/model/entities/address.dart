@@ -35,4 +35,9 @@ class Address {
         'latitude': latitude,
         'longitude': longitude
       };
+
+  @override
+  String toString() {
+    return district! + " , " + city!;
+  }
 }
