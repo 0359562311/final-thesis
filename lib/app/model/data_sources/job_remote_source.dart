@@ -14,15 +14,15 @@ class JobRemoteSource {
 
   Future<List<Job>> getJobs(FilterJob filterJob) async {
     final res =
-        (await GetIt.I<Dio>().get("/job", queryParameters: filterJob.toMap()))
+        (await GetIt.I<Dio>().get("/job", queryParameters: filterJob.toJson()))
             .data['results'];
     return (res as List).map((e) => Job.fromJson(e)).toList();
   }
 
-  Future<List<Job>> getMyJobs(int page) async {
-    final res =
-        (await GetIt.I<Dio>().get("/myJobs", queryParameters: {"page": page}))
-            .data['results'];
+  Future<List<Job>> getMyJobs(int offset) async {
+    final res = (await GetIt.I<Dio>()
+            .get("/myJobs", queryParameters: {"offset": offset}))
+        .data['results'];
     return (res as List).map((e) => Job.fromJson(e)).toList();
   }
 

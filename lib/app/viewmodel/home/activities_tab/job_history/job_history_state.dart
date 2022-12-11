@@ -4,12 +4,12 @@ enum JobHistoryStatus { error, loading, success }
 
 class JobHistoryState {
   List<Job> jobs;
-  int currentPage;
+  int offset;
   JobHistoryStatus status;
 
   JobHistoryState({
     required this.jobs,
-    required this.currentPage,
+    required this.offset,
     required this.status,
   });
 
@@ -20,7 +20,7 @@ class JobHistoryState {
   }) {
     return JobHistoryState(
       jobs: jobs ?? this.jobs,
-      currentPage: currentPage ?? this.currentPage,
+      offset: currentPage ?? this.offset,
       status: status ?? this.status,
     );
   }

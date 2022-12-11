@@ -9,7 +9,7 @@ class JobsListState {
   Address? selectedAddress;
   List<Category>? categories;
   JobsListStatus status;
-  int currentPage;
+  int offset;
 
   JobsListState({
     required this.jobs,
@@ -17,7 +17,7 @@ class JobsListState {
     this.selectedAddress,
     this.categories,
     required this.status,
-    required this.currentPage,
+    required this.offset,
   });
 
   JobsListState copyWith({
@@ -26,7 +26,7 @@ class JobsListState {
     Address? selectedAddress,
     List<Category>? categories,
     JobsListStatus? status,
-    int? currentPage,
+    int? offset,
   }) {
     return JobsListState(
       jobs: jobs ?? this.jobs,
@@ -34,7 +34,7 @@ class JobsListState {
       selectedAddress: selectedAddress ?? this.selectedAddress,
       categories: categories ?? this.categories,
       status: status ?? this.status,
-      currentPage: currentPage ?? this.currentPage,
+      offset: offset ?? this.offset,
     );
   }
 }

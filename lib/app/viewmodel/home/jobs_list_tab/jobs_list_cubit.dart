@@ -9,18 +9,18 @@ class JobsListViewModel extends Cubit<JobsListState> {
   final JobRepository _repository = JobRepositoryImpl();
 
   JobsListViewModel()
-      : super(JobsListState(
-            jobs: [], status: JobsListStatus.loading, currentPage: 1));
+      : super(
+            JobsListState(jobs: [], status: JobsListStatus.loading, offset: 0));
 
   void getJobs([
     bool isRefresh = false,
   ]) {
     if (isRefresh) {
-      emit(state.copyWith(currentPage: 0, status: JobsListStatus.loading));
+      emit(state.copyWith(offset: 0, status: JobsListStatus.loading));
     }
     _repository
         .getJobs(FilterJob(
-            page: state.currentPage + 1,
+            offset: state.offset,
             keyword: state.searchKey,
             categories: state.categories?.map((e) => e.id ?? 0).toList()))
         .then((value) {
@@ -28,10 +28,9 @@ class JobsListViewModel extends Cubit<JobsListState> {
       emit(state.copyWith(
           jobs: state.jobs..addAll(value),
           status: JobsListStatus.success,
-          currentPage: state.currentPage + 1));
+          offset: state.offset + value.length));
     }).catchError((e) {
-      emit(state.copyWith(
-          status: JobsListStatus.error, currentPage: state.currentPage));
+      emit(state.copyWith(status: JobsListStatus.error, offset: state.offset));
     });
   }
 
