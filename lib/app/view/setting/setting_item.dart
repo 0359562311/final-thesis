@@ -20,20 +20,23 @@ class SettingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColor.primaryColor.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: iconColor,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColor.primaryColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(10),
         ),
-        title: Text(
-          title,
-          style: GoogleFonts.montserrat(
-              color: AppColor.primaryColor, fontSize: 14),
+        child: ListTile(
+          leading: Icon(
+            icon,
+            color: iconColor,
+          ),
+          title: Text(
+            title,
+            style: GoogleFonts.montserrat(
+                color: AppColor.primaryColor, fontSize: 14),
+          ),
         ),
       ),
     );

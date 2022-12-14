@@ -11,8 +11,8 @@ class UserRepositoryImpl implements UserRepository {
   final UserLocalSource _localSource = UserLocalSource();
   @override
   Future<User> getProfile() {
-    return _remoteSource.getProfile().then((value) {
-      _localSource.save(value);
+    return _remoteSource.getProfile().then((value) async {
+      await _localSource.save(value);
       return value;
     });
   }

@@ -1,7 +1,11 @@
 import 'package:fakeslink/app/view/setting/setting_item.dart';
+import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
+import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
+import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingTab extends StatefulWidget {
   const SettingTab({Key? key}) : super(key: key);
@@ -27,16 +31,13 @@ class _SettingTabState extends State<SettingTab> {
                 onTap: () {
                   Navigator.pushNamed(context, AppRoute.profile, arguments: 1);
                 },
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(
-                      "https://znews-photo.zingcdn.me/w660/Uploaded/kbd_pilk/2022_08_30/lisa67.jpg"),
-                ),
+                child: AvatarWidget(
+                    avatar: configBox.get("user").avatar, size: 60),
               ),
               SizedBox(
                 width: 16,
               ),
-              Expanded(child: Text("anhtanhangxom@gmail.com")),
+              Expanded(child: Text(configBox.get("user").email)),
               SizedBox(
                 width: 16,
               ),
@@ -84,6 +85,11 @@ class _SettingTabState extends State<SettingTab> {
           SettingItem(
               icon: Icons.logout,
               iconColor: AppColor.primaryColor,
+              onPressed: () {
+                BlocProvider.of<HomeCubit>(context).logout();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRoute.login, (_) => false);
+              },
               title: "Đăng xuất"),
           SizedBox(
             height: 8,

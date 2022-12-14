@@ -4,7 +4,7 @@ import 'package:fakeslink/core/utils/validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final IAuthenticationRepository _authenticationRepository =
+  final AuthenticationRepository _authenticationRepository =
       AuthenticationRepositoryImpl();
 
   LoginCubit() : super(LoginState(status: LoginStatus.initial));

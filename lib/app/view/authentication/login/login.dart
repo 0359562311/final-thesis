@@ -47,7 +47,8 @@ class _LoginPageState extends State<LoginPage> {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error!)));
           } else if (state.status == LoginStatus.success) {
-            Navigator.pushNamed(context, AppRoute.home);
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoute.home, (_) => false);
           }
         },
         builder: (context, state) {

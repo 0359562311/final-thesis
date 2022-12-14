@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:fakeslink/app/model/repositories/authentication_repository.dart';
+import 'package:fakeslink/app/model/repositories/transaction_repository.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/repositories/user_respository.dart';
@@ -7,8 +9,12 @@ import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   final JobRepository _jobRepository = JobRepositoryImpl();
   final UserRepository _userRepository = UserRepositoryImpl();
+  final AuthenticationRepository _authRepository =
+      AuthenticationRepositoryImpl();
+  final TransactionRepository _transactionRepository =
+      TransactionRepositoryImpl();
 
-  HomeCubit() : super(HomeState(status: HomeStatus.initial));
+  HomeCubit() : super(HomeState(HomeStatus.initial, null, null, 0, null));
 
   List<String> listJob = [
     "Đào tạo",
@@ -54,5 +60,31 @@ class HomeCubit extends Cubit<HomeState> {
         .getJobs(FilterJob(categories: [state.category?[index].id ?? 0]))
         .then((value) => emit(state.copyWith(currentTab: index, jobs: value)))
         .catchError((_) => emit(state.copyWith(currentTab: index, jobs: [])));
+  }
+
+  void logout() async {
+    await _authRepository.signOut();
+  }
+
+  void deposit(int amount) {
+    emit(state.copyWith(status: HomeStatus.loading));
+    _transactionRepository
+        .deposit(amount)
+        .then((value) => emit(state.copyWith(
+            status: HomeStatus.depositSuccess, transaction: value)))
+        .catchError((_) {
+      emit(state.copyWith(status: HomeStatus.error));
+    });
+  }
+
+  void withdraw(int amount) {
+    emit(state.copyWith(status: HomeStatus.loading));
+    _transactionRepository
+        .withdraw(amount)
+        .then((value) => emit(state.copyWith(
+            status: HomeStatus.withdrawSuccess, transaction: value)))
+        .catchError((_) {
+      emit(state.copyWith(status: HomeStatus.error));
+    });
   }
 }
