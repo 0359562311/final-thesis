@@ -203,7 +203,7 @@ class _HomeTabState extends State<HomeTab>
                                             int amount = int.parse(deposit);
                                             if (amount > 0) {
                                               Navigator.pop(context);
-                                              _cubit.deposit(amount);
+                                              _cubit.withdraw(amount);
                                             }
                                           },
                                           style: ButtonStyle(

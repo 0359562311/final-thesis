@@ -1,7 +1,9 @@
 import 'package:fakeslink/app/view/profile/certificate_degree_item.dart';
-import 'package:fakeslink/app/viewmodel/profile/view_profile/view_profile_cubit.dart';
 import 'package:fakeslink/app/viewmodel/profile/view_profile/view_profile_state.dart';
+import 'package:fakeslink/app/viewmodel/profile/view_profile/view_profile_viewmodel.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
+import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,13 +18,13 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
-  late ViewProfileCubit _cubit;
+  late ViewProfileViewModel _cubit;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cubit = ViewProfileCubit();
+    _cubit = ViewProfileViewModel();
     _cubit.getProfile();
   }
 
@@ -35,7 +37,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         iconTheme: Theme.of(context).iconTheme.copyWith(color: Colors.black),
       ),
       backgroundColor: Colors.white,
-      body: BlocConsumer<ViewProfileCubit, ViewProfileState>(
+      body: BlocConsumer<ViewProfileViewModel, ViewProfileState>(
         bloc: _cubit,
         listener: (context, state) {
           // TODO: implement listener
@@ -46,11 +48,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(
-                          "https://znews-photo.zingcdn.me/w660/Uploaded/kbd_pilk/2022_08_30/lisa67.jpg"),
-                    ),
+                    AvatarWidget(
+                        avatar: configBox.get("user").avatar, size: 80),
                     const SizedBox(
                       height: 8,
                     ),
@@ -92,7 +91,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         height: 8,
                       ),
                       Text(
-                        "this is an introduction\nhehe",
+                        configBox.get("user").bio ?? "Chưa cập nhật",
                         style: GoogleFonts.montserrat(fontSize: 13),
                       ),
                       const SizedBox(
@@ -168,8 +167,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         (BuildContext context, int index) {
                   return CertificateDegreeItem(
                       title: "${_cubit.state.data?.degrees?[index]?.title}",
-                      description:
-                          "${_cubit.state.data?.degrees?[index]?.organization}",
                       organization:
                           "${_cubit.state.data?.degrees?[index]?.organization}");
                 }, childCount: _cubit.state.data?.degrees?.length ?? 0)),

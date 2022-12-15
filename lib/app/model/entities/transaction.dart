@@ -1,3 +1,7 @@
+import 'package:fakeslink/app/model/entities/bank.dart';
+
+enum TransactionStatus { Pending, Failed, Success }
+
 class Transaction {
   final int? id;
   final DepositTransaction? deposit;
@@ -98,7 +102,7 @@ class WithdrawTransaction {
   final int? id;
   final String? dueDate;
   final String? detail;
-  final int? userBankAccount;
+  final BankAccount? userBankAccount;
 
   WithdrawTransaction({
     this.id,
@@ -111,7 +115,9 @@ class WithdrawTransaction {
       : id = json['id'] as int?,
         dueDate = json['dueDate'] as String?,
         detail = json['detail'] as String?,
-        userBankAccount = json['userBankAccount'] as int?;
+        userBankAccount = json['userBankAccount'] == null
+            ? null
+            : BankAccount.fromJson(json['userBankAccount']);
 
   Map<String, dynamic> toJson() => {
         'id': id,

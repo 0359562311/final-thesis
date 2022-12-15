@@ -4,6 +4,7 @@ import 'package:fakeslink/app/model/entities/transaction.dart';
 abstract class TransactionRepository {
   Future<Transaction> deposit(int amount);
   Future<Transaction> withdraw(int amount);
+  Future<Transaction> getById(int id);
 }
 
 class TransactionRepositoryImpl extends TransactionRepository {
@@ -16,5 +17,10 @@ class TransactionRepositoryImpl extends TransactionRepository {
   @override
   Future<Transaction> withdraw(int amount) {
     return _remoteSource.withdraw(amount);
+  }
+
+  @override
+  Future<Transaction> getById(int id) {
+    return _remoteSource.getById(id);
   }
 }

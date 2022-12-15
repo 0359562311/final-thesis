@@ -14,4 +14,11 @@ class TransactionRemoteSource {
         .post("/payment/withdraw/", data: {"amount": amount});
     return Transaction.fromJson(res.data);
   }
+
+  Future<Transaction> getById(int id) async {
+    final res = await GetIt.I<Dio>().get(
+      "/payment/$id",
+    );
+    return Transaction.fromJson(res.data);
+  }
 }

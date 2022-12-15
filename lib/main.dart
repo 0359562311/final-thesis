@@ -71,7 +71,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
-    baseUrl: 'http://192.168.1.90:8000',
+    baseUrl: 'http://192.168.0.102:8000',
     connectTimeout: 60000,
     receiveTimeout: 60000,
   );

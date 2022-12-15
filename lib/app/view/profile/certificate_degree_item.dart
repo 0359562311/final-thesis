@@ -5,12 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 class CertificateDegreeItem extends StatelessWidget {
   final String title;
   final String organization;
-  final String description;
+  final String? description;
 
   const CertificateDegreeItem(
       {Key? key,
       required this.title,
-      required this.description,
+      this.description,
       required this.organization})
       : super(key: key);
 
@@ -30,8 +30,10 @@ class CertificateDegreeItem extends StatelessWidget {
                 title,
                 style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 4),
-              Text(description),
+              if (description != null) ...[
+                SizedBox(height: 4),
+                Text(description!),
+              ],
               SizedBox(height: 4),
               Text("tại " + organization)
             ],
