@@ -2,13 +2,14 @@ import 'package:fakeslink/app/model/data_sources/authentication_local_source.dar
 import 'package:fakeslink/app/model/data_sources/authentication_remote_source.dart';
 import 'package:fakeslink/app/model/entities/session.dart';
 
-mixin IAuthenticationRepository {
+mixin AuthenticationRepository {
   Future<Session> login(String email, String password);
   Future<void> signUp(String email, String password);
+  Future<void> signOut();
   void saveSession(Session session);
 }
 
-class AuthenticationRepositoryImpl implements IAuthenticationRepository {
+class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final AuthenticationRemoteSource _remoteSource = AuthenticationRemoteSource();
   final AuthenticationLocalSource _localSource = AuthenticationLocalSource();
 
@@ -25,5 +26,10 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
   @override
   Future<void> signUp(String email, String password) {
     return _remoteSource.signUp(email, password);
+  }
+
+  @override
+  Future<void> signOut() {
+    return _localSource.signOut();
   }
 }

@@ -33,13 +33,13 @@ class UserAdapter extends TypeAdapter<User> {
       experiences: (fields[13] as List?)?.cast<Experience?>(),
       certificates: (fields[14] as List?)?.cast<Certificate?>(),
       bio: fields[15] as String?,
-    );
+    )..balance = fields[16] as int?;
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -71,7 +71,9 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(14)
       ..write(obj.certificates)
       ..writeByte(15)
-      ..write(obj.bio);
+      ..write(obj.bio)
+      ..writeByte(16)
+      ..write(obj.balance);
   }
 
   @override

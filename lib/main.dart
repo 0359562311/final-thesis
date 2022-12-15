@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/model/entities/certificate.dart';
@@ -11,18 +10,15 @@ import 'package:fakeslink/app/view/authentication/login/login.dart';
 import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
 import 'package:fakeslink/app/view/profile/profile.dart';
-import 'package:fakeslink/core/const/firebase_config.dart';
+import 'package:fakeslink/app/view/transaction/transaction_detail.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'core/const/app_routes.dart';
 import 'core/utils/interceptor.dart';
 import 'core/utils/share_preferences.dart';
@@ -75,7 +71,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
-    baseUrl: 'http://192.168.0.102:8000',
+    baseUrl: 'http://192.168.1.90:8000',
     connectTimeout: 60000,
     receiveTimeout: 60000,
   );
@@ -181,6 +177,11 @@ class _MyAppState extends State<MyApp> {
                 builder: (context) =>
                     UserProfilePage(userId: settings.arguments as int),
               );
+            case AppRoute.transactionDetail:
+              return MaterialPageRoute(
+                  builder: (context) => TransactionDetail(
+                        transactionId: settings.arguments as int,
+                      ));
             default:
           }
           return null;

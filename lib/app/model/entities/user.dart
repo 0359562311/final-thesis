@@ -39,6 +39,8 @@ class User {
   List<Certificate?>? certificates;
   @HiveField(15)
   String? bio;
+  @HiveField(16)
+  int? balance;
 
   User(
       {this.id,
@@ -56,6 +58,7 @@ class User {
       this.degrees,
       this.experiences,
       this.certificates,
+      this.balance,
       this.bio});
   User.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
@@ -70,7 +73,7 @@ class User {
     email = json['email']?.toString();
     loyaltyPoint = json['loyaltyPoint']?.toInt();
     bankAccount = json['bankAccount']?.toString();
-    bio = json['bio']?.toString();
+    balance = json['balance'];
     if (json['degrees'] != null) {
       final v = json['degrees'];
       final arr0 = <Degree>[];

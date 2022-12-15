@@ -2,14 +2,13 @@ import 'package:fakeslink/app/view/create_job/create_job.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/core/utils/extensions/num.dart';
 import 'package:fakeslink/main.dart';
 import 'package:fakeslink/core/utils/navigations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,12 +22,24 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab>
     with AutomaticKeepAliveClientMixin<HomeTab> {
   late HomeCubit _cubit;
+  String deposit = "0";
+  String withdraw = "0";
+  late TextEditingController _depositController, _withdrawController;
 
   @override
   void initState() {
     super.initState();
-    _cubit = HomeCubit();
+    _cubit = BlocProvider.of(context);
     _cubit.init();
+    _depositController = TextEditingController();
+    _withdrawController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _depositController.dispose();
+    _withdrawController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,7 +47,11 @@ class _HomeTabState extends State<HomeTab>
     return BlocConsumer<HomeCubit, HomeState>(
       bloc: _cubit,
       listener: (context, state) {
-        // TODO: implement listener
+        if (state.status == HomeStatus.depositSuccess ||
+            state.status == HomeStatus.withdrawSuccess) {
+          Navigator.pushNamed(context, AppRoute.transactionDetail,
+              arguments: state.transaction?.id ?? 0);
+        }
       },
       builder: (context, state) {
         return CustomScrollView(
@@ -62,19 +77,164 @@ class _HomeTabState extends State<HomeTab>
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    Text("Xin chào, ${configBox.get("user")?.name}!"),
+                    Text(
+                      "Xin chào, ${configBox.get("user")?.name}!",
+                      style: GoogleFonts.montserrat(),
+                    ),
                     Spacer(),
                     AvatarWidget(
                       avatar: configBox.get("user").avatar,
-                      size: 32,
+                      size: 40,
                     )
                   ],
                 ),
               ),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 16,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Text("Tài khoản: ", style: GoogleFonts.montserrat()),
+                  Text(
+                      ((configBox.get("user")?.balance ?? 0) as int).price +
+                          " VND",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18,
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 16,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return IntrinsicHeight(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: TextField(
+                                          autofocus: true,
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            deposit = value;
+                                          },
+                                        ),
+                                      )),
+                                      TextButton(
+                                          onPressed: () {
+                                            int amount = int.parse(deposit);
+                                            if (amount > 0) {
+                                              Navigator.pop(context);
+                                              _cubit.deposit(amount);
+                                            }
+                                          },
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      AppColor.primaryColor)),
+                                          child: Text(
+                                            "Nạp",
+                                            style: GoogleFonts.montserrat(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom +
+                                        MediaQuery.of(context).padding.bottom,
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    },
+                    child: Text(
+                      "Nạp tiền",
+                      style: GoogleFonts.montserrat(
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return IntrinsicHeight(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: TextField(
+                                          autofocus: true,
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            deposit = value;
+                                          },
+                                        ),
+                                      )),
+                                      TextButton(
+                                          onPressed: () {
+                                            int amount = int.parse(deposit);
+                                            if (amount > 0) {
+                                              Navigator.pop(context);
+                                              _cubit.deposit(amount);
+                                            }
+                                          },
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      AppColor.primaryColor)),
+                                          child: Text(
+                                            "Rút",
+                                            style: GoogleFonts.montserrat(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom +
+                                        MediaQuery.of(context).padding.bottom,
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    },
+                    child: Text("Rút tiền",
+                        style: GoogleFonts.montserrat(
+                            color: AppColor.primaryColor,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ],
               ),
             ),
             SliverToBoxAdapter(
@@ -118,8 +278,9 @@ class _HomeTabState extends State<HomeTab>
                               child: Text(
                                 _cubit.state.category?[index].name ?? "",
                                 style: GoogleFonts.montserrat(
-                                  color: AppColor.primaryColor,
-                                ),
+                                    color: _cubit.state.currentTab == index
+                                        ? AppColor.primaryColor
+                                        : null),
                               )),
                         ),
                       );
@@ -150,7 +311,7 @@ class _HomeTabState extends State<HomeTab>
                                 borderRadius: BorderRadius.circular(8),
                                 color: AppColor.primaryColor),
                             child: Icon(
-                              Icons.translate,
+                              CupertinoIcons.bag,
                               color: AppColor.white,
                             ),
                           ),
