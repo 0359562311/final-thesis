@@ -8,6 +8,7 @@ AppBar appBar(BuildContext context, String title,
     Widget? rightWidget,
     Color? backgroundColor,
     Color? iconColor,
+    Color? textColor,
     double? elevation,
     bool centerTitle = false}) {
   return AppBar(
@@ -30,7 +31,9 @@ AppBar appBar(BuildContext context, String title,
       title,
       textAlign: TextAlign.center,
       style: GoogleFonts.montserrat(
-          color: AppColor.white, fontWeight: FontWeight.w600, fontSize: 20),
+          color: textColor ?? AppColor.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 20),
     ),
     actions: rightWidget == null ? null : [rightWidget],
   );

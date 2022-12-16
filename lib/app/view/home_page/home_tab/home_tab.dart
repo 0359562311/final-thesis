@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/view/create_job/create_job.dart';
+import 'package:fakeslink/app/view/job_detail/job_detail.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -83,7 +84,8 @@ class _HomeTabState extends State<HomeTab>
                     ),
                     Spacer(),
                     AvatarWidget(
-                      avatar: configBox.get("user").avatar,
+                      avatar: configBox.get("user").avatar ??
+                          _cubit.state.transaction?.profileView,
                       size: 40,
                     )
                   ],
@@ -295,67 +297,107 @@ class _HomeTabState extends State<HomeTab>
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final job = state.jobs![index];
-                    return Container(
-                      margin: EdgeInsets.only(left: 10, right: 6),
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColor.primaryColor10,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColor.primaryColor),
-                            child: Icon(
-                              CupertinoIcons.bag,
-                              color: AppColor.white,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => JobDetailPage(
+                                  jobId: _cubit.state.jobs?[index].id,
+                                )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10, right: 6),
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryColor10,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 56,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: AppColor.primaryColor),
+                              child: Icon(
+                                CupertinoIcons.bag,
+                                color: AppColor.white,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                job.title ?? "",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                    color: AppColor.primaryColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "${(job.payment?.amount ?? 0).price} VND",
-                                style: GoogleFonts.montserrat(
-                                    color: AppColor.errorColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                job.payment?.paymentMethod?.id == 1
-                                    ? "Trả theo dự án"
-                                    : "Trả theo giờ",
-                                style: GoogleFonts.montserrat(
-                                    color: AppColor.primaryColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                "Việc làm từ xa",
-                                style: GoogleFonts.montserrat(
-                                    color: AppColor.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              )
-                            ],
-                          )
-                        ],
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    job.title ?? "",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.montserrat(
+                                        color: AppColor.primaryColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "${(job.payment?.amount ?? 0).price} VND",
+                                    style: GoogleFonts.montserrat(
+                                        color: AppColor.errorColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Text(
+                                    job.payment?.paymentMethod?.id == 1
+                                        ? "Trả theo dự án"
+                                        : "Trả theo giờ",
+                                    style: GoogleFonts.montserrat(
+                                        color: AppColor.primaryColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ]),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  job.title ?? "",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.montserrat(
+                                      color: AppColor.primaryColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${(job.payment?.amount ?? 0).price} VND",
+                                  style: GoogleFonts.montserrat(
+                                      color: AppColor.errorColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  job.payment?.paymentMethod?.id == 1
+                                      ? "Trả theo dự án"
+                                      : "Trả theo giờ",
+                                  style: GoogleFonts.montserrat(
+                                      color: AppColor.primaryColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  "Việc làm từ xa",
+                                  style: GoogleFonts.montserrat(
+                                      color: AppColor.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },

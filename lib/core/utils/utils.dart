@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static Future<Map<String, dynamic>> parseJson(String fileName) async {
@@ -32,5 +33,19 @@ class Utils {
         behavior: SnackBarBehavior.floating, // Add this line
       ),
     );
+  }
+
+  static String formatDateTime(String time) {
+    if (time == "") return time;
+    final outputDate = DateFormat("d MMM yyyy").format(DateTime.parse(time));
+    return outputDate;
+  }
+
+  static String? formatMoney(dynamic amount) {
+    if (amount == null) return null;
+    if (amount is String) {
+      amount = double.parse(amount);
+    }
+    return NumberFormat("#,##0").format(amount);
   }
 }
