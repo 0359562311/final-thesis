@@ -17,4 +17,12 @@ class TransactionDetailViewModel extends Cubit<TransactionDetailState> {
       emit(state.copyWith(status: TransactionDetailStatus.error));
     });
   }
+
+  void done(bool status) {
+    if (state.data != null) {
+      _repository.done(state.data!, status).then((value) {
+        init(state.data!.id!);
+      });
+    }
+  }
 }

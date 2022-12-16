@@ -19,12 +19,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
-  late final HomeCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-    _cubit = HomeCubit();
   }
 
   @override
@@ -35,69 +33,67 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _cubit,
-      child: Theme(
-        data: Theme.of(context).copyWith(
-            textTheme: Theme.of(context).textTheme.apply(
-                displayColor: AppColor.black, bodyColor: AppColor.black)),
-        child: Scaffold(
-          body: PageView(
-            controller: _pageController,
-            children: [
-              HomeTab(),
-              ActivitiesPage(),
-              JobsListPage(),
-              NotificationPage(),
-              SettingTab()
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: AppColor.white,
-            selectedItemColor: AppColor.primaryColor,
-            unselectedItemColor: AppColor.primaryColor.withOpacity(0.2),
-            currentIndex: _currentIndex,
-            onTap: (value) {
-              setState(() {
-                _currentIndex = value;
-                _pageController.jumpToPage(
-                  _currentIndex,
-                );
-              });
-            },
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home_rounded,
-                    size: 28,
-                  ),
-                  label: "Trang chủ"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.list,
-                    size: 28,
-                  ),
-                  label: "Hoạt động"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.shopping_bag_rounded,
-                    size: 28,
-                  ),
-                  label: "Công việc"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.notifications,
-                    size: 28,
-                  ),
-                  label: "Thông báo"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.settings,
-                    size: 28,
-                  ),
-                  label: "Cài đặt"),
-            ],
-          ),
+    return Theme(
+      data: Theme.of(context).copyWith(
+          textTheme: Theme.of(context)
+              .textTheme
+              .apply(displayColor: AppColor.black, bodyColor: AppColor.black)),
+      child: Scaffold(
+        body: PageView(
+          controller: _pageController,
+          children: [
+            HomeTab(),
+            ActivitiesPage(),
+            JobsListPage(),
+            NotificationPage(),
+            SettingTab()
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: AppColor.white,
+          selectedItemColor: AppColor.primaryColor,
+          unselectedItemColor: AppColor.primaryColor.withOpacity(0.2),
+          currentIndex: _currentIndex,
+          onTap: (value) {
+            setState(() {
+              _currentIndex = value;
+              _pageController.jumpToPage(
+                _currentIndex,
+              );
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home_rounded,
+                  size: 28,
+                ),
+                label: "Trang chủ"),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.list,
+                  size: 28,
+                ),
+                label: "Hoạt động"),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.shopping_bag_rounded,
+                  size: 28,
+                ),
+                label: "Công việc"),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.notifications,
+                  size: 28,
+                ),
+                label: "Thông báo"),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.settings,
+                  size: 28,
+                ),
+                label: "Cài đặt"),
+          ],
         ),
       ),
     );

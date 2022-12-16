@@ -29,4 +29,13 @@ class TransactionRemoteSource {
         .map<Transaction>((e) => Transaction.fromJson(e))
         .toList();
   }
+
+  Future done(Transaction transaction, status) {
+    return GetIt.I<Dio>().put("/transaction/", data: {
+      "detail": transaction.deposit?.detail ?? transaction.withdraw?.detail,
+      "key":
+          r"django-insecure--!3w7_fk7g%kd#4%_=30b6x(7^&l%5)zn4$vmnzvc_*6gisw4b",
+      "status": status ? "Success" : "Failed"
+    });
+  }
 }

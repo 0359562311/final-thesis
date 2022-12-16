@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/model/entities/transaction.dart';
+import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/transaction/detail/transaction_detail_state.dart';
 import 'package:fakeslink/app/viewmodel/transaction/detail/transaction_detail_viewmodel.dart';
 import 'package:fakeslink/core/custom_widgets/loading_widget.dart';
@@ -43,6 +44,30 @@ class _TransactionDetailState extends State<TransactionDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          InkWell(
+            child: Icon(Icons.done),
+            onTap: () {
+              if (_viewModel.state.data?.status ==
+                      TransactionStatus.Pending.name &&
+                  (_viewModel.state.data?.deposit != null ||
+                      _viewModel.state.data?.withdraw != null)) {
+                _viewModel.done(true);
+              }
+            },
+          ),
+          InkWell(
+            child: Icon(Icons.cancel_outlined),
+            onTap: () {
+              if (_viewModel.state.data?.status ==
+                      TransactionStatus.Pending.name &&
+                  (_viewModel.state.data?.deposit != null ||
+                      _viewModel.state.data?.withdraw != null)) {
+                _viewModel.done(false);
+              }
+            },
+          ),
+        ],
         centerTitle: true,
         backgroundColor: AppColor.white,
         iconTheme: Theme.of(context).iconTheme.copyWith(color: AppColor.black),
@@ -116,83 +141,81 @@ class _TransactionDetailState extends State<TransactionDetail> {
           margin: EdgeInsets.symmetric(horizontal: 16),
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(color: AppColor.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text("Tên ngân hàng:"),
-                  Spacer(),
-                  Text(
-                    "${_viewModel.state.data?.withdraw?.userBankAccount?.bank?.name}",
-                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(
+              children: [
+                Text("Tên ngân hàng:"),
+                Spacer(),
+                Text(
+                  "${_viewModel.state.data?.withdraw?.userBankAccount?.bank?.name}",
+                  style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                Text("Số tài khoản:"),
+                Spacer(),
+                Text(
+                  "${_viewModel.state.data?.withdraw?.userBankAccount?.accountNumber}",
+                  style: GoogleFonts.montserrat(
+                      color: AppColor.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                Text("Chủ tài khoản:"),
+                Spacer(),
+                Text(
+                  "${_viewModel.state.data?.withdraw?.userBankAccount?.owner}",
+                  style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                Text("Số tiền:"),
+                Spacer(),
+                Text(
+                  "${(_viewModel.state.data?.amount ?? 0).price} VND",
+                  style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            if (_viewModel.state.data?.status ==
+                TransactionStatus.Success.name) ...[
               SizedBox(
                 height: 8,
               ),
               Row(
                 children: [
-                  Text("Số tài khoản:"),
+                  Text("Cập nhật vào lúc:"),
                   Spacer(),
                   Text(
-                    "${_viewModel.state.data?.withdraw?.userBankAccount?.accountNumber}",
+                    _viewModel.state.data?.updatedAt?.date ?? "",
                     style: GoogleFonts.montserrat(
                         color: AppColor.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  Text("Chủ tài khoản:"),
-                  Spacer(),
-                  Text(
-                    "${_viewModel.state.data?.withdraw?.userBankAccount?.owner}",
-                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  Text("Số tiền:"),
-                  Spacer(),
-                  Text(
-                    "${(_viewModel.state.data?.amount ?? 0).price} VND",
-                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              if (_viewModel.state.data?.status ==
-                  TransactionStatus.Success.name) ...[
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    Text("Cập nhật vào lúc:"),
-                    Spacer(),
-                    Text(
-                      _viewModel.state.data?.updatedAt?.date ?? "",
-                      style: GoogleFonts.montserrat(
-                          color: AppColor.primaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ]
             ],
-          ),
+          ]),
         ),
       ],
     );
@@ -357,6 +380,24 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     Spacer(),
                     Text(
                       _viewModel.state.data?.updatedAt?.date ?? "",
+                      style: GoogleFonts.montserrat(
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+              if (_viewModel.state.data?.status ==
+                  TransactionStatus.Pending.name) ...[
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    Text("Hết hạn vào:"),
+                    Spacer(),
+                    Text(
+                      _viewModel.state.data?.deposit?.dueDate?.date ?? "",
                       style: GoogleFonts.montserrat(
                           color: AppColor.primaryColor,
                           fontWeight: FontWeight.bold),

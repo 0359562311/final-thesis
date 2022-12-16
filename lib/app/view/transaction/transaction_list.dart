@@ -2,6 +2,7 @@ import 'package:fakeslink/app/model/entities/transaction.dart';
 import 'package:fakeslink/app/viewmodel/transaction/list/transaction_list_state.dart';
 import 'package:fakeslink/app/viewmodel/transaction/list/transaction_list_viewmodel.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/custom_widgets/loading_widget.dart';
 import 'package:fakeslink/core/utils/extensions/string.dart';
 import 'package:flutter/material.dart';
@@ -82,51 +83,57 @@ class _TransactionListPageState extends State<TransactionListPage> {
               itemCount: state.data.length,
               itemBuilder: (context, index) {
                 final data = state.data[index];
-                return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppColor.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _getStatus(data),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            data.type,
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            data.zAmount,
-                            style: GoogleFonts.montserrat(
-                                color: data.zAmount.startsWith("-")
-                                    ? AppColor.red
-                                    : Colors.green),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            data.createAt?.date ?? "",
-                            style: GoogleFonts.montserrat(),
-                          )
-                        ],
-                      )
-                    ],
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoute.transactionDetail,
+                        arguments: data.id);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _getStatus(data),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              data.type,
+                              style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              data.zAmount,
+                              style: GoogleFonts.montserrat(
+                                  color: data.zAmount.startsWith("-")
+                                      ? AppColor.red
+                                      : Colors.green),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              data.createAt?.date ?? "",
+                              style: GoogleFonts.montserrat(),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

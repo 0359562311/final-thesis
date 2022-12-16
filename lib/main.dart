@@ -12,11 +12,13 @@ import 'package:fakeslink/app/view/home_page/home.dart';
 import 'package:fakeslink/app/view/profile/profile.dart';
 import 'package:fakeslink/app/view/transaction/transaction_detail.dart';
 import 'package:fakeslink/app/view/transaction/transaction_list.dart';
+import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -98,7 +100,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const oneSignalAppId = "1537dc7c-b315-4c3a-a355-9ca677c33fef";
+  static const _oneSignalAppId = "d4e74032-239c-4260-8deb-c6762a3e85c5";
   @override
   void initState() {
     super.initState();
@@ -146,50 +148,53 @@ class _MyAppState extends State<MyApp> {
         overscroll.disallowIndicator();
         return true;
       },
-      child: MaterialApp(
-        theme: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          backgroundColor: AppColor.background,
-          textTheme: GoogleFonts.montserratTextTheme(),
-          appBarTheme: const AppBarTheme(
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
+      child: BlocProvider(
+        create: (context) => HomeCubit(),
+        child: MaterialApp(
+          theme: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            backgroundColor: AppColor.background,
+            textTheme: GoogleFonts.montserratTextTheme(),
+            appBarTheme: const AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+            ),
           ),
+          debugShowCheckedModeBanner: false,
+          routes: {
+            AppRoute.login: (context) => LoginPage(),
+            AppRoute.home: (context) => HomePage(),
+            AppRoute.signUp: (context) => SignUpPage(),
+            AppRoute.transactionList: (context) => TransactionListPage(),
+          },
+          onGenerateRoute: (settings) {
+            final session = configBox.get("session");
+            switch (settings.name) {
+              case "/":
+                if (session == null) {
+                  return MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  );
+                } else {
+                  return MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  );
+                }
+              case AppRoute.profile:
+                return MaterialPageRoute(
+                  builder: (context) =>
+                      UserProfilePage(userId: settings.arguments as int),
+                );
+              case AppRoute.transactionDetail:
+                return MaterialPageRoute(
+                    builder: (context) => TransactionDetail(
+                          transactionId: settings.arguments as int,
+                        ));
+              default:
+            }
+            return null;
+          },
         ),
-        debugShowCheckedModeBanner: false,
-        routes: {
-          AppRoute.login: (context) => LoginPage(),
-          AppRoute.home: (context) => HomePage(),
-          AppRoute.signUp: (context) => SignUpPage(),
-          AppRoute.transactionList: (context) => TransactionListPage(),
-        },
-        onGenerateRoute: (settings) {
-          final session = configBox.get("session");
-          switch (settings.name) {
-            case "/":
-              if (session == null) {
-                return MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                );
-              } else {
-                return MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                );
-              }
-            case AppRoute.profile:
-              return MaterialPageRoute(
-                builder: (context) =>
-                    UserProfilePage(userId: settings.arguments as int),
-              );
-            case AppRoute.transactionDetail:
-              return MaterialPageRoute(
-                  builder: (context) => TransactionDetail(
-                        transactionId: settings.arguments as int,
-                      ));
-            default:
-          }
-          return null;
-        },
       ),
     );
   }
