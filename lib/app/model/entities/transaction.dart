@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/model/entities/bank.dart';
+import 'package:fakeslink/core/utils/extensions/num.dart';
 
 enum TransactionStatus { Pending, Failed, Success }
 
@@ -12,7 +13,6 @@ class Transaction {
   final String? status;
   final int? user;
   final dynamic jobPromotion;
-  final dynamic profileView;
   final dynamic profilePromotion;
   final dynamic viewJobSeekers;
   final dynamic jobPayment;
@@ -27,7 +27,6 @@ class Transaction {
     this.status,
     this.user,
     this.jobPromotion,
-    this.profileView,
     this.profilePromotion,
     this.viewJobSeekers,
     this.jobPayment,
@@ -49,7 +48,6 @@ class Transaction {
         status = json['status'] as String?,
         user = json['user'] as int?,
         jobPromotion = json['jobPromotion'],
-        profileView = json['profileView'],
         profilePromotion = json['profilePromotion'],
         viewJobSeekers = json['viewJobSeekers'],
         jobPayment = json['jobPayment'];
@@ -64,11 +62,30 @@ class Transaction {
         'status': status,
         'user': user,
         'jobPromotion': jobPromotion,
-        'profileView': profileView,
         'profilePromotion': profilePromotion,
         'viewJobSeekers': viewJobSeekers,
         'jobPayment': jobPayment
       };
+
+  String get type {
+    if (deposit != null)
+      return "Nạp tiền";
+    else if (withdraw != null)
+      return "Rút tiền";
+    else if (jobPromotion != null)
+      return "Đẩy tìm kiếm công việc";
+    else if (profilePromotion != null)
+      return "Đẩy tìm kiếm hồ sơ";
+    else if (jobPayment != null) {
+      return "";
+    }
+    return "";
+  }
+
+  String get zAmount {
+    if (deposit != null) return "+" + (amount ?? 0).price + " VND";
+    return "-" + (amount ?? 0).price + " VND";
+  }
 }
 
 class DepositTransaction {

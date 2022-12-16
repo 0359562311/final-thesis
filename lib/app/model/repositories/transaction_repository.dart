@@ -5,6 +5,7 @@ abstract class TransactionRepository {
   Future<Transaction> deposit(int amount);
   Future<Transaction> withdraw(int amount);
   Future<Transaction> getById(int id);
+  Future<List<Transaction>> getAll(int offset);
 }
 
 class TransactionRepositoryImpl extends TransactionRepository {
@@ -22,5 +23,10 @@ class TransactionRepositoryImpl extends TransactionRepository {
   @override
   Future<Transaction> getById(int id) {
     return _remoteSource.getById(id);
+  }
+
+  @override
+  Future<List<Transaction>> getAll(int offset) {
+    return _remoteSource.getAll(offset);
   }
 }

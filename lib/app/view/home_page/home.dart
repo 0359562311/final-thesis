@@ -56,9 +56,6 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: AppColor.white,
             selectedItemColor: AppColor.primaryColor,
             unselectedItemColor: AppColor.primaryColor.withOpacity(0.2),
-            selectedIconTheme: IconThemeData(color: AppColor.primaryColor),
-            unselectedIconTheme:
-                IconThemeData(color: AppColor.primaryColor, opacity: 0.2),
             currentIndex: _currentIndex,
             onTap: (value) {
               setState(() {
@@ -70,39 +67,33 @@ class _HomePageState extends State<HomePage> {
             },
             items: [
               BottomNavigationBarItem(
-                  icon: Image.asset(
-                    "assets/images/ic_home.png",
-                    color: AppColor.primaryColor,
-                    width: 24,
-                    height: 24,
+                  icon: Icon(
+                    Icons.home_rounded,
+                    size: 28,
                   ),
                   label: "Trang chủ"),
               BottomNavigationBarItem(
-                  icon: Image.asset(
-                    "assets/images/ic_job_history.png",
-                    width: 24,
-                    height: 24,
+                  icon: Icon(
+                    Icons.list,
+                    size: 28,
                   ),
                   label: "Hoạt động"),
               BottomNavigationBarItem(
-                  icon: Image.asset(
-                    "assets/images/ic_job_list.png",
-                    width: 24,
-                    height: 24,
+                  icon: Icon(
+                    Icons.shopping_bag_rounded,
+                    size: 28,
                   ),
                   label: "Công việc"),
               BottomNavigationBarItem(
-                  icon: Image.asset(
-                    "assets/images/ic_notification.png",
-                    width: 24,
-                    height: 24,
+                  icon: Icon(
+                    Icons.notifications,
+                    size: 28,
                   ),
                   label: "Thông báo"),
               BottomNavigationBarItem(
-                  icon: Image.asset(
-                    "assets/images/ic_setting.png",
-                    width: 24,
-                    height: 24,
+                  icon: Icon(
+                    Icons.settings,
+                    size: 28,
                   ),
                   label: "Cài đặt"),
             ],

@@ -21,4 +21,12 @@ class TransactionRemoteSource {
     );
     return Transaction.fromJson(res.data);
   }
+
+  Future<List<Transaction>> getAll(int offset) async {
+    final res = await GetIt.I<Dio>()
+        .get("/payment/", queryParameters: {"offset": offset});
+    return res.data['results']
+        .map<Transaction>((e) => Transaction.fromJson(e))
+        .toList();
+  }
 }

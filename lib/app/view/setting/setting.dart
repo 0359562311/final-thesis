@@ -55,6 +55,9 @@ class _SettingTabState extends State<SettingTab> {
             height: 8,
           ),
           SettingItem(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoute.transactionList);
+              },
               icon: Icons.attach_money,
               iconColor: AppColor.primaryColor,
               title: "Lịch sử giao dịch"),

@@ -11,6 +11,8 @@ import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
 import 'package:fakeslink/app/view/profile/profile.dart';
 import 'package:fakeslink/app/view/transaction/transaction_detail.dart';
+import 'package:fakeslink/app/view/transaction/transaction_list.dart';
+import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
@@ -148,6 +150,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
+          backgroundColor: AppColor.background,
           textTheme: GoogleFonts.montserratTextTheme(),
           appBarTheme: const AppBarTheme(
             systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -158,6 +161,7 @@ class _MyAppState extends State<MyApp> {
           AppRoute.login: (context) => LoginPage(),
           AppRoute.home: (context) => HomePage(),
           AppRoute.signUp: (context) => SignUpPage(),
+          AppRoute.transactionList: (context) => TransactionListPage(),
         },
         onGenerateRoute: (settings) {
           final session = configBox.get("session");
