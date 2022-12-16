@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/view/create_job/create_job.dart';
+import 'package:fakeslink/app/view/verify_password/verify_password.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -123,7 +124,16 @@ class _HomeTabState extends State<HomeTab>
                       width: 16,
                     ),
                     TextButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        final data = await Navigator.push(context,
+                            MaterialPageRoute(builder: (_) {
+                          return VerifyPasswordPage();
+                        }));
+                        if (data != true) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Xác thực không thành công.")));
+                          return;
+                        }
                         showModalBottomSheet(
                             context: context,
                             builder: (context) {
@@ -186,11 +196,20 @@ class _HomeTabState extends State<HomeTab>
                       width: 16,
                     ),
                     TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (configBox.get('user')?.bankAccount == null) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                   "Hãy cập nhật tài khoản ngân hàng của bạn")));
+                          return;
+                        }
+                        final data = await Navigator.push(context,
+                            MaterialPageRoute(builder: (_) {
+                          return VerifyPasswordPage();
+                        }));
+                        if (data != true) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Xác thực không thành công.")));
                           return;
                         }
                         showModalBottomSheet(
