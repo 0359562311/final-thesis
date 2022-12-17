@@ -54,6 +54,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 categories: state.jobDetail?.categories?.first.id, offset: 0);
             _viewmodel.getJobDetail(jobDetailId: widget.jobId);
           }
+          if (state.status == JobDetailStatus.closedOfferSuccess) {
+            Navigator.pop(context);
+          }
         },
         builder: (context, state) {
           if (state.status == JobDetailStatus.loading) {
@@ -67,13 +70,55 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 rightWidget: Visibility(
                   visible: _viewmodel.state.jobDetail?.poster?.id ==
                       configBox.get("user").id,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 18, right: 5),
-                    child: Text(
-                      "Đóng",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                          color: AppColor.red, fontWeight: FontWeight.w600),
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Bạn có muộn đóng công việc không?',
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600, fontSize: 16),
+                              ),
+                              actions: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "Không",
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    _viewmodel.closedOffer(widget.jobId ?? 0);
+                                  },
+                                  child: Text(
+                                    "Có",
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        color: Colors.red),
+                                  ),
+                                )
+                              ],
+                            );
+                          });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 18, right: 5),
+                      child: Text(
+                        "Đóng",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.montserrat(
+                            color: AppColor.red, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                 )),

@@ -2,7 +2,13 @@ import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
 
-enum JobDetailStatus { loading, success, error, createOfferSuccess }
+enum JobDetailStatus {
+  loading,
+  success,
+  error,
+  createOfferSuccess,
+  closedOfferSuccess
+}
 
 class JobDetailState {
   final Job? jobDetail;

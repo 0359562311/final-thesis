@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
+import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,6 +79,17 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
       emit(state.copyWith(
         status: JobDetailStatus.createOfferSuccess,
       ));
+    }).catchError((onError) {
+      emit(state.copyWith(status: JobDetailStatus.error));
+    });
+  }
+
+  void closedOffer(int id) {
+    emit(state.copyWith(status: JobDetailStatus.loading));
+    _jobDetailRepository
+        .acceptOffer(AcceptOffers(status: "Closed"), jobId: id)
+        .then((value) {
+      emit(state.copyWith(status: JobDetailStatus.closedOfferSuccess));
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });
