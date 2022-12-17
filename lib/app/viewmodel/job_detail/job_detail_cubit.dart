@@ -10,6 +10,12 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
   JobDetailViewModel()
       : super(JobDetailState(status: JobDetailStatus.loading, jobDetail: null));
 
+  void init(int jobId) {
+    getJobDetail(jobDetailId: jobId);
+    getMyOffer(jobId: jobId);
+    getOffers(jobId: jobId);
+  }
+
   void getJobDetail({int? jobDetailId}) {
     emit(state.copyWith(status: JobDetailStatus.loading));
     _jobDetailRepository.getJobDetail(jobDetailId ?? 0).then((value) {
@@ -17,16 +23,16 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
         status: JobDetailStatus.success,
         jobDetail: value,
       ));
-      getOffers(id: jobDetailId);
+      getOffers(jobId: jobDetailId);
     }).catchError((e) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });
   }
 
-  void getOffers({int? id}) {
+  void getOffers({int? jobId}) {
     emit(state.copyWith(
         status: JobDetailStatus.loading, jobDetail: state.jobDetail));
-    _jobDetailRepository.getOffers(id ?? 0).then((value) {
+    _jobDetailRepository.getOffers(jobId ?? 0).then((value) {
       emit(state.copyWith(
         status: JobDetailStatus.success,
         offers: value,
@@ -44,35 +50,32 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
       emit(state.copyWith(status: JobDetailStatus.success, sameJobs: value));
     }).catchError((onError) {
       emit(state.copyWith(
-          status: JobDetailStatus.error, sameJobs: state.sameJobs));
+        status: JobDetailStatus.error,
+      ));
     });
   }
 
   void getMyOffer({int? jobId}) {
-    emit(JobDetailState(
-        status: JobDetailStatus.loading,
-        jobDetail: state.jobDetail,
-        sameJobs: state.sameJobs,
-        offers: state.offers));
+    emit(state.copyWith(
+      status: JobDetailStatus.loading,
+    ));
     _jobDetailRepository.getMyOffers(jobId: jobId).then((value) {
       emit(state.copyWith(
-          status: JobDetailStatus.success,
-          myOffer: value,
-          jobDetail: state.jobDetail,
-          offers: state.offers,
-          sameJobs: state.sameJobs));
+        status: JobDetailStatus.success,
+        myOffer: value,
+      ));
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });
   }
 
-  void createMyJob({int? jobId, String? description, String? price}) {
-    emit(JobDetailState(
+  void createMyOffer({int? jobId, String? description, String? price}) {
+    emit(state.copyWith(
       status: JobDetailStatus.loading,
     ));
     _jobDetailRepository
         .createMyJob(
-            CreateMyJobRequest(
+            CreateMyOfferRequest(
                 price: int.parse(price ?? ""), description: description),
             jobId: jobId)
         .then((value) {
@@ -84,12 +87,10 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
     });
   }
 
-  void closedOffer(int id) {
+  void closedOffer(int jobId) {
     emit(state.copyWith(status: JobDetailStatus.loading));
-    _jobDetailRepository
-        .acceptOffer(AcceptOffers(status: "Closed"), jobId: id)
-        .then((value) {
-      emit(state.copyWith(status: JobDetailStatus.closedOfferSuccess));
+    _jobDetailRepository.cancelOffer(jobId).then((value) {
+      getMyOffer(jobId: jobId);
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });

@@ -1,13 +1,13 @@
-class AcceptOffers {
-  String? status;
+class AcceptOfferRequest {
+  int? offerId;
 
-  AcceptOffers({
-    this.status,
+  AcceptOfferRequest({
+    this.offerId,
   });
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['status'] = status;
+    data['offerId'] = offerId;
     return data;
   }
 }

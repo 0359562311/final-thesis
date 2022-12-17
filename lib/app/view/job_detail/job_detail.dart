@@ -37,7 +37,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
     super.initState();
     _viewmodel = JobDetailViewModel();
     _viewmodel.getJobDetail(jobDetailId: widget.jobId);
-    _viewmodel.getOffers(id: widget.jobId);
+    _viewmodel.getOffers(jobId: widget.jobId);
     _viewmodel.getSameJob(categories: widget.categoryId, offset: 0);
     _viewmodel.getMyOffer(jobId: widget.jobId);
   }
@@ -372,13 +372,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => AllOfferPage(
-                                            id: widget.jobId,
+                                            jobId: widget.jobId,
                                           ))).then((value) {
                                 _viewmodel.getJobDetail(
                                     jobDetailId: widget.jobId);
                                 _viewmodel.getSameJob(
                                     categories: widget.categoryId, offset: 0);
-                                _viewmodel.getOffers(id: widget.jobId);
+                                _viewmodel.getOffers(jobId: widget.jobId);
                               });
                             } else {
                               if (_viewmodel.state.myOffer != null) {
@@ -397,34 +397,12 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    "Status",
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 16),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "YOUR OFFER",
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 13,
-                                                      color: Colors.red),
-                                                )
-                                              ],
-                                            ),
                                             const SizedBox(height: 10),
                                             Row(
                                               children: [
                                                 Expanded(
                                                   child: Text(
-                                                    "Wait for confirm",
+                                                    "Đang chờ duyệt",
                                                     style:
                                                         GoogleFonts.montserrat(
                                                             fontWeight:
@@ -440,7 +418,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                                                 .myOffer
                                                                 ?.price) ??
                                                         "") +
-                                                    "đ")
+                                                    " VND")
                                               ],
                                             ),
                                             const SizedBox(height: 10),
@@ -452,18 +430,20 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                               children: [
                                                 const Expanded(
                                                   child: Text(
-                                                      "(You can Cancel this offer and redeal)"),
+                                                      "(Bạn có thể huỷ chào giá này và tạo mới)"),
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {
                                                     Navigator.pop(context);
+                                                    _viewmodel.closedOffer(
+                                                        widget.jobId!);
                                                   },
                                                   child: Container(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             10),
                                                     child: Text(
-                                                      "Cancel",
+                                                      "Huỷ",
                                                       style: GoogleFonts
                                                           .montserrat(
                                                               color:
@@ -600,7 +580,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               title: "OK",
                               onPressed: () {
                                 Navigator.pop(context);
-                                _viewmodel.createMyJob(
+                                _viewmodel.createMyOffer(
                                     price: _priceController.text.trim(),
                                     description:
                                         _descriptionController.text.trim(),

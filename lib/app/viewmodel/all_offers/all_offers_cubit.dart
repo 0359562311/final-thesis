@@ -7,18 +7,20 @@ class AllOffersCubit extends Cubit<AllOffersState> {
   final JobRepository offer = JobRepositoryImpl();
   AllOffersCubit() : super(AllOffersState(status: AllOfferStatus.loading));
 
-  void getAllOffer({int? offerId}) {
+  void getAllOffer({int? jobId}) {
     emit(state.copyWith(status: AllOfferStatus.loading));
-    offer.getOffers(offerId ?? 0).then((value) {
+    offer.getOffers(jobId ?? 0).then((value) {
       emit(state.copyWith(status: AllOfferStatus.success, offers: value));
     }).catchError((onError) {
       emit(state.copyWith(status: AllOfferStatus.error));
     });
   }
 
-  void accept({int? id}) {
+  void accept({required int offerId, required int jobId}) {
     emit(state.copyWith(status: AllOfferStatus.loading));
-    offer.acceptOffer(AcceptOffers(status: "Pending"), jobId: id).then((value) {
+    offer
+        .acceptOffer(AcceptOfferRequest(offerId: offerId), jobId: jobId)
+        .then((value) {
       emit(state.copyWith(status: AllOfferStatus.acceptSuccess));
     }).catchError((onError) {
       emit(state.copyWith(status: AllOfferStatus.error));

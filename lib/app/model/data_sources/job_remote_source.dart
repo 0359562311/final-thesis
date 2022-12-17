@@ -69,17 +69,25 @@ class JobRemoteSource {
     return MyOffer.fromJson(res);
   }
 
-  Future<dynamic> createMyJob(CreateMyJobRequest request, {int? jobId}) async {
+  Future<dynamic> createMyOffer(CreateMyOfferRequest request,
+      {int? jobId}) async {
     final res = (await GetIt.I<Dio>()
             .post("/job/$jobId/my_offer/", data: request.toJson()))
         .data;
     return res;
   }
 
-  Future<dynamic> acceptOffer(AcceptOffers request, {int? jobId}) async {
-    final res =
-        (await GetIt.I<Dio>().patch("/job/$jobId/", data: request.toJson()))
-            .data;
+  Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId}) async {
+    final res = (await GetIt.I<Dio>()
+            .put("/job/$jobId/accept_offer/", data: request.toJson()))
+        .data;
+    return res;
+  }
+
+  Future cancelOffer(int jobId) async {
+    final res = (await GetIt.I<Dio>()
+            .patch("/job/$jobId/my_offer/", data: {"status": "Closed"}))
+        .data;
     return res;
   }
 }

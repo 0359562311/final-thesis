@@ -1,8 +1,8 @@
-class CreateMyJobRequest {
+class CreateMyOfferRequest {
   int? price;
   String? description;
 
-  CreateMyJobRequest({
+  CreateMyOfferRequest({
     this.price,
     this.description,
   });

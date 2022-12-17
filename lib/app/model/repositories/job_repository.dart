@@ -19,8 +19,9 @@ mixin JobRepository {
   Future<List<Offer>> getOffers(int id);
   Future<List<Job>> getSameJob({int? categories, int? offset});
   Future<MyOffer?> getMyOffers({int? jobId});
-  Future<dynamic> createMyJob(CreateMyJobRequest request, {int? jobId});
-  Future<dynamic> acceptOffer(AcceptOffers request, {int? jobId});
+  Future<dynamic> createMyJob(CreateMyOfferRequest request, {int? jobId});
+  Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId});
+  Future<dynamic> cancelOffer(int jobId);
 }
 
 class JobRepositoryImpl implements JobRepository {
@@ -71,12 +72,17 @@ class JobRepositoryImpl implements JobRepository {
   }
 
   @override
-  Future<dynamic> createMyJob(CreateMyJobRequest request, {int? jobId}) {
-    return _jobRemoteSource.createMyJob(request, jobId: jobId);
+  Future<dynamic> createMyJob(CreateMyOfferRequest request, {int? jobId}) {
+    return _jobRemoteSource.createMyOffer(request, jobId: jobId);
   }
 
   @override
-  Future<dynamic> acceptOffer(AcceptOffers request, {int? jobId}) {
+  Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId}) {
     return _jobRemoteSource.acceptOffer(request, jobId: jobId);
+  }
+
+  @override
+  Future cancelOffer(int jobId) {
+    return _jobRemoteSource.cancelOffer(jobId);
   }
 }

@@ -4,6 +4,7 @@ import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/button_widget.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/core/custom_widgets/custom_appbar.dart';
+import 'package:fakeslink/core/utils/extensions/string.dart';
 import 'package:fakeslink/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,9 +15,9 @@ import 'package:intl/intl.dart';
 enum Status { Approved, Pending }
 
 class AllOfferPage extends StatefulWidget {
-  final int? id;
+  final int? jobId;
 
-  const AllOfferPage({Key? key, this.id}) : super(key: key);
+  const AllOfferPage({Key? key, this.jobId}) : super(key: key);
 
   @override
   State<AllOfferPage> createState() => _AllOfferPageState();
@@ -30,7 +31,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
     // TODO: implement initState
     super.initState();
     _cubit = AllOffersCubit();
-    _cubit.getAllOffer(offerId: widget.id);
+    _cubit.getAllOffer(jobId: widget.jobId);
   }
 
   @override
@@ -158,10 +159,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               if (data?.user?.createAt != null)
                                 Expanded(
                                   child: Text(
-                                    DateFormat("hh:mm MMM,dd,yyyy").format(
-                                        DateTime.parse(
-                                            data?.user?.updateAt.toString() ??
-                                                "")),
+                                    data?.user?.updateAt?.date ?? "",
                                     style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12),
@@ -180,12 +178,13 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               const SizedBox(width: 5),
                               Visibility(
                                 visible: data?.status == Status.Pending.name,
-                                child: SizedBox(
-                                  width: 70,
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                      minWidth: 70, maxWidth: 100),
                                   child: ButtonWidget(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 5, vertical: 3),
-                                      title: "Accept",
+                                      title: "Chấp nhận",
                                       onPressed: () {
                                         showDialog(
                                             context: context,
@@ -233,7 +232,8 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                                     onTap: () {
                                                       Navigator.pop(context);
                                                       _cubit.accept(
-                                                          id: widget.id);
+                                                          offerId: data!.id!,
+                                                          jobId: widget.jobId!);
                                                     },
                                                     child: Text(
                                                       "Có",
