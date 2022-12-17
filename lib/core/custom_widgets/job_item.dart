@@ -1,6 +1,7 @@
 import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
+import 'package:fakeslink/core/utils/extensions/num.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +19,7 @@ class JobItem extends StatelessWidget {
         Navigator.pushNamed(context, AppRoute.jobDetail, arguments: data.id);
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(8)),
         child: Column(
@@ -30,7 +31,7 @@ class JobItem extends StatelessWidget {
               child: Row(
                 children: [
                   AvatarWidget(avatar: data.poster?.avatar, size: 24),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(
@@ -60,8 +61,8 @@ class JobItem extends StatelessWidget {
                 spacing: 10,
                 children: (data.categories ?? [])
                     .map((e) => Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
                               color: AppColor.primaryColor.withOpacity(0.3)),
@@ -75,44 +76,44 @@ class JobItem extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.attach_money,
                     color: AppColor.primaryColor,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(
-                    "${data.payment?.amount} VND",
+                    "${(data.payment?.amount ?? 0).price} VND",
                     style: GoogleFonts.montserrat(fontSize: 14),
                   )
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.calendar_month,
                     color: AppColor.primaryColor,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(
                     "còn ${data.dueDate?.difference(DateTime.now())?.inDays ?? 14} ngày",
                     style: GoogleFonts.montserrat(fontSize: 14),
                   ),
-                  Spacer(),
-                  Icon(
+                  const Spacer(),
+                  const Icon(
                     CupertinoIcons.bag_fill,
                     color: AppColor.primaryColor,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(
@@ -124,14 +125,14 @@ class JobItem extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     CupertinoIcons.location_solid,
                     color: AppColor.primaryColor,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(

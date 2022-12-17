@@ -6,4 +6,5 @@ abstract class AppRoute {
   static const String transactionList = "/transactionList";
   static const String transactionDetail = "/transactionDetail";
   static const String jobDetail = "/jobDetail";
+  static const String updateBank = "/updateBank";
 }

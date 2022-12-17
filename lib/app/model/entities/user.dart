@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 
+import 'bank.dart';
 import 'certificate.dart';
 import 'degree.dart';
 import 'experience.dart';
@@ -29,8 +30,7 @@ class User {
   String? email;
   @HiveField(10)
   int? loyaltyPoint;
-  @HiveField(11)
-  String? bankAccount;
+
   @HiveField(12)
   List<Degree?>? degrees;
   @HiveField(13)
@@ -41,6 +41,8 @@ class User {
   String? bio;
   @HiveField(16)
   int? balance;
+  @HiveField(17)
+  BankAccount? bankAccount;
 
   User(
       {this.id,
@@ -72,7 +74,9 @@ class User {
     updateAt = json['updateAt']?.toString();
     email = json['email']?.toString();
     loyaltyPoint = json['loyaltyPoint']?.toInt();
-    bankAccount = json['bankAccount']?.toString();
+    bankAccount = json['bankAccount'] == null
+        ? null
+        : BankAccount.fromJson(json['bankAccount']);
     balance = json['balance'];
     if (json['degrees'] != null) {
       final v = json['degrees'];

@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/view/setting/setting_item.dart';
+import 'package:fakeslink/app/view/verify_password/verify_password.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
@@ -22,7 +23,7 @@ class _SettingTabState extends State<SettingTab> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           Row(
@@ -34,24 +35,24 @@ class _SettingTabState extends State<SettingTab> {
                 child: AvatarWidget(
                     avatar: configBox.get("user").avatar, size: 60),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 16,
               ),
               Expanded(child: Text(configBox.get("user").email)),
-              SizedBox(
+              const SizedBox(
                 width: 16,
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.edit_note))
+              IconButton(onPressed: () {}, icon: const Icon(Icons.edit_note))
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
-          SettingItem(
+          const SettingItem(
               icon: Icons.notifications,
               iconColor: AppColor.primaryColor,
               title: "Thông báo"),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           SettingItem(
@@ -61,28 +62,41 @@ class _SettingTabState extends State<SettingTab> {
               icon: Icons.attach_money,
               iconColor: AppColor.primaryColor,
               title: "Lịch sử giao dịch"),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           SettingItem(
+              onPressed: () async {
+                final res = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const VerifyPasswordPage()));
+                if (res == true) {
+                  final update =
+                      await Navigator.pushNamed(context, AppRoute.updateBank);
+                  if (update == true) {
+                    BlocProvider.of<HomeCubit>(context).init();
+                  }
+                }
+              },
               icon: Icons.mode_standby,
               iconColor: AppColor.primaryColor,
               title: "Thay đổi tài khoản ngân hàng"),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          SettingItem(
+          const SettingItem(
               icon: Icons.question_mark,
               iconColor: AppColor.primaryColor,
               title: "Về ứng dụng"),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          SettingItem(
+          const SettingItem(
               icon: Icons.support_agent,
               iconColor: AppColor.primaryColor,
               title: "Hỗ trợ khách hàng"),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           SettingItem(
@@ -94,7 +108,7 @@ class _SettingTabState extends State<SettingTab> {
                     context, AppRoute.login, (_) => false);
               },
               title: "Đăng xuất"),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
         ],

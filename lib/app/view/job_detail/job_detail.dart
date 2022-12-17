@@ -84,20 +84,10 @@ class _JobDetailPageState extends State<JobDetailPage> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _viewmodel.state.jobDetail?.poster?.name ?? "",
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500, fontSize: 14),
-                            ),
-                            Text(
-                              "Poster",
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500, fontSize: 14),
-                            )
-                          ],
+                        child: Text(
+                          _viewmodel.state.jobDetail?.poster?.name ?? "",
+                          style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w500, fontSize: 14),
                         ),
                       ),
                       Text(

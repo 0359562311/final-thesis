@@ -28,12 +28,13 @@ class UserAdapter extends TypeAdapter<User> {
       updateAt: fields[8] as String?,
       email: fields[9] as String?,
       loyaltyPoint: fields[10] as int?,
-      bankAccount: fields[11] as String?,
+      bankAccount: fields[17] as BankAccount?,
       degrees: (fields[12] as List?)?.cast<Degree?>(),
       experiences: (fields[13] as List?)?.cast<Experience?>(),
       certificates: (fields[14] as List?)?.cast<Certificate?>(),
+      balance: fields[16] as int?,
       bio: fields[15] as String?,
-    )..balance = fields[16] as int?;
+    );
   }
 
   @override
@@ -62,8 +63,6 @@ class UserAdapter extends TypeAdapter<User> {
       ..write(obj.email)
       ..writeByte(10)
       ..write(obj.loyaltyPoint)
-      ..writeByte(11)
-      ..write(obj.bankAccount)
       ..writeByte(12)
       ..write(obj.degrees)
       ..writeByte(13)
@@ -73,7 +72,9 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(15)
       ..write(obj.bio)
       ..writeByte(16)
-      ..write(obj.balance);
+      ..write(obj.balance)
+      ..writeByte(17)
+      ..write(obj.bankAccount);
   }
 
   @override

@@ -46,7 +46,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
       appBar: AppBar(
         actions: [
           InkWell(
-            child: Icon(Icons.done),
+            child: const Icon(Icons.done),
             onTap: () {
               if (_viewModel.state.data?.status ==
                       TransactionStatus.Pending.name &&
@@ -57,7 +57,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
             },
           ),
           InkWell(
-            child: Icon(Icons.cancel_outlined),
+            child: const Icon(Icons.cancel_outlined),
             onTap: () {
               if (_viewModel.state.data?.status ==
                       TransactionStatus.Pending.name &&
@@ -89,15 +89,15 @@ class _TransactionDetailState extends State<TransactionDetail> {
           bloc: _viewModel,
           listener: (context, state) {
             if (state.status == TransactionDetailStatus.error) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("Đã có lỗi xảy ra")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Đã có lỗi xảy ra")));
             } else {
               _refreshController.refreshCompleted();
             }
           },
           builder: (context, state) {
             if (state.status == TransactionDetailStatus.loading) {
-              return LoadingWidget();
+              return const LoadingWidget();
             }
             if (state.data?.deposit != null) {
               return _buildPendingDeposit(context);
@@ -105,7 +105,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
             if (state.data?.withdraw != null) {
               return _buildWithDraw();
             }
-            return SizedBox();
+            return const SizedBox();
           },
         ),
       ),
@@ -118,8 +118,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
       children: [
         Container(
           width: double.infinity,
-          margin: EdgeInsets.all(16),
-          padding: EdgeInsets.all(8),
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.yellow[100],
               borderRadius: BorderRadius.circular(8)),
@@ -127,39 +127,40 @@ class _TransactionDetailState extends State<TransactionDetail> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.support_agent, size: 30, color: AppColor.primaryColor),
-              SizedBox(
+              const Icon(Icons.support_agent,
+                  size: 30, color: AppColor.primaryColor),
+              const SizedBox(
                 width: 8,
               ),
-              Expanded(
+              const Expanded(
                 child: Text("Giao dịch sẽ cần 1 khoảng thời gian để hoàn tất."),
               )
             ],
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(color: AppColor.white),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(color: AppColor.white),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
               children: [
-                Text("Tên ngân hàng:"),
-                Spacer(),
+                const Text("Tên ngân hàng:"),
+                const Spacer(),
                 Text(
                   "${_viewModel.state.data?.withdraw?.userBankAccount?.bank?.name}",
                   style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Row(
               children: [
-                Text("Số tài khoản:"),
-                Spacer(),
+                const Text("Số tài khoản:"),
+                const Spacer(),
                 Text(
                   "${_viewModel.state.data?.withdraw?.userBankAccount?.accountNumber}",
                   style: GoogleFonts.montserrat(
@@ -168,44 +169,44 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Row(
               children: [
-                Text("Chủ tài khoản:"),
-                Spacer(),
+                const Text("Chủ tài khoản:"),
+                const Spacer(),
                 Text(
                   "${_viewModel.state.data?.withdraw?.userBankAccount?.owner}",
                   style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Row(
               children: [
-                Text("Số tiền:"),
-                Spacer(),
+                const Text("Số tiền:"),
+                const Spacer(),
                 Text(
                   "${(_viewModel.state.data?.amount ?? 0).price} VND",
                   style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             if (_viewModel.state.data?.status ==
                 TransactionStatus.Success.name) ...[
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Row(
                 children: [
-                  Text("Cập nhật vào lúc:"),
-                  Spacer(),
+                  const Text("Cập nhật vào lúc:"),
+                  const Spacer(),
                   Text(
                     _viewModel.state.data?.updatedAt?.date ?? "",
                     style: GoogleFonts.montserrat(
@@ -230,8 +231,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
               _viewModel.state.data?.status == TransactionStatus.Pending,
           child: Container(
             width: double.infinity,
-            margin: EdgeInsets.all(16),
-            padding: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
                 color: Colors.yellow[100],
                 borderRadius: BorderRadius.circular(8)),
@@ -239,12 +240,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.support_agent,
+                const Icon(Icons.support_agent,
                     size: 30, color: AppColor.primaryColor),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
-                Expanded(
+                const Expanded(
                   child: Text(
                       "Để hoàn thành giao dịch, quý khách vui lòng chuyển khoản ngân hàng vào tài khoản dưới đây. Mọi thắc mắc vui lòng xin liên hệ đường dây nóng chăm sóc khách hàng"),
                 )
@@ -253,93 +254,95 @@ class _TransactionDetailState extends State<TransactionDetail> {
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(color: AppColor.white),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(color: AppColor.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text("Tên ngân hàng:"),
-                  Spacer(),
+                  const Text("Tên ngân hàng:"),
+                  const Spacer(),
                   Text(
                     "Tiên Phong Bank (TPBank)",
                     style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Row(
                 children: [
-                  Text("Số tài khoản:"),
-                  Spacer(),
+                  const Text("Số tài khoản:"),
+                  const Spacer(),
                   Text(
                     "04323662178",
                     style: GoogleFonts.montserrat(
                         color: AppColor.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   InkWell(
                     onTap: () {
-                      Clipboard.setData(ClipboardData(text: "04323662178"))
+                      Clipboard.setData(
+                              const ClipboardData(text: "04323662178"))
                           .then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Đã copy vào bộ nhớ đệm.")));
+                            const SnackBar(
+                                content: Text("Đã copy vào bộ nhớ đệm.")));
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.copy,
                       size: 18,
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Row(
                 children: [
-                  Text("Chủ tài khoản:"),
-                  Spacer(),
+                  const Text("Chủ tài khoản:"),
+                  const Spacer(),
                   Text(
                     "NGUYEN KIEM TAN",
                     style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Row(
                 children: [
-                  Text("Số tiền:"),
-                  Spacer(),
+                  const Text("Số tiền:"),
+                  const Spacer(),
                   Text(
                     "${(_viewModel.state.data?.amount ?? 0).price} VND",
                     style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Row(
                 children: [
-                  Text("Nội dung khoản:"),
-                  Spacer(),
+                  const Text("Nội dung khoản:"),
+                  const Spacer(),
                   Text(
                     _viewModel.state.data?.deposit?.detail ?? "",
                     style: GoogleFonts.montserrat(
                         color: AppColor.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   InkWell(
@@ -349,10 +352,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                   _viewModel.state.data?.deposit?.detail ?? ""))
                           .then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Đã copy vào bộ nhớ đệm.")));
+                            const SnackBar(
+                                content: Text("Đã copy vào bộ nhớ đệm.")));
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.copy,
                       size: 18,
                     ),
@@ -361,7 +365,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               ),
               if (_viewModel.state.data?.status ==
                   TransactionStatus.Pending.name) ...[
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Text(
@@ -371,13 +375,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
               ],
               if (_viewModel.state.data?.status ==
                   TransactionStatus.Success.name) ...[
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Row(
                   children: [
-                    Text("Cập nhật vào lúc:"),
-                    Spacer(),
+                    const Text("Cập nhật vào lúc:"),
+                    const Spacer(),
                     Text(
                       _viewModel.state.data?.updatedAt?.date ?? "",
                       style: GoogleFonts.montserrat(
@@ -389,13 +393,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
               ],
               if (_viewModel.state.data?.status ==
                   TransactionStatus.Pending.name) ...[
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Row(
                   children: [
-                    Text("Hết hạn vào:"),
-                    Spacer(),
+                    const Text("Hết hạn vào:"),
+                    const Spacer(),
                     Text(
                       _viewModel.state.data?.deposit?.dueDate?.date ?? "",
                       style: GoogleFonts.montserrat(

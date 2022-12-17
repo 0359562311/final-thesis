@@ -1,10 +1,23 @@
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/model/entities/bank.dart';
 import 'package:fakeslink/app/model/entities/user.dart';
+import 'package:fakeslink/app/model/request/update_bank_account_request.dart';
 import 'package:get_it/get_it.dart';
 
 class UserRemoteSource {
   Future<User> getProfile() async {
     final res = await GetIt.I<Dio>().get("/user/me");
     return User.fromJson(res.data);
+  }
+
+  Future<List<Bank>> getBanks() async {
+    final res = await GetIt.I<Dio>().get("/payment/banks");
+    return res.data.map<Bank>((e) => Bank.fromJson(e)).toList();
+  }
+
+  Future<void> updateBankAccount(UpdateBankAccountRequest request) async {
+    final res =
+        await GetIt.I<Dio>().put("/user/bank_account/", data: request.toJson());
+    return;
   }
 }

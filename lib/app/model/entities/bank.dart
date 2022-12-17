@@ -1,7 +1,15 @@
+import 'package:hive_flutter/hive_flutter.dart';
+part 'bank.g.dart';
+
+@HiveType(typeId: 6)
 class BankAccount {
+  @HiveField(0)
   final int? id;
+  @HiveField(1)
   final Bank? bank;
+  @HiveField(2)
   final String? owner;
+  @HiveField(3)
   final String? accountNumber;
 
   BankAccount({
@@ -19,17 +27,17 @@ class BankAccount {
         owner = json['owner'] as String?,
         accountNumber = json['accountNumber'] as String?;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'bank': bank?.toJson(),
-        'owner': owner,
-        'accountNumber': accountNumber
-      };
+  Map<String, dynamic> toJson() =>
+      {'bank': bank?.id, 'owner': owner, 'accountNumber': accountNumber};
 }
 
+@HiveType(typeId: 7)
 class Bank {
+  @HiveField(0)
   final int? id;
+  @HiveField(1)
   final String? bankId;
+  @HiveField(2)
   final String? name;
 
   Bank({

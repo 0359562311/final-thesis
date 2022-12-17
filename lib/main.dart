@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/model/entities/bank.dart';
 import 'package:fakeslink/app/model/entities/certificate.dart';
 import 'package:fakeslink/app/model/entities/degree.dart';
 import 'package:fakeslink/app/model/entities/experience.dart';
@@ -11,6 +12,7 @@ import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
 import 'package:fakeslink/app/view/job_detail/job_detail.dart';
 import 'package:fakeslink/app/view/profile/profile.dart';
+import 'package:fakeslink/app/view/profile/update_bank_account.dart';
 import 'package:fakeslink/app/view/transaction/transaction_detail.dart';
 import 'package:fakeslink/app/view/transaction/transaction_list.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
@@ -45,6 +47,8 @@ void main() async {
   Hive.registerAdapter(CertificateAdapter());
   Hive.registerAdapter(DegreeAdapter());
   Hive.registerAdapter(ExperienceAdapter());
+  Hive.registerAdapter(BankAdapter());
+  Hive.registerAdapter(BankAccountAdapter());
   await init();
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
@@ -163,10 +167,10 @@ class _MyAppState extends State<MyApp> {
           ),
           debugShowCheckedModeBanner: false,
           routes: {
-            AppRoute.login: (context) => LoginPage(),
-            AppRoute.home: (context) => HomePage(),
-            AppRoute.signUp: (context) => SignUpPage(),
-            AppRoute.transactionList: (context) => TransactionListPage(),
+            AppRoute.login: (context) => const LoginPage(),
+            AppRoute.home: (context) => const HomePage(),
+            AppRoute.signUp: (context) => const SignUpPage(),
+            AppRoute.transactionList: (context) => const TransactionListPage(),
           },
           onGenerateRoute: (settings) {
             final session = configBox.get("session");
@@ -174,11 +178,11 @@ class _MyAppState extends State<MyApp> {
               case "/":
                 if (session == null) {
                   return MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                    builder: (context) => const LoginPage(),
                   );
                 } else {
                   return MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) => const HomePage(),
                   );
                 }
               case AppRoute.profile:
@@ -196,6 +200,9 @@ class _MyAppState extends State<MyApp> {
                     builder: (context) => JobDetailPage(
                           jobId: settings.arguments as int,
                         ));
+              case AppRoute.updateBank:
+                return MaterialPageRoute(
+                    builder: (context) => const UpdateBankAccountPage());
               default:
             }
             return null;
