@@ -12,7 +12,11 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
   void getJobDetail({int? jobDetailId}) {
     emit(state.copyWith(status: JobDetailStatus.loading));
     _jobDetailRepository.getJobDetail(jobDetailId ?? 0).then((value) {
-      emit(state.copyWith(status: JobDetailStatus.success, jobDetail: value));
+      emit(state.copyWith(
+        status: JobDetailStatus.success,
+        jobDetail: value,
+      ));
+      getOffers(id: jobDetailId);
     }).catchError((e) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });

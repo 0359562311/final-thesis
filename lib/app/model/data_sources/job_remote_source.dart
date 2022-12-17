@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
+import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
@@ -71,6 +72,13 @@ class JobRemoteSource {
     final res = (await GetIt.I<Dio>()
             .post("/job/$jobId/my_offer/", data: request.toJson()))
         .data;
+    return res;
+  }
+
+  Future<dynamic> acceptOffer(AcceptOffers request, {int? jobId}) async {
+    final res =
+        (await GetIt.I<Dio>().patch("/job/$jobId/", data: request.toJson()))
+            .data;
     return res;
   }
 }

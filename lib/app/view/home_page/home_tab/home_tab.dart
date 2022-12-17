@@ -67,7 +67,7 @@ class _HomeTabState extends State<HomeTab>
           },
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 36,
                 ),
@@ -78,7 +78,7 @@ class _HomeTabState extends State<HomeTab>
                   height: 44,
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 16,
                 ),
@@ -92,7 +92,7 @@ class _HomeTabState extends State<HomeTab>
                         "Xin chào, ${configBox.get("user")?.name}!",
                         style: GoogleFonts.montserrat(),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       AvatarWidget(
                         avatar: configBox.get("user")?.avatar,
                         size: 40,
@@ -104,7 +104,7 @@ class _HomeTabState extends State<HomeTab>
               SliverToBoxAdapter(
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Text("Tài khoản: ", style: GoogleFonts.montserrat()),
@@ -121,18 +121,19 @@ class _HomeTabState extends State<HomeTab>
               SliverToBoxAdapter(
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
                       onPressed: () async {
                         final data = await Navigator.push(context,
                             MaterialPageRoute(builder: (_) {
-                          return VerifyPasswordPage();
+                          return const VerifyPasswordPage();
                         }));
                         if (data != true) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Xác thực không thành công.")));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Xác thực không thành công.")));
                           return;
                         }
                         showModalBottomSheet(
@@ -193,24 +194,25 @@ class _HomeTabState extends State<HomeTab>
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     TextButton(
                       onPressed: () async {
                         if (configBox.get('user')?.bankAccount == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                               content: Text(
                                   "Hãy cập nhật tài khoản ngân hàng của bạn")));
                           return;
                         }
                         final data = await Navigator.push(context,
                             MaterialPageRoute(builder: (_) {
-                          return VerifyPasswordPage();
+                          return const VerifyPasswordPage();
                         }));
                         if (data != true) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Xác thực không thành công.")));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Xác thực không thành công.")));
                           return;
                         }
                         showModalBottomSheet(
@@ -291,7 +293,7 @@ class _HomeTabState extends State<HomeTab>
                 child: SizedBox(
                   height: 40,
                   child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       scrollDirection: Axis.horizontal,
                       itemCount: _cubit.state.category?.length,
                       itemBuilder: (context, index) {
@@ -301,14 +303,14 @@ class _HomeTabState extends State<HomeTab>
                               _cubit.changeTab(index);
                             },
                             child: Container(
-                                margin: EdgeInsets.only(right: 5),
+                                margin: const EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
                                         color: _cubit.state.currentTab == index
                                             ? AppColor.primaryColor
                                             : Colors.grey.withOpacity(0.3))),
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 5, vertical: 3),
                                 child: Text(
                                   _cubit.state.category?[index].name ?? "",
@@ -322,86 +324,107 @@ class _HomeTabState extends State<HomeTab>
                       }),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 96,
-                  child: ListView.builder(
-                    itemCount: state.jobs?.length ?? 0,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final job = state.jobs![index];
-                      return Container(
-                        margin: EdgeInsets.only(left: 10, right: 6),
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColor.primaryColor10,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: AppColor.primaryColor),
-                              child: Icon(
-                                CupertinoIcons.bag,
-                                color: AppColor.white,
-                              ),
+              if (state.jobs?.isNotEmpty ?? false)
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 96,
+                    child: ListView.builder(
+                      itemCount: state.jobs?.length ?? 0,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final job = state.jobs![index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => JobDetailPage(
+                                      jobId: _cubit.state.jobs?[index].id,
+                                      categoryId: _cubit.categoryId,
+                                    )));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 6),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: AppColor.primaryColor10,
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
                                 Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth: 200, minWidth: 0),
-                                  child: Text(
-                                    job.title ?? "",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.montserrat(
-                                        color: AppColor.primaryColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: AppColor.primaryColor),
+                                  child: const Icon(
+                                    CupertinoIcons.bag,
+                                    color: AppColor.white,
                                   ),
                                 ),
-                                Text(
-                                  "${(job.payment?.amount ?? 0).price} VND",
-                                  style: GoogleFonts.montserrat(
-                                      color: AppColor.errorColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
+                                const SizedBox(
+                                  width: 8,
                                 ),
-                                Text(
-                                  job.payment?.paymentMethod?.id == 1
-                                      ? "Trả theo dự án"
-                                      : "Trả theo giờ",
-                                  style: GoogleFonts.montserrat(
-                                      color: AppColor.primaryColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Text(
-                                  "Việc làm từ xa",
-                                  style: GoogleFonts.montserrat(
-                                      color: AppColor.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      constraints: const BoxConstraints(
+                                          maxWidth: 200, minWidth: 0),
+                                      child: Text(
+                                        job.title ?? "",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.montserrat(
+                                            color: AppColor.primaryColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${(job.payment?.amount ?? 0).price} VND",
+                                      style: GoogleFonts.montserrat(
+                                          color: AppColor.errorColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    Text(
+                                      job.payment?.paymentMethod?.id == 1
+                                          ? "Trả theo dự án"
+                                          : "Trả theo giờ",
+                                      style: GoogleFonts.montserrat(
+                                          color: AppColor.primaryColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    Text(
+                                      "Việc làm từ xa",
+                                      style: GoogleFonts.montserrat(
+                                          color: AppColor.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                      );
-                    },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
+              if (state.jobs?.isEmpty ?? false)
+                SliverToBoxAdapter(
+                  child: Center(
+                      child: Text(
+                    "Không có công việc nào!",
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: AppColor.primaryColor),
+                  )),
+                ),
+              const SliverToBoxAdapter(
                 child: SizedBox(height: 12),
               ),
               SliverToBoxAdapter(
@@ -428,24 +451,25 @@ class _HomeTabState extends State<HomeTab>
               SliverToBoxAdapter(
                 child: Container(
                   height: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                       color: AppColor.white,
                       borderRadius: BorderRadius.circular(10)),
                   child: GridView.builder(
                       shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3),
                       itemCount: 9,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
                             NavigationUtils.navigatePage(
-                                context, CreateJobPage());
+                                context, const CreateJobPage());
                           },
                           child: Container(
-                            margin: EdgeInsets.all(10),
+                            margin: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 color: AppColor.background,
                                 borderRadius: BorderRadius.circular(10)),
@@ -459,7 +483,7 @@ class _HomeTabState extends State<HomeTab>
                                     width: 32,
                                     color: AppColor.primaryColor,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(

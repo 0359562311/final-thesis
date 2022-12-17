@@ -13,6 +13,7 @@ class HomeCubit extends Cubit<HomeState> {
       AuthenticationRepositoryImpl();
   final TransactionRepository _transactionRepository =
       TransactionRepositoryImpl();
+  int? categoryId;
 
   HomeCubit() : super(HomeState(HomeStatus.initial, null, null, 0, null));
 
@@ -60,6 +61,7 @@ class HomeCubit extends Cubit<HomeState> {
         .getJobs(FilterJob(categories: [state.category?[index].id ?? 0]))
         .then((value) => emit(state.copyWith(currentTab: index, jobs: value)))
         .catchError((_) => emit(state.copyWith(currentTab: index, jobs: [])));
+    categoryId = state.category?[index].id;
   }
 
   void logout() async {
