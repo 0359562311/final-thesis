@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/model/data_sources/job_remote_source.dart';
+import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
 import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
@@ -17,7 +18,7 @@ mixin JobRepository {
   Future<Job> getJobDetail(int jobDetailId);
   Future<List<Offer>> getOffers(int id);
   Future<List<Job>> getSameJob({int? categories, int? offset});
-  Future<Offer?> getMyOffers({int? jobId});
+  Future<MyOffer?> getMyOffers({int? jobId});
   Future<dynamic> createMyJob(CreateMyJobRequest request, {int? jobId});
   Future<dynamic> acceptOffer(AcceptOffers request, {int? jobId});
 }
@@ -65,7 +66,7 @@ class JobRepositoryImpl implements JobRepository {
   }
 
   @override
-  Future<Offer?> getMyOffers({int? jobId}) {
+  Future<MyOffer?> getMyOffers({int? jobId}) {
     return _jobRemoteSource.getMyOffers(offerId: jobId);
   }
 

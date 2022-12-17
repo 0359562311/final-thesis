@@ -52,6 +52,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
             _viewmodel.getMyOffer(jobId: widget.jobId);
             _viewmodel.getSameJob(
                 categories: state.jobDetail?.categories?.first.id, offset: 0);
+            _viewmodel.getJobDetail(jobDetailId: widget.jobId);
           }
         },
         builder: (context, state) {
@@ -91,15 +92,12 @@ class _JobDetailPageState extends State<JobDetailPage> {
                           size: 50,
                         ),
                         const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _viewmodel.state.jobDetail?.poster?.name ?? "",
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500, fontSize: 14),
-                            ),
-                          ],
+                        Expanded(
+                          child: Text(
+                            _viewmodel.state.jobDetail?.poster?.name ?? "",
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500, fontSize: 14),
+                          ),
                         ),
                         Visibility(
                           visible: _viewmodel.state.jobDetail?.status ==
