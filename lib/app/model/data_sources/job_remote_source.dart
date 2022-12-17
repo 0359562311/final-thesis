@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
 import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
@@ -62,10 +63,10 @@ class JobRemoteSource {
     return res['results'].map<Job>((e) => Job.fromJson(e)).toList();
   }
 
-  Future<Offer?> getMyOffers({int? offerId}) async {
+  Future<MyOffer?> getMyOffers({int? offerId}) async {
     final res = (await GetIt.I<Dio>().get("/job/$offerId/my_offer")).data;
     if (res is! Map<String, dynamic>) return null;
-    return Offer.fromJson(res);
+    return MyOffer.fromJson(res);
   }
 
   Future<dynamic> createMyJob(CreateMyJobRequest request, {int? jobId}) async {
