@@ -1,35 +1,33 @@
 import 'package:fakeslink/app/model/entities/job.dart';
-import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
-import 'package:fakeslink/app/model/entities/same_job.dart';
 
-enum JobDetailStatus { loading, success, error, createMyJobSuccess }
+enum JobDetailStatus { loading, success, error, createOfferSuccess }
 
 class JobDetailState {
   final Job? jobDetail;
   final JobDetailStatus status;
-  final List<OffersResponse>? offers;
-  final SameJobResponse? sameJobResponse;
-  final MyOfferResponse? myOfferResponse;
+  final List<Offer>? offers;
+  final List<Job>? sameJobs;
+  final Offer? myOffer;
 
   JobDetailState(
       {this.jobDetail,
       required this.status,
       this.offers,
-      this.sameJobResponse,
-      this.myOfferResponse});
+      this.sameJobs,
+      this.myOffer});
 
   JobDetailState copyWith(
       {Job? jobDetail,
       JobDetailStatus? status,
-      List<OffersResponse>? offers,
-      SameJobResponse? sameJobResponse,
-      MyOfferResponse? myOfferResponse}) {
+      List<Offer>? offers,
+      List<Job>? sameJobs,
+      Offer? myOffer}) {
     return JobDetailState(
         jobDetail: jobDetail ?? this.jobDetail,
         status: status ?? this.status,
         offers: offers ?? this.offers,
-        sameJobResponse: sameJobResponse ?? this.sameJobResponse,
-        myOfferResponse: myOfferResponse ?? this.myOfferResponse);
+        sameJobs: sameJobs ?? this.sameJobs,
+        myOffer: myOffer ?? this.myOffer);
   }
 }

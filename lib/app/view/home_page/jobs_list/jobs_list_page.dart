@@ -65,16 +65,19 @@ class _JobsListPageState extends State<JobsListPage>
           listener: (context, state) {
             if (state.status == JobsListStatus.error) {
               Utils.showSnackBar(context, "Đã có lỗi xảy ra");
+            } else if (state.status == JobsListStatus.success) {
+              _refreshController.refreshCompleted();
             }
           },
           builder: (context, state) {
+            Widget? child;
             if (state.status == JobsListStatus.loading) {
-              return Center(
+              child = Center(
                 child: CircularProgressIndicator(),
               );
             }
             if (state.jobs.isEmpty) {
-              return Center(
+              child = Center(
                 child: Text("Không có công việc nào!"),
               );
             }
@@ -87,12 +90,16 @@ class _JobsListPageState extends State<JobsListPage>
               onLoading: () {
                 _viewModel.getJobs();
               },
-              child: ListView.builder(
-                  itemCount: state.jobs.length,
-                  itemBuilder: (context, index) {
-                    final data = state.jobs[index];
-                    return JobItem(data: data);
-                  }),
+              child: child != null
+                  ? SingleChildScrollView(
+                      child: child,
+                    )
+                  : ListView.builder(
+                      itemCount: state.jobs.length,
+                      itemBuilder: (context, index) {
+                        final data = state.jobs[index];
+                        return JobItem(data: data);
+                      }),
             );
           },
         ),

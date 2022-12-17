@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
-import 'package:fakeslink/app/model/entities/same_job.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
@@ -48,24 +46,25 @@ class JobRemoteSource {
     return Job.fromJson(res.data);
   }
 
-  Future<List<OffersResponse>> getOffers(int id) async {
+  Future<List<Offer>> getOffers(int id) async {
     final res = (await GetIt.I<Dio>().get(
       "/job/$id/offers",
     ))
         .data;
-    return (res as List).map((e) => OffersResponse.fromJson(e)).toList();
+    return (res as List).map((e) => Offer.fromJson(e)).toList();
   }
 
-  Future<SameJobResponse> getSameJob({int? categories, int? offset}) async {
+  Future<List<Job>> getSameJob({int? categories, int? offset}) async {
     final res = (await GetIt.I<Dio>().get("/job",
             queryParameters: {"categories": categories, "offset": offset}))
         .data;
-    return SameJobResponse.fromJson(res);
+    return res['results'].map<Job>((e) => Job.fromJson(e)).toList();
   }
 
-  Future<MyOfferResponse> getMyOffers({int? offerId}) async {
+  Future<Offer?> getMyOffers({int? offerId}) async {
     final res = (await GetIt.I<Dio>().get("/job/$offerId/my_offer")).data;
-    return MyOfferResponse.fromJson(res);
+    if (res is! Map<String, dynamic>) return null;
+    return Offer.fromJson(res);
   }
 
   Future<dynamic> createMyJob(CreateMyJobRequest request, {int? jobId}) async {

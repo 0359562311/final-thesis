@@ -213,7 +213,6 @@ class CreateJobCubit extends Cubit<CreateJobState> {
               dueDate: (dueDate?.millisecondsSinceEpoch)! ~/ 1000,
               payment: Payment(
                   amount: int.parse(price ?? ""), paymentMethod: paymentMethod),
-              videos: [],
               images: images))
           .then((value) {
         emit(state.copyWith(

@@ -1,6 +1,6 @@
 import 'package:fakeslink/app/model/entities/user.dart';
 
-class OffersResponse {
+class Offer {
   int? id;
   User? user;
   String? status;
@@ -8,7 +8,7 @@ class OffersResponse {
   String? description;
   int? job;
 
-  OffersResponse({
+  Offer({
     this.id,
     this.user,
     this.status,
@@ -16,7 +16,7 @@ class OffersResponse {
     this.description,
     this.job,
   });
-  OffersResponse.fromJson(Map<String, dynamic> json) {
+  Offer.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
     user = (json['user'] != null) ? User.fromJson(json['user']) : null;
     status = json['status']?.toString();

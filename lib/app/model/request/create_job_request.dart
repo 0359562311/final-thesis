@@ -46,7 +46,6 @@ class CreteJobRequest {
   String? description;
   List<int?>? categories;
   List<String?>? images;
-  List<String?>? videos;
   int? dueDate;
 
   CreteJobRequest({
@@ -56,7 +55,6 @@ class CreteJobRequest {
     this.description,
     this.categories,
     this.images,
-    this.videos,
     this.dueDate,
   });
   Map<String, dynamic> toJson() {
@@ -85,14 +83,6 @@ class CreteJobRequest {
         arr0.add(v);
       });
       data['images'] = arr0;
-    }
-    if (videos != null) {
-      final v = videos;
-      final arr0 = [];
-      v!.forEach((v) {
-        arr0.add(v);
-      });
-      data['videos'] = arr0;
     }
     return data;
   }

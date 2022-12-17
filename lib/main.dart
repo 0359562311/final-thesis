@@ -9,6 +9,7 @@ import 'package:fakeslink/app/model/entities/user.dart';
 import 'package:fakeslink/app/view/authentication/login/login.dart';
 import 'package:fakeslink/app/view/authentication/sign_up/sign_up.dart';
 import 'package:fakeslink/app/view/home_page/home.dart';
+import 'package:fakeslink/app/view/job_detail/job_detail.dart';
 import 'package:fakeslink/app/view/profile/profile.dart';
 import 'package:fakeslink/app/view/transaction/transaction_detail.dart';
 import 'package:fakeslink/app/view/transaction/transaction_list.dart';
@@ -75,7 +76,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
-    baseUrl: 'http://192.168.0.100:8000',
+    baseUrl: 'http://192.168.0.102:8000',
     connectTimeout: 60000,
     receiveTimeout: 60000,
   );
@@ -189,6 +190,11 @@ class _MyAppState extends State<MyApp> {
                 return MaterialPageRoute(
                     builder: (context) => TransactionDetail(
                           transactionId: settings.arguments as int,
+                        ));
+              case AppRoute.jobDetail:
+                return MaterialPageRoute(
+                    builder: (context) => JobDetailPage(
+                          jobId: settings.arguments as int,
                         ));
               default:
             }

@@ -3,10 +3,10 @@ import 'package:fakeslink/app/model/request/create_my_job_request.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class JobDetailCubit extends Cubit<JobDetailState> {
+class JobDetailViewModel extends Cubit<JobDetailState> {
   final JobRepository _jobDetailRepository = JobRepositoryImpl();
 
-  JobDetailCubit()
+  JobDetailViewModel()
       : super(JobDetailState(status: JobDetailStatus.loading, jobDetail: null));
 
   void getJobDetail({int? jobDetailId}) {
@@ -23,9 +23,9 @@ class JobDetailCubit extends Cubit<JobDetailState> {
         status: JobDetailStatus.loading, jobDetail: state.jobDetail));
     _jobDetailRepository.getOffers(id ?? 0).then((value) {
       emit(state.copyWith(
-          status: JobDetailStatus.success,
-          offers: value,
-          jobDetail: state.jobDetail));
+        status: JobDetailStatus.success,
+        offers: value,
+      ));
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error, offers: state.offers));
     });
@@ -36,52 +36,44 @@ class JobDetailCubit extends Cubit<JobDetailState> {
     _jobDetailRepository
         .getSameJob(categories: categories, offset: offset)
         .then((value) {
-      emit(state.copyWith(
-          status: JobDetailStatus.success, sameJobResponse: value));
+      emit(state.copyWith(status: JobDetailStatus.success, sameJobs: value));
     }).catchError((onError) {
       emit(state.copyWith(
-          status: JobDetailStatus.error,
-          sameJobResponse: state.sameJobResponse));
+          status: JobDetailStatus.error, sameJobs: state.sameJobs));
     });
   }
 
-  void getMyOffer({int? offerId}) {
+  void getMyOffer({int? jobId}) {
     emit(JobDetailState(
         status: JobDetailStatus.loading,
         jobDetail: state.jobDetail,
-        sameJobResponse: state.sameJobResponse,
+        sameJobs: state.sameJobs,
         offers: state.offers));
-    _jobDetailRepository.getMyOffers(offerId: offerId).then((value) {
-      emit(JobDetailState(
-          status: JobDetailStatus.success,
-          myOfferResponse: value,
-          jobDetail: state.jobDetail));
+    _jobDetailRepository.getMyOffers(jobId: jobId).then((value) {
+      emit(state.copyWith(
+        status: JobDetailStatus.success,
+        myOffer: value,
+      ));
     }).catchError((onError) {
-      emit(JobDetailState(status: JobDetailStatus.error));
+      emit(state.copyWith(status: JobDetailStatus.error));
     });
   }
 
   void createMyJob({int? jobId, String? description, String? price}) {
     emit(JobDetailState(
-        status: JobDetailStatus.loading,
-        jobDetail: state.jobDetail,
-        myOfferResponse: state.myOfferResponse,
-        sameJobResponse: state.sameJobResponse,
-        offers: state.offers));
+      status: JobDetailStatus.loading,
+    ));
     _jobDetailRepository
         .createMyJob(
             CreateMyJobRequest(
                 price: int.parse(price ?? ""), description: description),
             jobId: jobId)
         .then((value) {
-      emit(JobDetailState(
-          status: JobDetailStatus.createMyJobSuccess,
-          jobDetail: state.jobDetail,
-          myOfferResponse: state.myOfferResponse,
-          sameJobResponse: state.sameJobResponse,
-          offers: state.offers));
+      emit(state.copyWith(
+        status: JobDetailStatus.createOfferSuccess,
+      ));
     }).catchError((onError) {
-      emit(JobDetailState(status: JobDetailStatus.error));
+      emit(state.copyWith(status: JobDetailStatus.error));
     });
   }
 }

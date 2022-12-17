@@ -5,9 +5,10 @@ import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/button_widget.dart';
 import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/core/custom_widgets/custom_appbar.dart';
+import 'package:fakeslink/core/custom_widgets/job_item.dart';
+import 'package:fakeslink/core/utils/extensions/string.dart';
 import 'package:fakeslink/core/utils/utils.dart';
 import 'package:fakeslink/main.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
@@ -24,19 +25,18 @@ class JobDetailPage extends StatefulWidget {
 }
 
 class _JobDetailPageState extends State<JobDetailPage> {
-  late JobDetailCubit _cubit;
+  late JobDetailViewModel _viewmodel;
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _cubit = JobDetailCubit();
-    _cubit.getJobDetail(jobDetailId: widget.jobId);
-    _cubit.getOffers(id: widget.jobId);
-    _cubit.getSameJob(categories: 1, offset: 0);
-    _cubit.getMyOffer(offerId: widget.jobId);
+    _viewmodel = JobDetailViewModel();
+    _viewmodel.getJobDetail(jobDetailId: widget.jobId);
+    _viewmodel.getOffers(id: widget.jobId);
+    _viewmodel.getSameJob(categories: 1, offset: 0);
+    _viewmodel.getMyOffer(jobId: widget.jobId);
   }
 
   @override
@@ -55,12 +55,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   color: AppColor.red, fontWeight: FontWeight.w600),
             ),
           )),
-      body: BlocConsumer<JobDetailCubit, JobDetailState>(
-        bloc: _cubit,
+      body: BlocConsumer<JobDetailViewModel, JobDetailState>(
+        bloc: _viewmodel,
         listener: (context, state) {
-          if (state.status == JobDetailStatus.createMyJobSuccess) {
-            _cubit.getMyOffer(offerId: 9);
-            _cubit.getSameJob(categories: 1, offset: 0);
+          if (state.status == JobDetailStatus.createOfferSuccess) {
+            _viewmodel.getMyOffer(jobId: widget.jobId);
+            _viewmodel.getSameJob(
+                categories: state.jobDetail?.categories?.first.id, offset: 0);
           }
         },
         builder: (context, state) {
@@ -77,7 +78,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   child: Row(
                     children: [
                       AvatarWidget(
-                        avatar: _cubit.state.jobDetail?.poster?.avatar ?? "",
+                        avatar:
+                            _viewmodel.state.jobDetail?.poster?.avatar ?? "",
                         size: 50,
                       ),
                       const SizedBox(width: 10),
@@ -86,7 +88,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _cubit.state.jobDetail?.poster?.name ?? "",
+                              _viewmodel.state.jobDetail?.poster?.name ?? "",
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w500, fontSize: 14),
                             ),
@@ -109,28 +111,38 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: CarouselSlider.builder(
-                    unlimitedMode: true,
-                    autoSliderDelay: const Duration(seconds: 2),
-                    scrollDirection: Axis.horizontal,
-                    enableAutoSlider: true,
-                    keepPage: true,
-                    slideTransform: const CubeTransform(),
-                    slideIndicator: CircularSlideIndicator(
-                      currentIndicatorColor: AppColor.primaryColor,
-                      padding: const EdgeInsets.only(bottom: 32),
-                    ),
-                    slideBuilder: (int index) {
-                      return Image.network(
-                          _cubit.state.jobDetail?.images?[index] ?? "");
-                    },
-                    itemCount: _cubit.state.jobDetail?.images?.length ?? 0,
+              if (_viewmodel.state.jobDetail?.images?.isEmpty == true)
+                SliverToBoxAdapter(
+                  child: Container(
+                    child: Text("Không có hình ảnh minh hoạ"),
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.width / 16 * 9,
+                    alignment: Alignment.center,
                   ),
                 ),
-              ),
+              if (_viewmodel.state.jobDetail?.images?.isNotEmpty == true)
+                SliverToBoxAdapter(
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CarouselSlider.builder(
+                      unlimitedMode: true,
+                      autoSliderDelay: const Duration(seconds: 2),
+                      scrollDirection: Axis.horizontal,
+                      enableAutoSlider: true,
+                      keepPage: true,
+                      slideIndicator: CircularSlideIndicator(
+                        currentIndicatorColor: AppColor.primaryColor,
+                        padding: const EdgeInsets.only(bottom: 32),
+                      ),
+                      slideBuilder: (int index) {
+                        return Image.network(
+                            _viewmodel.state.jobDetail?.images?[index] ?? "");
+                      },
+                      itemCount:
+                          _viewmodel.state.jobDetail?.images?.length ?? 0,
+                    ),
+                  ),
+                ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -138,15 +150,16 @@ class _JobDetailPageState extends State<JobDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _cubit.state.jobDetail?.title ?? "",
+                        _viewmodel.state.jobDetail?.title ?? "",
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w600, fontSize: 16),
                       ),
                       const SizedBox(height: 10),
                       Wrap(
                         runSpacing: 10,
+                        spacing: 10,
                         children: List.generate(
-                            _cubit.state.jobDetail?.categories?.length ?? 0,
+                            _viewmodel.state.jobDetail?.categories?.length ?? 0,
                             (index) => Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15, vertical: 3),
@@ -155,8 +168,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                       color: AppColor.primaryColor
                                           .withOpacity(0.3)),
                                   child: Text(
-                                    _cubit.state.jobDetail?.categories?[index]
-                                            .name ??
+                                    _viewmodel.state.jobDetail
+                                            ?.categories?[index].name ??
                                         "",
                                     style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w500,
@@ -167,91 +180,73 @@ class _JobDetailPageState extends State<JobDetailPage> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "Description",
+                        "Mô tả",
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w600, fontSize: 16),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        _cubit.state.jobDetail?.description ?? "",
+                        _viewmodel.state.jobDetail?.description ?? "",
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w400, fontSize: 14),
                       ),
                       const SizedBox(height: 10),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "From",
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                Utils.formatDateTime(
-                                    _cubit.state.jobDetail?.poster?.createAt ??
-                                        ""),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500, fontSize: 16),
-                              ),
-                            ],
+                          Text(
+                            "Ngày hết hạn",
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600, fontSize: 16),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "To",
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  Utils.formatDateTime(_cubit
-                                          .state.jobDetail?.poster?.updateAt ??
-                                      ""),
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          )
+                          const SizedBox(height: 5),
+                          Text(
+                            df.format(_viewmodel.state.jobDetail?.dueDate ??
+                                DateTime.now()),
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        "Address",
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600, fontSize: 16),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        "${_cubit.state.jobDetail?.address?.detail ?? ""}, ${_cubit.state.jobDetail?.address?.ward}, ${_cubit.state.jobDetail?.address?.district}, ${_cubit.state.jobDetail?.address?.city}",
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: AppColor.primaryColor),
-                      ),
+                      if (_viewmodel.state.jobDetail?.address != null) ...[
+                        Text(
+                          "Địa chỉ",
+                          style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w600, fontSize: 16),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          "${_viewmodel.state.jobDetail?.address?.detail ?? ""}, ${_viewmodel.state.jobDetail?.address?.ward}, ${_viewmodel.state.jobDetail?.address?.district}, ${_viewmodel.state.jobDetail?.address?.city}",
+                          style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: AppColor.primaryColor),
+                        ),
+                      ],
+                      if (_viewmodel.state.jobDetail?.address == null)
+                        Text(
+                          "Công việc từ xa",
+                          style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: AppColor.primaryColor),
+                        ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
                           Expanded(
                             child: Text(
-                              "Budget",
+                              "Kinh phí",
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w600, fontSize: 16),
                             ),
                           ),
                           Text(
-                            (Utils.formatMoney(_cubit
+                            (Utils.formatMoney(_viewmodel
                                         .state.jobDetail?.payment?.amount) ??
                                     "") +
-                                "đ",
+                                " VND",
                             style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w600, fontSize: 16),
                           ),
@@ -259,7 +254,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                       ),
                       const SizedBox(height: 10),
                       Visibility(
-                        visible: _cubit.state.offers?.isNotEmpty ?? false,
+                        visible: _viewmodel.state.offers?.isNotEmpty ?? false,
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -270,7 +265,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                           child: Row(
                             children: [
                               Text(
-                                "${_cubit.state.offers?.length} Offer",
+                                "${_viewmodel.state.offers?.length} chào giá",
                                 style: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
@@ -294,10 +289,10 @@ class _JobDetailPageState extends State<JobDetailPage> {
                       const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
-                          if (_cubit.state.jobDetail?.poster?.id ==
+                          if (_viewmodel.state.jobDetail?.poster?.id ==
                               configBox.get("user").id) {
                           } else {
-                            if (_cubit.state.myOfferResponse != null) {
+                            if (_viewmodel.state.myOffer != null) {
                               showModalBottomSheet(
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.vertical(
@@ -346,17 +341,17 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                                       color: Colors.green),
                                                 ),
                                               ),
-                                              Text((Utils.formatMoney(_cubit
+                                              Text((Utils.formatMoney(_viewmodel
                                                           .state
-                                                          .myOfferResponse
+                                                          .myOffer
                                                           ?.price) ??
                                                       "") +
                                                   "đ")
                                             ],
                                           ),
                                           const SizedBox(height: 10),
-                                          Text(_cubit.state.myOfferResponse
-                                                  ?.description ??
+                                          Text(_viewmodel
+                                                  .state.myOffer?.description ??
                                               ""),
                                           const SizedBox(height: 10),
                                           Row(
@@ -406,16 +401,16 @@ class _JobDetailPageState extends State<JobDetailPage> {
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: _cubit.state.jobDetail?.poster?.id ==
+                              color: _viewmodel.state.jobDetail?.poster?.id ==
                                       configBox.get("user").id
                                   ? AppColor.primaryColor
                                   : Colors.deepOrange),
                           child: Center(
                             child: Text(
-                              _cubit.state.jobDetail?.poster?.id ==
+                              _viewmodel.state.jobDetail?.poster?.id ==
                                       configBox.get("user").id
                                   ? "View Offers"
-                                  : _cubit.state.myOfferResponse == null
+                                  : _viewmodel.state.myOffer == null
                                       ? "Chào giá"
                                       : "Xem chào giá",
                               style: GoogleFonts.montserrat(
@@ -440,205 +435,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(color: Colors.grey.shade200)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                AvatarWidget(
-                                    avatar: _cubit.state.sameJobResponse
-                                            ?.results?[index]?.poster?.avatar ??
-                                        "",
-                                    size: 40),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                    _cubit.state.sameJobResponse
-                                            ?.results?[index]?.poster?.name ??
-                                        "",
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _cubit.state.sameJobResponse?.results?[index]
-                                      ?.title ??
-                                  "",
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w600, fontSize: 16),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Wrap(
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                    children: List.generate(
-                                        _cubit
-                                                .state
-                                                .sameJobResponse
-                                                ?.results?[index]
-                                                ?.categories
-                                                ?.length ??
-                                            0,
-                                        (currentIndex) => Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 3),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  color: AppColor.primaryColor
-                                                      .withOpacity(0.3)),
-                                              child: Text(
-                                                _cubit
-                                                        .state
-                                                        .sameJobResponse
-                                                        ?.results?[index]
-                                                        ?.categories?[
-                                                            currentIndex]
-                                                        .name ??
-                                                    "",
-                                                style: GoogleFonts.montserrat(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                    color:
-                                                        AppColor.primaryColor),
-                                              ),
-                                            )),
-                                  ),
-                                ),
-                                Text(
-                                  Utils.formatMoney(
-                                          "${_cubit.state.sameJobResponse?.results?[index]?.payment?.amount}") ??
-                                      "",
-                                  style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.lock_clock,
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Expanded(
-                                            child: Text(
-                                              DateFormat("hh:mm").format(
-                                                  DateTime.parse(_cubit
-                                                          .state
-                                                          .sameJobResponse
-                                                          ?.results?[index]
-                                                          ?.poster
-                                                          ?.updateAt ??
-                                                      "")),
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.calendar_month,
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Expanded(
-                                              child: Text(
-                                                  Utils.formatDateTime(_cubit
-                                                          .state
-                                                          .sameJobResponse
-                                                          ?.results?[index]
-                                                          ?.poster
-                                                          ?.updateAt ??
-                                                      ""),
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 14)))
-                                        ],
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.location_on_rounded,
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Expanded(
-                                              child: Text(
-                                                  "${_cubit.state.sameJobResponse?.results?[index]?.address?.district}, ${_cubit.state.sameJobResponse?.results?[index]?.address?.city}",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 14)))
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  _cubit.state.sameJobResponse?.results?[index]
-                                              ?.status ==
-                                          "Opening"
-                                      ? "Đang chờ"
-                                      : "Đã hoàn thành",
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      color: Colors.green),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
-                      );
+                      return JobItem(data: _viewmodel.state.sameJobs![index]);
                     },
-                    childCount: _cubit.state.sameJobResponse?.results?.length ??
+                    childCount: _viewmodel.state.sameJobs?.length ??
                         0, // 1000 list items
                   ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
               ),
             ],
           );
@@ -698,7 +501,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               title: "OK",
                               onPressed: () {
                                 Navigator.pop(context);
-                                _cubit.createMyJob(
+                                _viewmodel.createMyJob(
                                     price: _priceController.text.trim(),
                                     description:
                                         _descriptionController.text.trim(),
