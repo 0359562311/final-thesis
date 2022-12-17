@@ -59,7 +59,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            appBar: appBar(context, "Details",
+            appBar: appBar(context, "Chi tiết công việc",
                 textColor: AppColor.primaryColor,
                 iconColor: AppColor.primaryColor,
                 centerTitle: true,
@@ -91,22 +91,15 @@ class _JobDetailPageState extends State<JobDetailPage> {
                           size: 50,
                         ),
                         const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _viewmodel.state.jobDetail?.poster?.name ?? "",
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500, fontSize: 14),
-                              ),
-                              Text(
-                                "Poster",
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500, fontSize: 14),
-                              )
-                            ],
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _viewmodel.state.jobDetail?.poster?.name ?? "",
+                              style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w500, fontSize: 14),
+                            ),
+                          ],
                         ),
                         Visibility(
                           visible: _viewmodel.state.jobDetail?.status ==
@@ -471,7 +464,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               child: Text(
                                 _viewmodel.state.jobDetail?.poster?.id ==
                                         configBox.get("user").id
-                                    ? "View Offers"
+                                    ? "Xem chào giá"
                                     : _viewmodel.state.myOffer == null
                                         ? "Chào giá"
                                         : "Xem chào giá",

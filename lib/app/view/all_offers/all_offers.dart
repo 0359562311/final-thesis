@@ -66,7 +66,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                   child: Center(
                       heightFactor: 20,
                       child: Text(
-                        "Không có offers nào!",
+                        "Không có chào giá nào!",
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
