@@ -67,6 +67,8 @@ dev_dependencies:
   http_mock_adapter: ^0.3.2
   bloc_test: ^9.0.1
   flutter_lints: ^1.0.4
+  flutter_carousel_slider: ^1.1.0
+  avatar_stack: ^1.1.2
 
 dependency_overrides:
   platform: ^3.1.0

@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/view/create_job/create_job.dart';
 import 'package:fakeslink/app/view/verify_password/verify_password.dart';
+import 'package:fakeslink/app/view/job_detail/job_detail.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
