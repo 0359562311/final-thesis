@@ -1,8 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fakeslink/app/model/entities/my_offer.dart';
-import 'package:fakeslink/app/model/entities/offers.dart';
-import 'package:fakeslink/app/model/request/accept_offers.dart';
-import 'package:fakeslink/app/model/request/create_my_job_request.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
@@ -48,14 +44,6 @@ class JobRemoteSource {
     return Job.fromJson(res.data);
   }
 
-  Future<List<Offer>> getOffers(int id) async {
-    final res = (await GetIt.I<Dio>().get(
-      "/job/$id/offers",
-    ))
-        .data;
-    return (res as List).map((e) => Offer.fromJson(e)).toList();
-  }
-
   Future<List<Job>> getSameJob({int? categories, int? offset}) async {
     final res = (await GetIt.I<Dio>().get("/job",
             queryParameters: {"categories": categories, "offset": offset}))
@@ -63,31 +51,8 @@ class JobRemoteSource {
     return res['results'].map<Job>((e) => Job.fromJson(e)).toList();
   }
 
-  Future<MyOffer?> getMyOffers({int? offerId}) async {
-    final res = (await GetIt.I<Dio>().get("/job/$offerId/my_offer")).data;
-    if (res is! Map<String, dynamic>) return null;
-    return MyOffer.fromJson(res);
-  }
-
-  Future<dynamic> createMyOffer(CreateMyOfferRequest request,
-      {int? jobId}) async {
-    final res = (await GetIt.I<Dio>()
-            .post("/job/$jobId/my_offer/", data: request.toJson()))
-        .data;
-    return res;
-  }
-
-  Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId}) async {
-    final res = (await GetIt.I<Dio>()
-            .put("/job/$jobId/accept_offer/", data: request.toJson()))
-        .data;
-    return res;
-  }
-
-  Future cancelOffer(int jobId) async {
-    final res = (await GetIt.I<Dio>()
-            .patch("/job/$jobId/my_offer/", data: {"status": "Closed"}))
-        .data;
-    return res;
+  Future updateJobStatus(int jobId, JobStatus status) {
+    return GetIt.I<Dio>()
+        .patch("/job/$jobId/", queryParameters: {"status": status.name});
   }
 }

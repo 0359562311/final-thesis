@@ -1,5 +1,4 @@
 import 'package:fakeslink/app/model/entities/job.dart';
-import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
 
 enum JobDetailStatus {
@@ -15,7 +14,7 @@ class JobDetailState {
   final JobDetailStatus status;
   final List<Offer>? offers;
   final List<Job>? sameJobs;
-  final MyOffer? myOffer;
+  final Offer? myOffer;
 
   JobDetailState(
       {this.jobDetail,
@@ -29,7 +28,7 @@ class JobDetailState {
       JobDetailStatus? status,
       List<Offer>? offers,
       List<Job>? sameJobs,
-      MyOffer? myOffer}) {
+      Offer? myOffer}) {
     return JobDetailState(
         jobDetail: jobDetail ?? this.jobDetail,
         status: status ?? this.status,

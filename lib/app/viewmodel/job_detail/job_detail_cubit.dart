@@ -1,4 +1,6 @@
+import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
+import 'package:fakeslink/app/model/repositories/offer_repository.dart';
 import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class JobDetailViewModel extends Cubit<JobDetailState> {
   final JobRepository _jobDetailRepository = JobRepositoryImpl();
+  final OfferRepository _offerRepository = OfferRepositoryImpl();
 
   JobDetailViewModel()
       : super(JobDetailState(status: JobDetailStatus.loading, jobDetail: null));
@@ -32,7 +35,7 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
   void getOffers({int? jobId}) {
     emit(state.copyWith(
         status: JobDetailStatus.loading, jobDetail: state.jobDetail));
-    _jobDetailRepository.getOffers(jobId ?? 0).then((value) {
+    _offerRepository.getOffers(jobId ?? 0).then((value) {
       emit(state.copyWith(
         status: JobDetailStatus.success,
         offers: value,
@@ -59,7 +62,7 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
     emit(state.copyWith(
       status: JobDetailStatus.loading,
     ));
-    _jobDetailRepository.getMyOffers(jobId: jobId).then((value) {
+    _offerRepository.getMyOffers(jobId: jobId).then((value) {
       emit(state.copyWith(
         status: JobDetailStatus.success,
         myOffer: value,
@@ -73,8 +76,8 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
     emit(state.copyWith(
       status: JobDetailStatus.loading,
     ));
-    _jobDetailRepository
-        .createMyJob(
+    _offerRepository
+        .createMyOffer(
             CreateMyOfferRequest(
                 price: int.parse(price ?? ""), description: description),
             jobId: jobId)
@@ -89,8 +92,17 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
 
   void closedOffer(int jobId) {
     emit(state.copyWith(status: JobDetailStatus.loading));
-    _jobDetailRepository.cancelOffer(jobId).then((value) {
+    _offerRepository.cancelOffer(jobId).then((value) {
       getMyOffer(jobId: jobId);
+    }).catchError((onError) {
+      emit(state.copyWith(status: JobDetailStatus.error));
+    });
+  }
+
+  void updateJobStatus(int jobId, JobStatus status) {
+    _jobDetailRepository.updateJobStatus(jobId, status).then((value) {
+      emit(state.copyWith(status: JobDetailStatus.loading));
+      getJobDetail(jobDetailId: jobId);
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });

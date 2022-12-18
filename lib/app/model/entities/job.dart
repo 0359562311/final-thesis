@@ -3,6 +3,8 @@ import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/payment.dart';
 import 'package:fakeslink/app/model/entities/user.dart';
 
+enum JobStatus { Pending, Opening, Closed }
+
 class Job {
   final int? id;
   final Payment? payment;
@@ -63,4 +65,13 @@ class Job {
         'description': description,
         'status': status
       };
+
+  String get statusText {
+    if (status == JobStatus.Opening.name) {
+      return "Đang mở";
+    } else if (status == JobStatus.Pending.name) {
+      return "Chờ hoàn thành";
+    }
+    return "Đã đóng";
+  }
 }

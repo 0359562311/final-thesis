@@ -1,5 +1,4 @@
 import 'package:fakeslink/app/model/data_sources/job_remote_source.dart';
-import 'package:fakeslink/app/model/entities/my_offer.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
 import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
@@ -16,12 +15,8 @@ mixin JobRepository {
   Future<List<Job>> getJobs(FilterJob filterJob);
   Future<List<Job>> getMyJobs(int page);
   Future<Job> getJobDetail(int jobDetailId);
-  Future<List<Offer>> getOffers(int id);
   Future<List<Job>> getSameJob({int? categories, int? offset});
-  Future<MyOffer?> getMyOffers({int? jobId});
-  Future<dynamic> createMyJob(CreateMyOfferRequest request, {int? jobId});
-  Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId});
-  Future<dynamic> cancelOffer(int jobId);
+  Future updateJobStatus(int jobId, JobStatus status);
 }
 
 class JobRepositoryImpl implements JobRepository {
@@ -57,32 +52,12 @@ class JobRepositoryImpl implements JobRepository {
   }
 
   @override
-  Future<List<Offer>> getOffers(int id) {
-    return _jobRemoteSource.getOffers(id);
-  }
-
-  @override
   Future<List<Job>> getSameJob({int? categories, int? offset}) {
     return _jobRemoteSource.getSameJob(categories: categories, offset: offset);
   }
 
   @override
-  Future<MyOffer?> getMyOffers({int? jobId}) {
-    return _jobRemoteSource.getMyOffers(offerId: jobId);
-  }
-
-  @override
-  Future<dynamic> createMyJob(CreateMyOfferRequest request, {int? jobId}) {
-    return _jobRemoteSource.createMyOffer(request, jobId: jobId);
-  }
-
-  @override
-  Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId}) {
-    return _jobRemoteSource.acceptOffer(request, jobId: jobId);
-  }
-
-  @override
-  Future cancelOffer(int jobId) {
-    return _jobRemoteSource.cancelOffer(jobId);
+  Future updateJobStatus(int jobId, JobStatus status) {
+    return _jobRemoteSource.updateJobStatus(jobId, status);
   }
 }

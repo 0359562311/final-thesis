@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/view/all_offers/all_offers.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_cubit.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
@@ -13,8 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-enum JobStatus { Pending, Opening, Closed }
 
 class JobDetailPage extends StatefulWidget {
   final int? jobId;
@@ -97,7 +96,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.pop(context);
-                                    _viewmodel.closedOffer(widget.jobId ?? 0);
+                                    _viewmodel.updateJobStatus(
+                                        widget.jobId ?? 0, JobStatus.Closed);
                                   },
                                   child: Text(
                                     "Có",

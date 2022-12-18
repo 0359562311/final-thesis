@@ -116,11 +116,7 @@ class JobItem extends StatelessWidget {
                   const SizedBox(
                     width: 8,
                   ),
-                  Text(
-                    "Đang mở",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 14, color: Colors.lightGreen),
-                  )
+                  _getStatus()
                 ],
               ),
             ),
@@ -147,6 +143,21 @@ class JobItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Text _getStatus() {
+    Color c;
+    if (data.status == JobStatus.Opening.name) {
+      c = Colors.lightGreen;
+    } else if (data.status == JobStatus.Pending.name) {
+      c = Colors.yellow[600]!;
+    } else {
+      c = AppColor.red;
+    }
+    return Text(
+      data.statusText,
+      style: GoogleFonts.montserrat(fontSize: 14, color: c),
     );
   }
 }
