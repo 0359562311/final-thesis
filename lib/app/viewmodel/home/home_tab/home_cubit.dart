@@ -5,6 +5,7 @@ import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/repositories/user_respository.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
+import 'package:fakeslink/main.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final JobRepository _jobRepository = JobRepositoryImpl();
@@ -42,7 +43,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void init() async {
     emit(state.copyWith(status: HomeStatus.loading));
-    await _userRepository.getProfile();
+    await _userRepository.getProfile(configBox.get("user")?.id);
     getCategory();
   }
 

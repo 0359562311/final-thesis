@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/view/all_offers/all_offers.dart';
+import 'package:fakeslink/app/view/profile/profile.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_cubit.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -132,10 +133,23 @@ class _JobDetailPageState extends State<JobDetailPage> {
                         horizontal: 16, vertical: 10),
                     child: Row(
                       children: [
-                        AvatarWidget(
-                          avatar:
-                              _viewmodel.state.jobDetail?.poster?.avatar ?? "",
-                          size: 50,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserProfilePage(
+                                          userId: _viewmodel.state.jobDetail
+                                                  ?.poster?.id ??
+                                              0,
+                                        )));
+                          },
+                          child: AvatarWidget(
+                            avatar:
+                                _viewmodel.state.jobDetail?.poster?.avatar ??
+                                    "",
+                            size: 50,
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
