@@ -188,7 +188,7 @@ class _MyAppState extends State<MyApp> {
               case AppRoute.profile:
                 return MaterialPageRoute(
                   builder: (context) =>
-                      UserProfilePage(userId: settings.arguments as int),
+                      UserProfilePage(userId: settings.arguments as int?),
                 );
               case AppRoute.transactionDetail:
                 return MaterialPageRoute(

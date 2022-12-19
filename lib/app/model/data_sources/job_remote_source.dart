@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/model/entities/offers.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
@@ -54,5 +55,10 @@ class JobRemoteSource {
   Future updateJobStatus(int jobId, JobStatus status) {
     return GetIt.I<Dio>()
         .patch("/job/$jobId/", queryParameters: {"status": status.name});
+  }
+
+  Future<List<Offer>> getOfferHistory() async {
+    final res = (await GetIt.I<Dio>().get("/job/offered")).data;
+    return (res as List).map((e) => Offer.fromJson(e)).toList();
   }
 }

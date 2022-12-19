@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/view/home_page/activities/jobs_history_page.dart';
+import 'package:fakeslink/app/view/home_page/activities/offfer_history_page.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,7 +58,7 @@ class _ActivitiesPageState extends State<ActivitiesPage>
         controller: _tabController,
         children: [
           JobHistoryPage(),
-          Text(""),
+          OfferHistoryPage(),
         ],
       ),
     );

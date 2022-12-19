@@ -5,7 +5,7 @@ import 'package:fakeslink/app/model/entities/user.dart';
 import 'package:fakeslink/app/model/request/update_bank_account_request.dart';
 
 mixin UserRepository {
-  Future<User> getProfile();
+  Future<User> getProfile(int? userId);
   Future<void> updateBankAccount(UpdateBankAccountRequest request);
   Future<List<Bank>> getBanks();
 }
@@ -14,9 +14,9 @@ class UserRepositoryImpl implements UserRepository {
   final UserRemoteSource _remoteSource = UserRemoteSource();
   final UserLocalSource _localSource = UserLocalSource();
   @override
-  Future<User> getProfile() {
-    return _remoteSource.getProfile().then((value) async {
-      await _localSource.save(value);
+  Future<User> getProfile(int? userId) {
+    return _remoteSource.getProfile(userId: userId).then((value) async {
+      if (userId == null) await _localSource.save(value);
       return value;
     });
   }

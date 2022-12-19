@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserProfilePage extends StatefulWidget {
-  final int userId;
+  final int? userId;
 
   const UserProfilePage({Key? key, required this.userId}) : super(key: key);
 
@@ -25,7 +25,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     // TODO: implement initState
     super.initState();
     _cubit = ViewProfileViewModel();
-    _cubit.getProfile();
+    _cubit.getProfile(widget.userId);
   }
 
   @override

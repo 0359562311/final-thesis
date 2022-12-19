@@ -1,12 +1,10 @@
 import 'package:fakeslink/app/model/data_sources/job_remote_source.dart';
-import 'package:fakeslink/app/model/entities/offers.dart';
-import 'package:fakeslink/app/model/request/accept_offers.dart';
-import 'package:fakeslink/app/model/request/create_my_job_request.dart';
-import 'package:fakeslink/app/model/request/filter_job_request.dart';
 import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
+import 'package:fakeslink/app/model/entities/offers.dart';
 import 'package:fakeslink/app/model/entities/payment.dart';
 import 'package:fakeslink/app/model/request/create_job_request.dart';
+import 'package:fakeslink/app/model/request/filter_job_request.dart';
 
 mixin JobRepository {
   Future<List<Category>> getCategory();
@@ -17,6 +15,7 @@ mixin JobRepository {
   Future<Job> getJobDetail(int jobDetailId);
   Future<List<Job>> getSameJob({int? categories, int? offset});
   Future updateJobStatus(int jobId, JobStatus status);
+  Future<List<Offer>>getOfferHistory();
 }
 
 class JobRepositoryImpl implements JobRepository {
@@ -59,5 +58,9 @@ class JobRepositoryImpl implements JobRepository {
   @override
   Future updateJobStatus(int jobId, JobStatus status) {
     return _jobRemoteSource.updateJobStatus(jobId, status);
+  }
+  @override
+  Future<List<Offer>> getOfferHistory(){
+    return _jobRemoteSource.getOfferHistory();
   }
 }

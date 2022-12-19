@@ -7,9 +7,9 @@ class ViewProfileViewModel extends Cubit<ViewProfileState> {
   ViewProfileViewModel()
       : super(const ViewProfileState(
             status: ViewProfileStatus.initial, data: null));
-  void getProfile() {
+  void getProfile(int? id) {
     emit(state.copyWith(status: ViewProfileStatus.loading));
-    _userRepository.getProfile().then((value) {
+    _userRepository.getProfile(id).then((value) {
       emit(state.copyWith(status: ViewProfileStatus.success, data: value));
     }).catchError((e) {
       emit(state.copyWith(status: ViewProfileStatus.error));

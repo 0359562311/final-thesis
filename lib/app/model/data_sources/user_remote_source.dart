@@ -5,9 +5,14 @@ import 'package:fakeslink/app/model/request/update_bank_account_request.dart';
 import 'package:get_it/get_it.dart';
 
 class UserRemoteSource {
-  Future<User> getProfile() async {
-    final res = await GetIt.I<Dio>().get("/user/me");
-    return User.fromJson(res.data);
+  Future<User> getProfile({int? userId}) async {
+    if (userId != null) {
+      final res = await GetIt.I<Dio>().get("/user/$userId");
+      return User.fromJson(res.data);
+    } else {
+      final res = await GetIt.I<Dio>().get("/user/me");
+      return User.fromJson(res.data);
+    }
   }
 
   Future<List<Bank>> getBanks() async {

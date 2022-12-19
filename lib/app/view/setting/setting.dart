@@ -30,7 +30,7 @@ class _SettingTabState extends State<SettingTab> {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoute.profile, arguments: 1);
+                  Navigator.pushNamed(context, AppRoute.profile);
                 },
                 child: AvatarWidget(
                     avatar: configBox.get("user").avatar, size: 60),
