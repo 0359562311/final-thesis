@@ -58,6 +58,7 @@ dependencies:
   google_fonts: ^3.0.1
   cached_network_image: ^3.2.2
   pull_to_refresh: ^2.0.0
+  flutter_carousel_slider: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +68,7 @@ dev_dependencies:
   http_mock_adapter: ^0.3.2
   bloc_test: ^9.0.1
   flutter_lints: ^1.0.4
-  flutter_carousel_slider: ^1.1.0
+  
   avatar_stack: ^1.1.2
 
 dependency_overrides:

@@ -13,6 +13,7 @@ import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
+import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class JobDetailPage extends StatefulWidget {
