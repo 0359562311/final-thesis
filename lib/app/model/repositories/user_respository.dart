@@ -1,6 +1,7 @@
 import 'package:fakeslink/app/model/data_sources/user_local_source.dart';
 import 'package:fakeslink/app/model/data_sources/user_remote_source.dart';
 import 'package:fakeslink/app/model/entities/bank.dart';
+import 'package:fakeslink/app/model/entities/review_response.dart';
 import 'package:fakeslink/app/model/entities/user.dart';
 import 'package:fakeslink/app/model/request/update_bank_account_request.dart';
 
@@ -8,6 +9,7 @@ mixin UserRepository {
   Future<User> getProfile(int? userId);
   Future<void> updateBankAccount(UpdateBankAccountRequest request);
   Future<List<Bank>> getBanks();
+  Future<List<ReviewResponse>> getReview(int userId);
 }
 
 class UserRepositoryImpl implements UserRepository {
@@ -29,5 +31,10 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<void> updateBankAccount(UpdateBankAccountRequest request) {
     return _remoteSource.updateBankAccount(request);
+  }
+
+  @override
+  Future<List<ReviewResponse>> getReview(int userId) {
+    return _remoteSource.getReview(userId);
   }
 }

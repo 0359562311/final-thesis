@@ -1,7 +1,7 @@
 import 'package:fakeslink/app/model/repositories/offer_repository.dart';
 import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/pay_offer_request.dart';
-import 'package:fakeslink/app/model/request/review_response.dart';
+import 'package:fakeslink/app/model/request/review_request.dart';
 import 'package:fakeslink/app/viewmodel/all_offers/all_offers_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

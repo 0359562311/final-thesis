@@ -1,6 +1,7 @@
 import 'package:fakeslink/app/model/data_sources/offer_remote_source.dart';
+import 'package:fakeslink/app/model/entities/review_response.dart';
 import 'package:fakeslink/app/model/request/pay_offer_request.dart';
-import 'package:fakeslink/app/model/request/review_response.dart';
+import 'package:fakeslink/app/model/request/review_request.dart';
 
 import '../entities/offers.dart';
 import '../entities/transaction.dart';
