@@ -71,7 +71,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      HomePage()));
+                                      const HomePage()));
                         },
                         child: Text(
                           "Không",
@@ -81,7 +81,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               color: AppColor.black),
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
@@ -91,8 +91,8 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                 return SingleChildScrollView(
                                   padding: MediaQuery.of(context).viewInsets,
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
                                     child: Column(
                                       children: [
                                         Center(
@@ -106,20 +106,25 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                                 const EdgeInsets.symmetric(
                                                     horizontal: 2.0),
                                             itemBuilder: (context, index) =>
-                                                Icon(
+                                                const Icon(
                                               Icons.star,
                                               color: Colors.yellow,
                                             ),
-                                            onRatingUpdate: (value) {},
+                                            onRatingUpdate: (value) {
+                                              setState(() {
+                                                _cubit.changeRating(
+                                                    value.toInt());
+                                              });
+                                            },
                                           ),
                                         ),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         TextField(
                                           controller: _evaluateController,
                                           decoration: const InputDecoration(
                                               hintText: "Description"),
                                         ),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: SizedBox(
@@ -127,13 +132,23 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                             child: ButtonWidget(
                                               title: "Đánh giá",
                                               uppercaseTitle: false,
-                                              onPressed: () {},
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 5),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                _cubit.review(
+                                                    transactionId: _cubit
+                                                        .state.transaction?.id,
+                                                    rating: _cubit.rating,
+                                                    detail: _evaluateController
+                                                        .text,
+                                                    jobId: state.jobId);
+                                              },
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
                                             ),
                                           ),
                                         ),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                       ],
                                     ),
                                   ),
@@ -152,17 +167,20 @@ class _AllOfferPageState extends State<AllOfferPage> {
                   );
                 });
           }
+          if (state.status == AllOfferStatus.reviewSuccess) {
+            Navigator.pop(context);
+          }
         },
         builder: (context, state) {
           if (state.status == AllOfferStatus.loading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
           return CustomScrollView(
             shrinkWrap: true,
             slivers: [
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(height: 10),
               ),
               if (_cubit.state.offers?.isEmpty ?? false)
@@ -206,7 +224,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     RichText(
                                       text: TextSpan(
                                         children: [
@@ -238,7 +256,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
                                     (Utils.formatMoney(data?.price) ?? "") +
                                         " VND",
@@ -282,7 +300,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               Visibility(
                                 visible: data?.status == Status.Pending.name,
                                 child: Container(
-                                  constraints: BoxConstraints(
+                                  constraints: const BoxConstraints(
                                       minWidth: 70, maxWidth: 100),
                                   child: ButtonWidget(
                                       padding: const EdgeInsets.symmetric(
@@ -330,7 +348,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                                               fontSize: 14),
                                                     ),
                                                   ),
-                                                  SizedBox(width: 10),
+                                                  const SizedBox(width: 10),
                                                   GestureDetector(
                                                     onTap: () {
                                                       Navigator.pop(context);
@@ -408,7 +426,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                     style: GoogleFonts.montserrat(
                         fontSize: 14, fontWeight: FontWeight.w600)),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               GestureDetector(
                 onTap: () async {
                   Navigator.pop(contextT);
@@ -432,13 +450,13 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                   children: [
                                     TextField(
                                       controller: _textEditingController,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                           hintText: "Nhập số giờ làm"),
                                     ),
-                                    SizedBox(height: 15),
+                                    const SizedBox(height: 15),
                                     ButtonWidget(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
                                         backgroundColor: AppColor.primaryColor,
                                         title: "Thanh toán",
                                         onPressed: () {
@@ -490,7 +508,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                                 );
                                               });
                                         }),
-                                    SizedBox(height: 15),
+                                    const SizedBox(height: 15),
                                   ],
                                 ),
                               ),
@@ -538,7 +556,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                 style: GoogleFonts.montserrat(
                                     fontSize: 14, fontWeight: FontWeight.w600)),
                             actions: [
-                              Text("Đã hiểu"),
+                              const Text("Đã hiểu"),
                             ],
                           );
                         });
