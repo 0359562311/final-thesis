@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/model/entities/offers.dart';
-import 'package:fakeslink/app/model/entities/pay_offer_response.dart';
+import 'package:fakeslink/app/model/entities/transaction.dart';
 import 'package:fakeslink/app/model/request/pay_offer_request.dart';
+import 'package:fakeslink/app/model/request/review_response.dart';
 import 'package:get_it/get_it.dart';
 
 import '../request/accept_offers.dart';
@@ -44,10 +45,17 @@ class OfferRemoteSource {
     return (res as List).map((e) => Offer.fromJson(e)).toList();
   }
 
-  Future<PayOfferResponse> pay(PayOfferRequest request, {int? jobId}) async {
+  Future<Transaction> pay(PayOfferRequest request, {int? jobId}) async {
     final res = (await GetIt.I<Dio>()
             .post("/payment/$jobId/jobPayment/", data: request.toJson()))
         .data;
-    return PayOfferResponse.fromJson(res);
+    return Transaction.fromJson(res);
+  }
+
+  Future<dynamic> review(ReviewRequest request, {int? jobId}) async {
+    final res = (await GetIt.I<Dio>()
+            .post("/job/$jobId/review/", data: request.toJson()))
+        .data;
+    return res;
   }
 }
