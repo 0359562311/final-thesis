@@ -43,7 +43,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void init() async {
     emit(state.copyWith(status: HomeStatus.loading));
-    await _userRepository.getProfile(configBox.get("user")?.id);
+    await _userRepository.getProfile(null);
     getCategory();
   }
 

@@ -1,4 +1,6 @@
 import 'package:fakeslink/app/model/data_sources/offer_remote_source.dart';
+import 'package:fakeslink/app/model/entities/pay_offer_response.dart';
+import 'package:fakeslink/app/model/request/pay_offer_request.dart';
 
 import '../entities/offers.dart';
 import '../request/accept_offers.dart';
@@ -10,6 +12,7 @@ mixin OfferRepository {
   Future<dynamic> createMyOffer(CreateMyOfferRequest request, {int? jobId});
   Future<dynamic> acceptOffer(AcceptOfferRequest request, {int? jobId});
   Future<dynamic> cancelOffer(int jobId);
+  Future<PayOfferResponse> pay(PayOfferRequest request, {int? jobId});
 }
 
 class OfferRepositoryImpl implements OfferRepository {
@@ -37,5 +40,10 @@ class OfferRepositoryImpl implements OfferRepository {
   @override
   Future<List<Offer>> getOffers(int id) {
     return _offerRemoteSource.getOffers(id);
+  }
+
+  @override
+  Future<PayOfferResponse> pay(PayOfferRequest request, {int? jobId}) {
+    return _offerRemoteSource.pay(request, jobId: jobId);
   }
 }

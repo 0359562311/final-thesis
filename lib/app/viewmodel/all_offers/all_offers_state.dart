@@ -1,6 +1,6 @@
 import 'package:fakeslink/app/model/entities/offers.dart';
 
-enum AllOfferStatus { loading, success, error, acceptSuccess }
+enum AllOfferStatus { loading, success, error, acceptSuccess, paySuccess }
 
 class AllOffersState {
   AllOfferStatus status;

@@ -5,6 +5,7 @@ import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/model/entities/payment.dart';
 import 'package:fakeslink/app/model/request/create_job_request.dart';
+import 'package:fakeslink/app/model/request/pay_offer_request.dart';
 import 'package:get_it/get_it.dart';
 
 class JobRemoteSource {
