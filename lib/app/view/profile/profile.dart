@@ -6,6 +6,7 @@ import 'package:fakeslink/core/custom_widgets/circle_avatar_widget.dart';
 import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     super.initState();
     _cubit = ViewProfileViewModel();
     _cubit.getProfile(widget.userId);
+    _cubit.getReview(widget.userId ?? configBox.get("user").id);
   }
 
   @override
@@ -171,6 +173,65 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           "${_cubit.state.data?.degrees?[index]?.organization}");
                 }, childCount: _cubit.state.data?.degrees?.length ?? 0)),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 10,
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              AvatarWidget(
+                                  avatar: _cubit.state.listReview?[index].user
+                                          ?.avatar ??
+                                      "",
+                                  size: 30),
+                              Expanded(
+                                  child: Text(
+                                _cubit.state.listReview?[index].user?.name ??
+                                    "",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              ))
+                            ],
+                          ),
+                          RatingBar.builder(
+                            itemSize: 20,
+                            initialRating: _cubit
+                                    .state.listReview?[index].rating
+                                    ?.toDouble() ??
+                                0,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            itemCount: 5,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 2.0),
+                            itemBuilder: (context, index) => const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                            ),
+                            onRatingUpdate: (value) {},
+                          ),
+                          Text(
+                            _cubit.state.listReview?[index].detail ?? "",
+                            style: GoogleFonts.montserrat(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          )
+                        ],
+                      ),
+                    );
+                  }, childCount: _cubit.state.listReview?.length),
+                ),
               )
             ],
           );
