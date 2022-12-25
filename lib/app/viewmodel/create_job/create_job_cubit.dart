@@ -9,10 +9,10 @@ import 'package:fakeslink/core/utils/storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CreateJobCubit extends Cubit<CreateJobState> {
+class CreateJobViewModel extends Cubit<CreateJobState> {
   final JobRepository _jobRepository = JobRepositoryImpl();
 
-  CreateJobCubit() : super(CreateJobState(status: CreateJobStatus.loading));
+  CreateJobViewModel() : super(CreateJobState(status: CreateJobStatus.loading));
   List<dynamic> cities = [];
   List<dynamic> districts = [];
   List<dynamic> ward = [];

@@ -7,7 +7,7 @@ import 'package:fakeslink/app/model/repositories/user_respository.dart';
 import 'package:fakeslink/app/viewmodel/home/home_tab/home_state.dart';
 import 'package:fakeslink/main.dart';
 
-class HomeCubit extends Cubit<HomeState> {
+class HomeViewModel extends Cubit<HomeState> {
   final JobRepository _jobRepository = JobRepositoryImpl();
   final UserRepository _userRepository = UserRepositoryImpl();
   final AuthenticationRepository _authRepository =
@@ -16,7 +16,7 @@ class HomeCubit extends Cubit<HomeState> {
       TransactionRepositoryImpl();
   int? categoryId;
 
-  HomeCubit() : super(HomeState(HomeStatus.initial, null, null, 0, null));
+  HomeViewModel() : super(HomeState(HomeStatus.initial, null, null, 0, null));
 
   List<String> listJob = [
     "Đào tạo",

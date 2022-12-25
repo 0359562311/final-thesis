@@ -75,7 +75,7 @@ class _SettingTabState extends State<SettingTab> {
                   final update =
                       await Navigator.pushNamed(context, AppRoute.updateBank);
                   if (update == true) {
-                    BlocProvider.of<HomeCubit>(context).init();
+                    BlocProvider.of<HomeViewModel>(context).init();
                   }
                 }
               },
@@ -103,7 +103,7 @@ class _SettingTabState extends State<SettingTab> {
               icon: Icons.logout,
               iconColor: AppColor.primaryColor,
               onPressed: () {
-                BlocProvider.of<HomeCubit>(context).logout();
+                BlocProvider.of<HomeViewModel>(context).logout();
                 Navigator.pushNamedAndRemoveUntil(
                     context, AppRoute.login, (_) => false);
               },

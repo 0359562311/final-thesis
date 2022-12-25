@@ -27,7 +27,7 @@ class AllOfferPage extends StatefulWidget {
 }
 
 class _AllOfferPageState extends State<AllOfferPage> {
-  late AllOffersCubit _cubit;
+  late AllOffersViewModel _cubit;
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _evaluateController = TextEditingController();
 
@@ -35,7 +35,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cubit = AllOffersCubit();
+    _cubit = AllOffersViewModel();
     _cubit.getAllOffer(jobId: widget.jobId);
   }
 
@@ -48,7 +48,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
           elevation: 1,
           centerTitle: true,
           iconColor: AppColor.primaryColor),
-      body: BlocConsumer<AllOffersCubit, AllOffersState>(
+      body: BlocConsumer<AllOffersViewModel, AllOffersState>(
         bloc: _cubit,
         listener: (context, state) {
           if (state.status == AllOfferStatus.acceptSuccess) {

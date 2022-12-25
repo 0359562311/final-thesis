@@ -16,13 +16,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final LoginCubit _cubit;
+  late final LoginViewModel _cubit;
   late final TextEditingController _emailController, _passwordController;
 
   @override
   void initState() {
     super.initState();
-    _cubit = LoginCubit();
+    _cubit = LoginViewModel();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
   }
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: BlocConsumer<LoginCubit, LoginState>(
+      body: BlocConsumer<LoginViewModel, LoginState>(
         bloc: _cubit,
         listener: (context, state) {
           if (state.status == LoginStatus.error && state.error != null) {

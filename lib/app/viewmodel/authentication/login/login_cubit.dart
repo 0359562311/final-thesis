@@ -3,11 +3,11 @@ import 'package:fakeslink/app/viewmodel/authentication/login/login_state.dart';
 import 'package:fakeslink/core/utils/validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginCubit extends Cubit<LoginState> {
+class LoginViewModel extends Cubit<LoginState> {
   final AuthenticationRepository _authenticationRepository =
       AuthenticationRepositoryImpl();
 
-  LoginCubit() : super(LoginState(status: LoginStatus.initial));
+  LoginViewModel() : super(LoginState(status: LoginStatus.initial));
 
   void login(String email, String password) {
     if (state.errorEmail == null && state.errorPassword == null) {

@@ -16,19 +16,19 @@ class OfferHistoryPage extends StatefulWidget {
 }
 
 class _OfferHistoryPageState extends State<OfferHistoryPage> {
-  late OfferHistoryCubit _cubit;
+  late OfferHistoryViewModel _cubit;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cubit = OfferHistoryCubit();
+    _cubit = OfferHistoryViewModel();
     _cubit.getOfferHistory();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OfferHistoryCubit, OfferHistoryState>(
+    return BlocConsumer<OfferHistoryViewModel, OfferHistoryState>(
       bloc: _cubit,
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, state) {

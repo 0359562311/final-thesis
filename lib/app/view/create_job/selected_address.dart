@@ -10,12 +10,12 @@ class SelectedAddressPage extends StatefulWidget {
 }
 
 class _SelectedAddressPageState extends State<SelectedAddressPage> {
-  late CreateJobCubit _cubit;
+  late CreateJobViewModel _cubit;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cubit = CreateJobCubit();
+    _cubit = CreateJobViewModel();
   }
 
   @override

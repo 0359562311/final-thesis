@@ -24,7 +24,7 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab>
     with AutomaticKeepAliveClientMixin<HomeTab> {
-  late HomeCubit _cubit;
+  late HomeViewModel _cubit;
   String deposit = "0";
   String withdraw = "0";
   late TextEditingController _depositController, _withdrawController;
@@ -49,7 +49,7 @@ class _HomeTabState extends State<HomeTab>
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeCubit, HomeState>(
+    return BlocConsumer<HomeViewModel, HomeState>(
       bloc: _cubit,
       listener: (context, state) {
         if (state.status == HomeStatus.depositSuccess ||

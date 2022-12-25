@@ -18,7 +18,7 @@ class _SignUpPageState extends State<SignUpPage> {
   late final TextEditingController _emailController,
       _passwordController,
       _confirmPasswordController;
-  late final SignUpCubit _cubit;
+  late final SignUpViewModel _cubit;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
-    _cubit = SignUpCubit();
+    _cubit = SignUpViewModel();
   }
 
   @override
@@ -49,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(36.0),
-        child: BlocConsumer<SignUpCubit, SignUpState>(
+        child: BlocConsumer<SignUpViewModel, SignUpState>(
           bloc: _cubit,
           listener: (context, state) {
             if (state is SignUpErrorState) {

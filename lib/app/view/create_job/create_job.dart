@@ -26,13 +26,13 @@ class _CreateJobPageState extends State<CreateJobPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  late CreateJobCubit _cubit;
+  late CreateJobViewModel _cubit;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cubit = CreateJobCubit();
+    _cubit = CreateJobViewModel();
     _cubit.getCity();
     _cubit.getCategory();
     _cubit.getPayment();
@@ -45,7 +45,7 @@ class _CreateJobPageState extends State<CreateJobPage> {
           backgroundColor: const Color(0xFF4E43BD),
           centerTitle: true,
           iconColor: AppColor.white),
-      body: BlocConsumer<CreateJobCubit, CreateJobState>(
+      body: BlocConsumer<CreateJobViewModel, CreateJobState>(
         bloc: _cubit,
         listener: (context, state) {
           if (state.status == CreateJobStatus.createJobSuccess) {

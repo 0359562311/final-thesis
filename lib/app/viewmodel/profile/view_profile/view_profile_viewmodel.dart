@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:fakeslink/app/model/repositories/user_respository.dart';
 import 'package:fakeslink/app/viewmodel/profile/view_profile/view_profile_state.dart';
-import 'package:fakeslink/main.dart';
 
 class ViewProfileViewModel extends Cubit<ViewProfileState> {
   final UserRepository _userRepository = UserRepositoryImpl();

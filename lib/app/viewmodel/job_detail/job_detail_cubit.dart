@@ -93,6 +93,7 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
   void closedOffer(int jobId) {
     emit(state.copyWith(status: JobDetailStatus.loading));
     _offerRepository.cancelOffer(jobId).then((value) {
+      emit(state.copyWith(myOffer: null));
       getMyOffer(jobId: jobId);
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error));

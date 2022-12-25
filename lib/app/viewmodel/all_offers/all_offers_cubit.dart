@@ -5,10 +5,10 @@ import 'package:fakeslink/app/model/request/review_request.dart';
 import 'package:fakeslink/app/viewmodel/all_offers/all_offers_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AllOffersCubit extends Cubit<AllOffersState> {
+class AllOffersViewModel extends Cubit<AllOffersState> {
   final OfferRepository _offerRepository = OfferRepositoryImpl();
 
-  AllOffersCubit() : super(AllOffersState(status: AllOfferStatus.loading));
+  AllOffersViewModel() : super(AllOffersState(status: AllOfferStatus.loading));
   int rating = 5;
 
   void getAllOffer({int? jobId}) {

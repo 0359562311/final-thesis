@@ -1,6 +1,8 @@
 import 'package:fakeslink/app/model/entities/bank.dart';
 import 'package:fakeslink/core/utils/extensions/num.dart';
 
+import 'offers.dart';
+
 enum TransactionStatus { Pending, Failed, Success }
 
 class Transaction {
@@ -15,7 +17,7 @@ class Transaction {
   final dynamic jobPromotion;
   final dynamic profilePromotion;
   final dynamic viewJobSeekers;
-  final dynamic jobPayment;
+  final JobPaymentTransaction? jobPayment;
 
   Transaction({
     this.id,
@@ -50,7 +52,10 @@ class Transaction {
         jobPromotion = json['jobPromotion'],
         profilePromotion = json['profilePromotion'],
         viewJobSeekers = json['viewJobSeekers'],
-        jobPayment = json['jobPayment'];
+        jobPayment = (json['jobPayment'] as Map<String, dynamic>?) != null
+            ? JobPaymentTransaction.fromJson(
+                json['jobPayment'] as Map<String, dynamic>)
+            : null;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -77,7 +82,7 @@ class Transaction {
     else if (profilePromotion != null)
       return "Đẩy tìm kiếm hồ sơ";
     else if (jobPayment != null) {
-      return "";
+      return "Thanh toán công việc";
     }
     return "";
   }
@@ -142,4 +147,23 @@ class WithdrawTransaction {
         'detail': detail,
         'userBankAccount': userBankAccount
       };
+}
+
+class JobPaymentTransaction {
+  final int? id;
+  final Offer? offer;
+  final int? receiveAmount;
+
+  JobPaymentTransaction({
+    this.id,
+    this.offer,
+    this.receiveAmount,
+  });
+
+  JobPaymentTransaction.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        offer = (json['offer'] as Map<String, dynamic>?) != null
+            ? Offer.fromJson(json['offer'] as Map<String, dynamic>)
+            : null,
+        receiveAmount = json['receiveAmount'] as int?;
 }
