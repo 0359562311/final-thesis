@@ -20,6 +20,7 @@ class CertificateDegreeItem extends StatelessWidget {
       decoration: BoxDecoration(
           color: AppColor.background, borderRadius: BorderRadius.circular(8)),
       padding: EdgeInsets.all(8),
+      margin: EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,10 +39,6 @@ class CertificateDegreeItem extends StatelessWidget {
               Text("tại " + organization)
             ],
           ),
-          // SizedBox(
-          //   height: 8,
-          // ),
-          // Text(description)
         ],
       ),
     );

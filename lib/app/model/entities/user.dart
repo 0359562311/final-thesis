@@ -1,9 +1,11 @@
+import 'package:fakeslink/app/model/entities/transaction.dart';
 import 'package:hive/hive.dart';
 
 import 'bank.dart';
 import 'certificate.dart';
 import 'degree.dart';
 import 'experience.dart';
+
 part 'user.g.dart';
 
 @HiveType(typeId: 2)
@@ -43,6 +45,8 @@ class User {
   int? balance;
   @HiveField(17)
   BankAccount? bankAccount;
+  @HiveField(18)
+  ProfilePromotionTransaction? profilePromotion;
 
   User(
       {this.id,
@@ -61,7 +65,9 @@ class User {
       this.experiences,
       this.certificates,
       this.balance,
-      this.bio});
+      this.bio,
+      this.profilePromotion});
+
   User.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
     name = json['name']?.toString();
@@ -77,6 +83,9 @@ class User {
     bankAccount = json['bankAccount'] == null
         ? null
         : BankAccount.fromJson(json['bankAccount']);
+    profilePromotion = json['profilePromotion'] != null
+        ? ProfilePromotionTransaction.fromJson(json['profilePromotion'])
+        : null;
     balance = json['balance'];
     if (json['degrees'] != null) {
       final v = json['degrees'];
@@ -103,6 +112,7 @@ class User {
       certificates = arr0;
     }
   }
+
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;

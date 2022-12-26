@@ -1,7 +1,7 @@
 import 'package:fakeslink/app/model/entities/review_response.dart';
 import 'package:fakeslink/app/model/entities/user.dart';
 
-enum ViewProfileStatus { loading, error, success, initial }
+enum ViewProfileStatus { loading, error, success, initial, inputDaySuccess }
 
 class ViewProfileState {
   final ViewProfileStatus status;
