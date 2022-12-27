@@ -3,6 +3,7 @@ import 'package:fakeslink/app/model/data_sources/user_remote_source.dart';
 import 'package:fakeslink/app/model/entities/bank.dart';
 import 'package:fakeslink/app/model/entities/review_response.dart';
 import 'package:fakeslink/app/model/entities/user.dart';
+import 'package:fakeslink/app/model/request/day_request.dart';
 import 'package:fakeslink/app/model/request/update_bank_account_request.dart';
 
 mixin UserRepository {
@@ -10,6 +11,7 @@ mixin UserRepository {
   Future<void> updateBankAccount(UpdateBankAccountRequest request);
   Future<List<Bank>> getBanks();
   Future<List<ReviewResponse>> getReview(int userId);
+  Future<User> requestDay(DayRequest request);
 }
 
 class UserRepositoryImpl implements UserRepository {
@@ -36,5 +38,10 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<List<ReviewResponse>> getReview(int userId) {
     return _remoteSource.getReview(userId);
+  }
+
+  @override
+  Future<User> requestDay(DayRequest request) {
+    return _remoteSource.requestDay(request);
   }
 }

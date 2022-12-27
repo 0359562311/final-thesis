@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:fakeslink/app/model/entities/bank.dart';
 import 'package:fakeslink/app/model/entities/review_response.dart';
 import 'package:fakeslink/app/model/entities/user.dart';
+import 'package:fakeslink/app/model/request/day_request.dart';
 import 'package:fakeslink/app/model/request/update_bank_account_request.dart';
 import 'package:get_it/get_it.dart';
 
@@ -30,5 +31,12 @@ class UserRemoteSource {
   Future<List<ReviewResponse>> getReview(int userId) async {
     final res = (await GetIt.I<Dio>().get("/user/$userId/ratings")).data;
     return (res as List).map((e) => ReviewResponse.fromJson(e)).toList();
+  }
+
+  Future<User> requestDay(DayRequest request) async {
+    final res = (await GetIt.I<Dio>()
+            .post("/payment/profilePromotion/", data: request.toJson()))
+        .data;
+    return User.fromJson(res);
   }
 }

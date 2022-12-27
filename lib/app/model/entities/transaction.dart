@@ -15,7 +15,7 @@ class Transaction {
   final String? status;
   final int? user;
   final dynamic jobPromotion;
-  final dynamic profilePromotion;
+  final ProfilePromotionTransaction? profilePromotion;
   final dynamic viewJobSeekers;
   final JobPaymentTransaction? jobPayment;
 
@@ -91,6 +91,17 @@ class Transaction {
     if (deposit != null) return "+" + (amount ?? 0).price + " VND";
     return "-" + (amount ?? 0).price + " VND";
   }
+}
+
+class ProfilePromotionTransaction {
+  final int? id;
+  final String? dueDate;
+
+  ProfilePromotionTransaction({this.id, this.dueDate});
+
+  ProfilePromotionTransaction.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        dueDate = json['dueDate'] as String?;
 }
 
 class DepositTransaction {
