@@ -1,6 +1,8 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/view/all_offers/all_offers.dart';
 import 'package:fakeslink/app/view/profile/profile.dart';
+import 'package:fakeslink/app/view/verify_password/verify_password.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_cubit.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -12,10 +14,12 @@ import 'package:fakeslink/core/utils/extensions/string.dart';
 import 'package:fakeslink/core/utils/utils.dart';
 import 'package:fakeslink/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class JobDetailPage extends StatefulWidget {
   final int? jobId;
@@ -32,6 +36,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
   late JobDetailViewModel _viewmodel;
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _inputDayController = TextEditingController();
+  String? selectedValue;
+  final List<String> items = [
+    'Đóng',
+    'Đẩy tìm kiếm công việc',
+    'Xem người tìm việc phù hợp',
+  ];
 
   @override
   void initState() {
@@ -49,7 +60,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
       body: BlocConsumer<JobDetailViewModel, JobDetailState>(
         bloc: _viewmodel,
         listener: (context, state) {
-          if (state.status == JobDetailStatus.createOfferSuccess) {
+          if (state.status == JobDetailStatus.createOfferSuccess ||
+              state.status == JobDetailStatus.updateDaySuccess) {
             _viewmodel.getMyOffer(jobId: widget.jobId);
             _viewmodel.getSameJob(
                 categories: state.jobDetail?.categories?.first.id, offset: 0);
@@ -64,66 +76,180 @@ class _JobDetailPageState extends State<JobDetailPage> {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            appBar: appBar(context, "Chi tiết công việc",
-                textColor: AppColor.primaryColor,
-                iconColor: AppColor.primaryColor,
-                centerTitle: true,
-                rightWidget: Visibility(
-                  visible: _viewmodel.state.jobDetail?.poster?.id ==
-                      configBox.get("user").id,
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(
-                                'Bạn có muộn đóng công việc không?',
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
-                              ),
-                              actions: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    "Không",
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    _viewmodel.updateJobStatus(
-                                        widget.jobId ?? 0, JobStatus.Closed);
-                                  },
-                                  child: Text(
-                                    "Có",
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
-                                        color: Colors.red),
-                                  ),
-                                )
-                              ],
-                            );
-                          });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 18, right: 5),
-                      child: Text(
-                        "Đóng",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.montserrat(
-                            color: AppColor.red, fontWeight: FontWeight.w600),
+            appBar: appBar(
+              context,
+              "Chi tiết công việc",
+              textColor: AppColor.primaryColor,
+              iconColor: AppColor.primaryColor,
+              centerTitle: true,
+              rightWidget: Visibility(
+                visible: _viewmodel.state.jobDetail?.poster?.id ==
+                    configBox.get("user").id,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    hint: Text(
+                      'Select Item',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).hintColor,
                       ),
                     ),
+                    items: items
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColor.primaryColor),
+                              ),
+                            ))
+                        .toList(),
+                    value: selectedValue,
+                    onChanged: (String? value) async {
+                      setState(() {
+                        selectedValue = value;
+                      });
+                      if (value == "Đóng") {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(
+                                  'Bạn có muộn đóng công việc không?',
+                                  style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16),
+                                ),
+                                actions: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "Không",
+                                      style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      _viewmodel.updateJobStatus(
+                                          widget.jobId ?? 0, JobStatus.Closed);
+                                    },
+                                    child: Text(
+                                      "Có",
+                                      style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                          color: Colors.red),
+                                    ),
+                                  )
+                                ],
+                              );
+                            });
+                      } else if (value == "Đẩy tìm kiếm công việc") {
+                        final res = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const VerifyPasswordPage()));
+                        if (res == true) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      void Function(void Function()) setState) {
+                                    return AlertDialog(
+                                      content: SingleChildScrollView(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Nhập số ngày",
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16),
+                                            ),
+                                            TextField(
+                                              controller: _inputDayController,
+                                              maxLines: 1,
+                                              decoration: const InputDecoration(
+                                                hintText: "Nhập số ngày",
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _viewmodel.priceAdvertisement(
+                                                      balance: _viewmodel
+                                                          .state
+                                                          .jobDetail!
+                                                          .payment!
+                                                          .amount!,
+                                                      day: int.parse(
+                                                          _inputDayController
+                                                              .text));
+                                                });
+                                              },
+                                            ),
+                                            const SizedBox(height: 10),
+                                            if (_viewmodel.state.jobDetail
+                                                        ?.payment?.amount !=
+                                                    null &&
+                                                _inputDayController
+                                                    .text.isNotEmpty)
+                                              Text(
+                                                  "Số tiền: ${Utils.formatMoney(_viewmodel.price)} VND")
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Không",
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14)),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            _viewmodel.createDay(
+                                                jobId: _viewmodel
+                                                    .state.jobDetail?.id,
+                                                day: int.parse(
+                                                    _inputDayController.text));
+                                          },
+                                          child: Text("Có",
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                  color: Colors.red)),
+                                        ),
+                                        const SizedBox(width: 10),
+                                      ],
+                                    );
+                                  },
+                                );
+                              });
+                        }
+                      }
+                    },
+                    buttonHeight: 40,
+                    itemHeight: 40,
                   ),
-                )),
+                ),
+              ),
+            ),
             body: CustomScrollView(
               shrinkWrap: true,
               slivers: [
@@ -205,7 +331,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 if (_viewmodel.state.jobDetail?.images?.isEmpty == true)
                   SliverToBoxAdapter(
                     child: Container(
-                      child: Text("Không có hình ảnh minh hoạ"),
+                      child: const Text("Không có hình ảnh minh hoạ"),
                       width: double.infinity,
                       height: MediaQuery.of(context).size.width / 16 * 9,
                       alignment: Alignment.center,
@@ -231,6 +357,19 @@ class _JobDetailPageState extends State<JobDetailPage> {
                         },
                         itemCount:
                             _viewmodel.state.jobDetail?.images?.length ?? 0,
+                      ),
+                    ),
+                  ),
+                if (_viewmodel.dueDate != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 5),
+                      child: Text(
+                        "Công việc được đẩy quảng cáo tới ngày ${DateFormat("dd/MM/yyy").format(DateTime.parse(_viewmodel.dueDate ?? ""))}",
+                        maxLines: 2,
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600, fontSize: 16),
                       ),
                     ),
                   ),
@@ -562,21 +701,22 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   TextField(
                     controller: _priceController,
                     maxLines: 1,
-                    decoration: InputDecoration(hintText: "Nhập giá tiền"),
+                    decoration:
+                        const InputDecoration(hintText: "Nhập giá tiền"),
                     keyboardType: TextInputType.number,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: _descriptionController,
                     maxLines: 1,
-                    decoration: InputDecoration(hintText: "Nhập mô tả"),
+                    decoration: const InputDecoration(hintText: "Nhập mô tả"),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
                           child: ButtonWidget(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 5),
                               title: "Hủy",
                               backgroundColor: Colors.white,
@@ -585,10 +725,10 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               onPressed: () {
                                 Navigator.pop(context);
                               })),
-                      SizedBox(width: 15),
+                      const SizedBox(width: 15),
                       Expanded(
                           child: ButtonWidget(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 5),
                               backgroundColor: Colors.deepOrange,
                               textColor: Colors.white,
@@ -632,4 +772,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
             style:
                 Theme.of(context).textTheme.headline6?.copyWith(fontSize: 12)),
       );
+
+  bool checkDay() {
+    if (_inputDayController.text.isNotEmpty &&
+        DateTime.now().difference(_viewmodel.state.jobDetail!.dueDate!).inDays >
+            Duration(days: int.parse(_inputDayController.text)).inDays) {
+      return true;
+    }
+    return false;
+  }
 }

@@ -5,6 +5,7 @@ import 'package:fakeslink/app/model/entities/offers.dart';
 import 'package:fakeslink/app/model/entities/payment.dart';
 import 'package:fakeslink/app/model/request/create_job_request.dart';
 import 'package:fakeslink/app/model/request/filter_job_request.dart';
+import 'package:fakeslink/app/model/request/job_promotion_request.dart';
 
 mixin JobRepository {
   Future<List<Category>> getCategory();
@@ -15,7 +16,8 @@ mixin JobRepository {
   Future<Job> getJobDetail(int jobDetailId);
   Future<List<Job>> getSameJob({int? categories, int? offset});
   Future updateJobStatus(int jobId, JobStatus status);
-  Future<List<Offer>>getOfferHistory();
+  Future<List<Offer>> getOfferHistory();
+  Future<Job> jobPromotion(JobPromotionRequest request);
 }
 
 class JobRepositoryImpl implements JobRepository {
@@ -59,8 +61,14 @@ class JobRepositoryImpl implements JobRepository {
   Future updateJobStatus(int jobId, JobStatus status) {
     return _jobRemoteSource.updateJobStatus(jobId, status);
   }
+
   @override
-  Future<List<Offer>> getOfferHistory(){
+  Future<List<Offer>> getOfferHistory() {
     return _jobRemoteSource.getOfferHistory();
+  }
+
+  @override
+  Future<Job> jobPromotion(JobPromotionRequest request) {
+    return _jobRemoteSource.jobPromotion(request);
   }
 }
