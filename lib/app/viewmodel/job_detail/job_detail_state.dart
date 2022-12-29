@@ -6,7 +6,8 @@ enum JobDetailStatus {
   success,
   error,
   createOfferSuccess,
-  closedOfferSuccess
+  closedOfferSuccess,
+  updateDaySuccess,
 }
 
 class JobDetailState {

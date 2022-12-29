@@ -15,21 +15,26 @@ class Job {
   final List<dynamic>? videos;
   final String? title;
   final String? description;
+  final Promotion? promotion;
+  final JobPromotion? jobPromotion;
   final String? status;
   final DateTime? dueDate;
 
-  Job(
-      {this.id,
-      this.payment,
-      this.address,
-      this.poster,
-      this.categories,
-      this.images,
-      this.videos,
-      this.title,
-      this.description,
-      this.status,
-      this.dueDate});
+  Job({
+    this.id,
+    this.payment,
+    this.address,
+    this.poster,
+    this.categories,
+    this.images,
+    this.videos,
+    this.title,
+    this.description,
+    this.status,
+    this.dueDate,
+    this.promotion,
+    this.jobPromotion,
+  });
 
   Job.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int?,
@@ -50,6 +55,12 @@ class Job {
         videos = json['videos'] as List?,
         title = json['title'] as String?,
         description = json['description'] as String?,
+        promotion = (json['promotion'] != null)
+            ? Promotion.fromJson(json['promotion'])
+            : null,
+        jobPromotion = (json['jobPromotion'] != null)
+            ? JobPromotion.fromJson(json['jobPromotion'])
+            : null,
         status = json['status'] as String?,
         dueDate = DateTime.tryParse(json['dueDate'] ?? "");
 
@@ -73,5 +84,34 @@ class Job {
       return "Chờ hoàn thành";
     }
     return "Đã đóng";
+  }
+}
+
+class Promotion {
+  final int? id;
+  final String? dueDate;
+
+  Promotion({this.id, this.dueDate});
+
+  Promotion.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        dueDate = json['dueDate'] as String?;
+}
+
+class JobPromotion {
+  int? id;
+  String? dueDate;
+  int? job;
+
+  JobPromotion({
+    this.id,
+    this.dueDate,
+    this.job,
+  });
+
+  JobPromotion.fromJson(Map<String, dynamic> json) {
+    id = json['id']?.toInt();
+    dueDate = json['dueDate']?.toString();
+    job = json['job']?.toInt();
   }
 }

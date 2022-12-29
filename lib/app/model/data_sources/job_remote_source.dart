@@ -5,6 +5,7 @@ import 'package:fakeslink/app/model/entities/category.dart';
 import 'package:fakeslink/app/model/entities/job.dart';
 import 'package:fakeslink/app/model/entities/payment.dart';
 import 'package:fakeslink/app/model/request/create_job_request.dart';
+import 'package:fakeslink/app/model/request/job_promotion_request.dart';
 import 'package:fakeslink/app/model/request/pay_offer_request.dart';
 import 'package:get_it/get_it.dart';
 
@@ -61,5 +62,12 @@ class JobRemoteSource {
   Future<List<Offer>> getOfferHistory() async {
     final res = (await GetIt.I<Dio>().get("/job/offered")).data;
     return (res as List).map((e) => Offer.fromJson(e)).toList();
+  }
+
+  Future<Job> jobPromotion(JobPromotionRequest request) async {
+    final res = (await GetIt.I<Dio>()
+            .post("/payment/jobPromotion/", data: request.toJson()))
+        .data;
+    return Job.fromJson(res);
   }
 }

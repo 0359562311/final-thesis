@@ -3,6 +3,7 @@ import 'package:fakeslink/app/model/repositories/job_repository.dart';
 import 'package:fakeslink/app/model/repositories/offer_repository.dart';
 import 'package:fakeslink/app/model/request/accept_offers.dart';
 import 'package:fakeslink/app/model/request/create_my_job_request.dart';
+import 'package:fakeslink/app/model/request/job_promotion_request.dart';
 import 'package:fakeslink/app/viewmodel/job_detail/job_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +13,9 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
 
   JobDetailViewModel()
       : super(JobDetailState(status: JobDetailStatus.loading, jobDetail: null));
+
+  int? price;
+  String? dueDate;
 
   void init(int jobId) {
     getJobDetail(jobDetailId: jobId);
@@ -104,6 +108,24 @@ class JobDetailViewModel extends Cubit<JobDetailState> {
     _jobDetailRepository.updateJobStatus(jobId, status).then((value) {
       emit(state.copyWith(status: JobDetailStatus.loading));
       getJobDetail(jobDetailId: jobId);
+    }).catchError((onError) {
+      emit(state.copyWith(status: JobDetailStatus.error));
+    });
+  }
+
+  int? priceAdvertisement({required int balance, required int day}) {
+    price = balance * day;
+    return price;
+  }
+
+  void createDay({int? day, int? jobId}) {
+    emit(state.copyWith(status: JobDetailStatus.loading));
+    _jobDetailRepository
+        .jobPromotion(JobPromotionRequest(days: day, jobId: jobId))
+        .then((value) {
+      dueDate = value.jobPromotion?.dueDate;
+      emit(state.copyWith(
+          status: JobDetailStatus.updateDaySuccess, jobDetail: value));
     }).catchError((onError) {
       emit(state.copyWith(status: JobDetailStatus.error));
     });
