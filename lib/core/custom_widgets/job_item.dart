@@ -104,10 +104,7 @@ class JobItem extends StatelessWidget {
                   const SizedBox(
                     width: 8,
                   ),
-                  Text(
-                    "còn ${data.dueDate?.difference(DateTime.now())?.inDays ?? 14} ngày",
-                    style: GoogleFonts.montserrat(fontSize: 14),
-                  ),
+                  remainingDays(),
                   const Spacer(),
                   const Icon(
                     CupertinoIcons.bag_fill,
@@ -146,9 +143,24 @@ class JobItem extends StatelessWidget {
     );
   }
 
+  Text remainingDays() {
+    if (data.dueDate?.isBefore(DateTime.now()) ?? true) {
+      return Text(
+        "Hết hạn ${data.dueDate != null ? DateTime.now().difference(data.dueDate!).inDays : 10} ngày",
+        style: GoogleFonts.montserrat(fontSize: 14),
+      );
+    }
+    return Text(
+      "còn ${data.dueDate?.difference(DateTime.now()).inDays ?? 14} ngày",
+      style: GoogleFonts.montserrat(fontSize: 14),
+    );
+  }
+
   Text _getStatus() {
-    Color c;
-    if (data.status == JobStatus.Opening.name) {
+    Color c = AppColor.red;
+    if (data.dueDate?.isBefore(DateTime.now()) ?? true) {
+      c = AppColor.red;
+    } else if (data.status == JobStatus.Opening.name) {
       c = Colors.lightGreen;
     } else if (data.status == JobStatus.Pending.name) {
       c = Colors.yellow[600]!;
