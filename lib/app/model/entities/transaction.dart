@@ -50,7 +50,9 @@ class Transaction {
         status = json['status'] as String?,
         user = json['user'] as int?,
         jobPromotion = json['jobPromotion'],
-        profilePromotion = json['profilePromotion'],
+        profilePromotion = json['profilePromotion'] != null
+            ? ProfilePromotionTransaction.fromJson(json['profilePromotion'])
+            : null,
         viewJobSeekers = json['viewJobSeekers'],
         jobPayment = (json['jobPayment'] as Map<String, dynamic>?) != null
             ? JobPaymentTransaction.fromJson(

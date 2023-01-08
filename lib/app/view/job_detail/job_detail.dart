@@ -76,180 +76,236 @@ class _JobDetailPageState extends State<JobDetailPage> {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            appBar: appBar(
-              context,
-              "Chi tiết công việc",
-              textColor: AppColor.primaryColor,
-              iconColor: AppColor.primaryColor,
-              centerTitle: true,
-              rightWidget: Visibility(
-                visible: _viewmodel.state.jobDetail?.poster?.id ==
-                    configBox.get("user").id,
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    hint: Text(
-                      'Select Item',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    items: items
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColor.primaryColor),
-                              ),
-                            ))
-                        .toList(),
-                    value: selectedValue,
-                    onChanged: (String? value) async {
-                      setState(() {
-                        selectedValue = value;
-                      });
-                      if (value == "Đóng") {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  'Bạn có muộn đóng công việc không?',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16),
-                                ),
-                                actions: [
+            appBar: appBar(context, "Chi tiết công việc",
+                textColor: AppColor.primaryColor,
+                iconColor: AppColor.primaryColor,
+                centerTitle: true,
+                rightWidget: IconButton(
+                    onPressed: () {
+                      if (_viewmodel.state.jobDetail?.poster?.id !=
+                          configBox.get("user").id) return;
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (_) {
+                            return IntrinsicHeight(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.pop(context);
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                'Bạn có muốn đóng công việc không?',
+                                                style: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 16),
+                                              ),
+                                              actions: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Không",
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 14),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 10),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    _viewmodel.updateJobStatus(
+                                                        widget.jobId ?? 0,
+                                                        JobStatus.Closed);
+                                                  },
+                                                  child: Text(
+                                                    "Có",
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 14,
+                                                            color: Colors.red),
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          });
                                     },
-                                    child: Text(
-                                      "Không",
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 16),
+                                      child: Text(
+                                        "Đóng công việc",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColor.primaryColor),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
                                       Navigator.pop(context);
-                                      _viewmodel.updateJobStatus(
-                                          widget.jobId ?? 0, JobStatus.Closed);
+                                      final res = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const VerifyPasswordPage()));
+                                      if (res == true) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return StatefulBuilder(
+                                                builder: (BuildContext context,
+                                                    void Function(
+                                                            void Function())
+                                                        setState) {
+                                                  return AlertDialog(
+                                                    content:
+                                                        SingleChildScrollView(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            "Nhập số ngày",
+                                                            style: GoogleFonts
+                                                                .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        16),
+                                                          ),
+                                                          TextField(
+                                                            controller:
+                                                                _inputDayController,
+                                                            maxLines: 1,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                              hintText:
+                                                                  "Nhập số ngày",
+                                                            ),
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                _viewmodel.priceAdvertisement(
+                                                                    balance: _viewmodel
+                                                                        .state
+                                                                        .jobDetail!
+                                                                        .payment!
+                                                                        .amount!,
+                                                                    day: int.parse(
+                                                                        _inputDayController
+                                                                            .text));
+                                                              });
+                                                            },
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          if (_viewmodel
+                                                                      .state
+                                                                      .jobDetail
+                                                                      ?.payment
+                                                                      ?.amount !=
+                                                                  null &&
+                                                              _inputDayController
+                                                                  .text
+                                                                  .isNotEmpty)
+                                                            Text(
+                                                                "Số tiền: ${Utils.formatMoney(_viewmodel.price)} VND")
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text("Không",
+                                                            style: GoogleFonts
+                                                                .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        14)),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          _viewmodel.createDay(
+                                                              jobId: _viewmodel
+                                                                  .state
+                                                                  .jobDetail
+                                                                  ?.id,
+                                                              day: int.parse(
+                                                                  _inputDayController
+                                                                      .text));
+                                                        },
+                                                        child: Text("Có",
+                                                            style: GoogleFonts
+                                                                .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .red)),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            });
+                                      }
                                     },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 16),
+                                      child: Text(
+                                        "Đẩy tìm kiếm công việc",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColor.primaryColor),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 16),
                                     child: Text(
-                                      "Có",
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
+                                      "Tìm người tìm việc phù hợp",
+                                      style: const TextStyle(
                                           fontSize: 14,
-                                          color: Colors.red),
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColor.primaryColor),
                                     ),
                                   )
                                 ],
-                              );
-                            });
-                      } else if (value == "Đẩy tìm kiếm công việc") {
-                        final res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const VerifyPasswordPage()));
-                        if (res == true) {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return StatefulBuilder(
-                                  builder: (BuildContext context,
-                                      void Function(void Function()) setState) {
-                                    return AlertDialog(
-                                      content: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Nhập số ngày",
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16),
-                                            ),
-                                            TextField(
-                                              controller: _inputDayController,
-                                              maxLines: 1,
-                                              decoration: const InputDecoration(
-                                                hintText: "Nhập số ngày",
-                                              ),
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _viewmodel.priceAdvertisement(
-                                                      balance: _viewmodel
-                                                          .state
-                                                          .jobDetail!
-                                                          .payment!
-                                                          .amount!,
-                                                      day: int.parse(
-                                                          _inputDayController
-                                                              .text));
-                                                });
-                                              },
-                                            ),
-                                            const SizedBox(height: 10),
-                                            if (_viewmodel.state.jobDetail
-                                                        ?.payment?.amount !=
-                                                    null &&
-                                                _inputDayController
-                                                    .text.isNotEmpty)
-                                              Text(
-                                                  "Số tiền: ${Utils.formatMoney(_viewmodel.price)} VND")
-                                          ],
-                                        ),
-                                      ),
-                                      actions: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text("Không",
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 14)),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            _viewmodel.createDay(
-                                                jobId: _viewmodel
-                                                    .state.jobDetail?.id,
-                                                day: int.parse(
-                                                    _inputDayController.text));
-                                          },
-                                          child: Text("Có",
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 14,
-                                                  color: Colors.red)),
-                                        ),
-                                        const SizedBox(width: 10),
-                                      ],
-                                    );
-                                  },
-                                );
-                              });
-                        }
-                      }
+                              ),
+                            );
+                          });
                     },
-                    buttonHeight: 40,
-                    itemHeight: 40,
-                  ),
-                ),
-              ),
-            ),
+                    icon: Icon(Icons.menu))),
             body: CustomScrollView(
               shrinkWrap: true,
               slivers: [
