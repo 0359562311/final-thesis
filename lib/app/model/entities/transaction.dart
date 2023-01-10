@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/model/entities/bank.dart';
 import 'package:fakeslink/core/utils/extensions/num.dart';
+import 'package:fakeslink/main.dart';
 
 import 'offers.dart';
 
@@ -90,7 +91,10 @@ class Transaction {
   }
 
   String get zAmount {
-    if (deposit != null) return "+" + (amount ?? 0).price + " VND";
+    if (deposit != null ||
+        (jobPayment != null &&
+            jobPayment!.offer!.user!.id == configBox.get('user')?.id))
+      return "+" + (amount ?? 0).price + " VND";
     return "-" + (amount ?? 0).price + " VND";
   }
 }
