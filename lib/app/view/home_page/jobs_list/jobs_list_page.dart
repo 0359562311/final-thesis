@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/view/create_job/create_job.dart';
 import 'package:fakeslink/app/viewmodel/home/jobs_list_tab/jobs_list_cubit.dart';
 import 'package:fakeslink/app/viewmodel/home/jobs_list_tab/jobs_list_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -26,7 +27,10 @@ class _JobsListPageState extends State<JobsListPage>
   void initState() {
     super.initState();
     _viewModel = JobsListViewModel();
-    _viewModel.getJobs(true);
+    _viewModel.getJobs(
+        true, _viewModel.state.categories?.map((e) => e.id ?? 0).toList());
+    _viewModel.getCity();
+    _viewModel.getCategory();
     _refreshController = RefreshController();
   }
 
@@ -44,19 +48,85 @@ class _JobsListPageState extends State<JobsListPage>
         appBar: AppBar(
           backgroundColor: AppColor.primaryColor,
           title: CupertinoSearchTextField(
-            itemColor: Colors.white,
-            style: GoogleFonts.montserrat(color: Colors.white),
+            itemColor: Colors.black,
+            backgroundColor: Colors.white,
+            style: GoogleFonts.montserrat(color: Colors.black),
             onSubmitted: (value) {},
           ),
           bottom: PreferredSize(
             preferredSize: Size(MediaQuery.of(context).size.width, 40),
             child: SizedBox.fromSize(
               size: Size(MediaQuery.of(context).size.width, 40),
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Center(child: Text("Vị trí "));
-                  }),
+              child: BlocBuilder<JobsListViewModel, JobsListState>(
+                bloc: _viewModel,
+                builder: (context, state) {
+                  return Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          buildSelectedAddress(context, callBack: (index) {
+                            Navigator.pop(context);
+                            _viewModel.selectedCity(
+                                name: _viewModel.cities[index]['name'],
+                                code: _viewModel.cities[index]['code']);
+                          }, list: _viewModel.cities);
+                        },
+                        child: Container(
+                          width: 220,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              //   border: Border.all(color: AppColor.white),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                      _viewModel.cityName ??
+                                          "Chọn tỉnh/ thành phố",
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                      ))),
+                              const Icon(
+                                Icons.arrow_drop_down,
+                                color: AppColor.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            buildSelectedCategory(context);
+                          },
+                          child: Container(
+                            width: 220,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                //   border: Border.all(color: AppColor.white),
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                        _viewModel.categoryName ??
+                                            "Chọn Category",
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                        ))),
+                                const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: AppColor.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -105,6 +175,126 @@ class _JobsListPageState extends State<JobsListPage>
         ),
       ),
     );
+  }
+
+  Future<dynamic> buildSelectedAddress(BuildContext context,
+      {List<dynamic>? list, required OnTab callBack}) {
+    return showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(10),
+          ),
+        ),
+        builder: (context) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5, top: 5),
+                child: Align(
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(Icons.close)),
+                  alignment: Alignment.centerRight,
+                ),
+              ),
+              Expanded(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: list?.length ?? 0,
+                  itemBuilder: (context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        callBack(index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16, bottom: 10, top: 10),
+                        child: Text(
+                          list?[index]['name_with_type'],
+                          style: GoogleFonts.montserrat(
+                              color: AppColor.primaryColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 1,
+                      color: Colors.grey.shade200,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<dynamic> buildSelectedCategory(
+    BuildContext context,
+  ) {
+    return showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(10),
+          ),
+        ),
+        builder: (context) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5, top: 5),
+                child: Align(
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(Icons.close)),
+                  alignment: Alignment.centerRight,
+                ),
+              ),
+              Expanded(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: _viewModel.state.categories?.length ?? 0,
+                  itemBuilder: (context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        _viewModel.selectedCategory(
+                            name: _viewModel.state.categories?[index].name,
+                            categoryId: _viewModel.state.categories?[index].id);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16, bottom: 10, top: 10),
+                        child: Text(
+                          _viewModel.state.categories?[index].name ?? "",
+                          style: GoogleFonts.montserrat(
+                              color: AppColor.primaryColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 1,
+                      color: Colors.grey.shade200,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   @override
