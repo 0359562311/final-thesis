@@ -425,7 +425,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
                         "Công việc được đẩy quảng cáo tới ngày ${DateFormat("dd/MM/yyy").format(DateTime.parse(_viewmodel.dueDate ?? ""))}",
                         maxLines: 2,
                         style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600, fontSize: 16),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            fontStyle: FontStyle.italic),
                       ),
                     ),
                   ),

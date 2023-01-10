@@ -15,7 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
-enum Status { Approved, Pending }
+enum Status { Approved, Pending, Payed }
 
 class AllOfferPage extends StatefulWidget {
   final int? jobId;
@@ -122,7 +122,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                         TextField(
                                           controller: _evaluateController,
                                           decoration: const InputDecoration(
-                                              hintText: "Description"),
+                                              hintText: "Chi tiết"),
                                         ),
                                         const SizedBox(height: 10),
                                         Align(
@@ -215,56 +215,17 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               AvatarWidget(
                                   avatar: data?.user?.avatar ?? "", size: 40),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      data?.user?.name ?? "",
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                              text: data?.user?.loyaltyPoint
-                                                  .toString()),
-                                          const WidgetSpan(
-                                              child: Icon(
-                                            Icons.star,
-                                            size: 14,
-                                            color: Colors.red,
-                                          ))
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                child: Text(
+                                  data?.user?.name ?? "",
+                                  style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "Offer",
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    (Utils.formatMoney(data?.price) ?? "") +
-                                        " VND",
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  )
-                                ],
+                              Text(
+                                (Utils.formatMoney(data?.price) ?? "") + " VND",
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
                               )
                             ],
                           ),
@@ -286,16 +247,6 @@ class _AllOfferPageState extends State<AllOfferPage> {
                                         fontSize: 12),
                                   ),
                                 ),
-                              SizedBox(
-                                width: 70,
-                                child: ButtonWidget(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5, vertical: 3),
-                                    title: "Chat",
-                                    onPressed: () {},
-                                    uppercaseTitle: false,
-                                    textSize: 14),
-                              ),
                               const SizedBox(width: 5),
                               Visibility(
                                 visible: data?.status == Status.Pending.name,
@@ -378,13 +329,26 @@ class _AllOfferPageState extends State<AllOfferPage> {
                               ),
                               const SizedBox(width: 5),
                               Visibility(
-                                visible: data?.status == Status.Approved.name,
+                                visible: data?.status == Status.Payed.name,
                                 child: SizedBox(
-                                  width: 70,
+                                  width: 120,
                                   child: ButtonWidget(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 5, vertical: 3),
-                                      title: "Pay",
+                                      title: "Đã thanh toán",
+                                      onPressed: () {},
+                                      textSize: 14,
+                                      uppercaseTitle: false),
+                                ),
+                              ),
+                              Visibility(
+                                visible: data?.status == Status.Approved.name,
+                                child: SizedBox(
+                                  width: 120,
+                                  child: ButtonWidget(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 3),
+                                      title: "Thanh toán",
                                       onPressed: () async {
                                         await buildPay(context, index);
                                       },
